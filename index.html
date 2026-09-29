@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>이수영 줘패기 - beta 0.203</title>
+  <title>이수영 줘패기 - beta 0.204</title>
   <style>
     :root {
       --bg1:#121826; --bg2:#1f2a44; --panel:rgba(255,255,255,.08);
@@ -65,7 +65,7 @@
     .floor-dot.current{background:rgba(255,203,71,.18);color:var(--accent);border-color:rgba(255,203,71,.45);box-shadow:0 0 16px rgba(255,203,71,.08)}
     .floor-dot.boss-floor{border-color:rgba(255,88,88,.35)}
 
-    /* beta 0.203: compact combat HUD */
+    /* beta 0.204: compact combat HUD */
     .target-panel{padding:12px}
     .combat-hud{width:min(100%,620px);display:grid;grid-template-columns:150px minmax(260px,1fr) 118px;gap:8px;align-items:stretch;margin:0 0 7px}
     .hud-stage{display:flex;flex-direction:column;justify-content:center;gap:5px;padding:7px 8px;border-radius:13px;background:rgba(0,0,0,.16);border:1px solid rgba(255,255,255,.07)}
@@ -199,7 +199,7 @@
   <div class="titlebar">
     <div class="brand-line">
       <h1>이수영 줘패기</h1>
-      <div class="version-tag">beta 0.203</div>
+      <div class="version-tag">beta 0.204</div>
     </div>
     <div class="top-stats">
       <div class="mini-card"><span class="k">재화</span><span class="v" id="moneyTop">0원</span></div>
@@ -352,6 +352,9 @@
       <div class="tools">
         <button class="utility-btn" id="saveBtn">저장</button>
         <button class="utility-btn secondary" id="backupBtn">자동 백업 복구</button>
+        <button class="utility-btn secondary" id="downloadSaveBtn">세이브 파일 다운로드</button>
+        <button class="utility-btn secondary" id="loadSaveFileBtn">세이브 파일 불러오기</button>
+        <input id="saveFileInput" type="file" accept=".json,application/json" hidden>
         <button class="utility-btn secondary" id="resetBtn">초기화</button>
         <button class="utility-btn secondary" id="exportBtn">저장데이터 복사</button>
         <button class="utility-btn secondary" id="importBtn">저장데이터 불러오기</button>
@@ -458,7 +461,7 @@
     achievementNormalList:document.getElementById('achievementNormalList'), achievementChallengeList:document.getElementById('achievementChallengeList'),
     blessingResetInfo:document.getElementById('blessingResetInfo'), blessingResetBtn:document.getElementById('blessingResetBtn'),
     rebirthFlash:document.getElementById('rebirthFlash'), rebirthFlashSub:document.getElementById('rebirthFlashSub'), achievementToastStack:document.getElementById('achievementToastStack'),
-    saveBtn:document.getElementById('saveBtn'), backupBtn:document.getElementById('backupBtn'), resetBtn:document.getElementById('resetBtn'), exportBtn:document.getElementById('exportBtn'), importBtn:document.getElementById('importBtn'), saveMsg:document.getElementById('saveMsg'), backupStatus:document.getElementById('backupStatus')
+    saveBtn:document.getElementById('saveBtn'), backupBtn:document.getElementById('backupBtn'), downloadSaveBtn:document.getElementById('downloadSaveBtn'), loadSaveFileBtn:document.getElementById('loadSaveFileBtn'), saveFileInput:document.getElementById('saveFileInput'), resetBtn:document.getElementById('resetBtn'), exportBtn:document.getElementById('exportBtn'), importBtn:document.getElementById('importBtn'), saveMsg:document.getElementById('saveMsg'), backupStatus:document.getElementById('backupStatus')
   };
 
   const hitDialogues = [
@@ -1623,6 +1626,85 @@
     setTimeout(()=>el.saveMsg.textContent='',1200);
   }
 
+  function saveFileTimestamp(date=new Date()){
+    const pad=n=>String(n).padStart(2,'0');
+    return `${date.getFullYear()}-${pad(date.getMonth()+1)}-${pad(date.getDate())}_${pad(date.getHours())}-${pad(date.getMinutes())}-${pad(date.getSeconds())}`;
+  }
+
+  function downloadSaveFile(){
+    saveGame(false);
+    const payload={
+      ...state,
+      saveGeneration:SAVE_GENERATION,
+      balanceVersion:11,
+      lastActiveAt:Date.now(),
+      saveFileFormat:'BlackLee',
+      exportedAt:Date.now()
+    };
+    const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json;charset=utf-8'});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    a.href=url;
+    a.download=`BlackLee_save_${saveFileTimestamp()}.json`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),500);
+    el.saveMsg.textContent='세이브 파일을 다운로드했습니다.';
+    setTimeout(()=>el.saveMsg.textContent='',1800);
+  }
+
+  function applyImportedSave(loaded,sourceLabel='저장 데이터'){
+    createAutoBackup(true);
+    state=loaded;
+    hurtTargetUntil=0;if(hurtTargetTimer){clearTimeout(hurtTargetTimer);hurtTargetTimer=null;}
+    frenzyEndAt=0;frenzyCombo=0;lastManualAttackAt=-Infinity;resetManualInputGuard();
+    combatLocked=false;
+    lastTimerStamp=performance.now();
+    const importedOffline=applyOfflineReward(false);
+    render();
+    saveGame(false);
+    el.saveMsg.textContent=`${sourceLabel}를 불러왔습니다.`;
+    showNotice(
+      '불러오기 완료!',
+      importedOffline.reward>0
+        ?`오프라인 ${formatOfflineDuration(importedOffline.elapsed)} · +${formatNum(importedOffline.reward)}원`
+        :'진행 상황을 이어서 플레이합니다.',
+      importedOffline.reward>0?3000:1500
+    );
+    setTimeout(()=>el.saveMsg.textContent='',1800);
+  }
+
+  function importSaveFile(file){
+    if(!file)return;
+    const reader=new FileReader();
+    reader.onload=()=>{
+      try{
+        const p=JSON.parse(String(reader.result||''));
+        if(!p||typeof p!=='object')throw new Error('invalid');
+        if(p.saveGeneration!==SAVE_GENERATION){
+          alert('호환되지 않는 세이브 파일입니다.\n\nBeta 0.16 이후 버전의 BlackLee 세이브 파일만 불러올 수 있습니다.');
+          return;
+        }
+        if(!p.upgrades||!p.blessings)throw new Error('invalid');
+        const loaded=hydrateSaveObject(p);
+        if(!loaded)throw new Error('invalid');
+
+        if(!confirm(`세이브 파일을 불러오시겠습니까?\n\n파일: ${file.name}\n스테이지: ${loaded.stage}-${loaded.floor}층\n검은수영의 눈물: ${loaded.tears||0}개\n환생: ${loaded.rebirths||0}회\n\n현재 이 기기의 진행 상황은 덮어씌워집니다.`))return;
+        applyImportedSave(loaded,'세이브 파일');
+      }catch(err){
+        alert('세이브 파일을 읽지 못했습니다.\nBlackLee에서 다운로드한 .json 세이브 파일인지 확인해 주세요.');
+      }finally{
+        el.saveFileInput.value='';
+      }
+    };
+    reader.onerror=()=>{
+      el.saveFileInput.value='';
+      alert('세이브 파일을 읽는 중 오류가 발생했습니다.');
+    };
+    reader.readAsText(file,'utf-8');
+  }
+
   function exportSave(){
     state.saveGeneration=SAVE_GENERATION;
     state.balanceVersion=11;
@@ -1654,24 +1736,7 @@
 
       if(!confirm(`저장 데이터를 불러오시겠습니까?\n\n스테이지: ${loaded.stage}-${loaded.floor}층\n검은수영의 눈물: ${loaded.tears||0}개\n환생: ${loaded.rebirths||0}회\n\n현재 이 기기의 진행 상황은 덮어씌워집니다.`))return;
 
-      createAutoBackup(true);
-      state=loaded;
-      hurtTargetUntil=0;if(hurtTargetTimer){clearTimeout(hurtTargetTimer);hurtTargetTimer=null;}
-      frenzyEndAt=0;frenzyCombo=0;lastManualAttackAt=-Infinity;resetManualInputGuard();
-      combatLocked=false;
-      lastTimerStamp=performance.now();
-      const importedOffline=applyOfflineReward(false);
-      render();
-      saveGame(false);
-      el.saveMsg.textContent='저장 데이터를 불러왔습니다.';
-      showNotice(
-        '불러오기 완료!',
-        importedOffline.reward>0
-          ?`오프라인 ${formatOfflineDuration(importedOffline.elapsed)} · +${formatNum(importedOffline.reward)}원`
-          :'진행 상황을 이어서 플레이합니다.',
-        importedOffline.reward>0?3000:1500
-      );
-      setTimeout(()=>el.saveMsg.textContent='',1800);
+      applyImportedSave(loaded,'저장 데이터');
     }catch(err){
       alert('저장 데이터를 읽지 못했습니다. 저장 문자열 전체가 정확히 붙여넣어졌는지 확인해 주세요.');
     }
@@ -1714,7 +1779,7 @@
   el.blessingResetBtn.addEventListener('click',resetBlessings);
   el.upgradeTab.addEventListener('click',()=>switchGrowthTab('upgrade'));
   el.blessingTab.addEventListener('click',()=>switchGrowthTab('blessing'));
-  el.retryBtn.addEventListener('click',retryCurrent);el.rebirthBtn.addEventListener('click',doRebirth);el.saveBtn.addEventListener('click',()=>saveGame(true));el.backupBtn.addEventListener('click',restoreAutoBackup);el.resetBtn.addEventListener('click',resetGame);el.exportBtn.addEventListener('click',exportSave);
+  el.retryBtn.addEventListener('click',retryCurrent);el.rebirthBtn.addEventListener('click',doRebirth);el.saveBtn.addEventListener('click',()=>saveGame(true));el.backupBtn.addEventListener('click',restoreAutoBackup);el.downloadSaveBtn.addEventListener('click',downloadSaveFile);el.loadSaveFileBtn.addEventListener('click',()=>el.saveFileInput.click());el.saveFileInput.addEventListener('change',()=>importSaveFile(el.saveFileInput.files?.[0]));el.resetBtn.addEventListener('click',resetGame);el.exportBtn.addEventListener('click',exportSave);
   el.importBtn.addEventListener('click',importSave);
 
   setInterval(()=>{if(!document.hidden&&state.autoAttack>0)applyHit(state.autoAttack/2,'auto');},500);
