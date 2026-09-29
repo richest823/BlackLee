@@ -1,0 +1,1753 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>이수영 줘패기 - beta 0.203</title>
+  <style>
+    :root {
+      --bg1:#121826; --bg2:#1f2a44; --panel:rgba(255,255,255,.08);
+      --text:#f4f7fb; --muted:#b7c3d9; --accent:#ffcb47; --danger:#ff6464;
+      --good:#7bf1a8; --tear:#9bdcff;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;height:100vh;min-height:100vh;overflow:hidden;font-family:"Segoe UI","Apple SD Gothic Neo","Malgun Gothic",sans-serif;color:var(--text);background:radial-gradient(circle at top,#2b3d6b 0%,var(--bg1) 45%,#0c1220 100%)}
+    .wrap{width:100%;max-width:1380px;height:100vh;margin:0 auto;padding:12px 16px;display:flex;flex-direction:column;overflow:hidden}
+    .titlebar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px;padding:8px 11px;border-radius:15px;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.075);box-shadow:0 8px 24px rgba(0,0,0,.16);backdrop-filter:blur(10px);flex:0 0 auto}
+    .brand-line{display:flex;align-items:center;gap:7px;min-width:max-content}
+    h1{margin:0;font-size:20px;line-height:1;letter-spacing:-.035em;text-shadow:0 3px 12px rgba(0,0,0,.28)}
+    .version-tag{font-size:9.5px;font-weight:900;color:var(--muted);background:rgba(255,255,255,.075);border:1px solid rgba(255,255,255,.08);border-radius:999px;padding:4px 7px;white-space:nowrap}
+    .top-stats{display:flex;align-items:center;justify-content:flex-end;gap:4px;min-width:0;flex:1}
+    .mini-card{display:flex;align-items:baseline;gap:5px;min-width:0;padding:4px 8px;border-left:1px solid rgba(255,255,255,.075)}
+    .mini-card:first-child{border-left:none}.mini-card .k{display:inline;color:var(--muted);font-size:9.5px;white-space:nowrap}.mini-card .v{font-size:12px;font-weight:950;color:var(--accent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .mini-card.tear .v{color:var(--tear)}
+    .layout{display:grid;grid-template-columns:350px 1fr 320px;gap:16px;align-items:stretch;flex:1 1 auto;min-height:0;overflow:hidden}
+    .panel{background:var(--panel);border:1px solid rgba(255,255,255,.08);border-radius:22px;padding:16px;backdrop-filter:blur(12px);box-shadow:0 14px 36px rgba(0,0,0,.24)}
+    .layout>section{height:100%;min-height:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;scrollbar-gutter:stable;scrollbar-width:thin;scrollbar-color:rgba(183,195,217,.45) rgba(255,255,255,.035)}
+    .layout>section::-webkit-scrollbar{width:9px}.layout>section::-webkit-scrollbar-track{background:rgba(255,255,255,.025);border-radius:999px}.layout>section::-webkit-scrollbar-thumb{background:rgba(183,195,217,.35);border-radius:999px;border:2px solid transparent;background-clip:padding-box}.layout>section::-webkit-scrollbar-thumb:hover{background:rgba(183,195,217,.55);background-clip:padding-box}
+    .panel h2{margin:0 0 12px;font-size:22px;letter-spacing:-.03em}
+    .section-title-line,.upgrade-title-row,.title-with-info{display:flex;align-items:center;justify-content:space-between;gap:8px}
+    .section-title-line h2{margin:0}.title-with-info .rebirth-title{margin-bottom:0}
+    .info-icon{position:relative;flex:0 0 auto;width:19px;height:19px;border-radius:50%;border:1px solid rgba(255,255,255,.20);background:rgba(255,255,255,.08);color:#dbe6f7;font-size:11px;font-weight:1000;font-family:Georgia,serif;line-height:17px;text-align:center;padding:0;cursor:help;z-index:40}
+    .info-icon:hover,.info-icon:focus-visible{background:rgba(155,220,255,.16);border-color:rgba(155,220,255,.42);color:#fff;outline:none}
+    .info-icon::after{content:attr(data-tip);position:absolute;right:-2px;top:calc(100% + 8px);width:250px;max-width:min(250px,78vw);padding:9px 10px;border-radius:10px;background:rgba(8,13,24,.98);border:1px solid rgba(255,255,255,.14);box-shadow:0 12px 30px rgba(0,0,0,.45);color:#edf3ff;font-family:"Segoe UI","Apple SD Gothic Neo","Malgun Gothic",sans-serif;font-size:10.5px;font-weight:650;line-height:1.55;letter-spacing:0;text-align:left;text-transform:none;white-space:pre-line;opacity:0;visibility:hidden;transform:translateY(-3px);transition:.14s ease;pointer-events:none;z-index:999}
+    .info-icon:hover::after,.info-icon:focus-visible::after{opacity:1;visibility:visible;transform:translateY(0)}
+    .info-icon.tip-left::after{right:auto;left:-2px}
+    .resource{display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,.08);border-radius:16px;padding:13px 14px;margin-bottom:10px;gap:14px}
+    .resource .label{color:var(--muted);font-size:12px}.resource .value{font-size:26px;font-weight:900;color:var(--accent);text-align:right}.resource .value.tear{color:var(--tear)}
+    .growth-sticky-head{position:sticky;top:-1px;z-index:30;margin:-4px -4px 10px;padding:4px 4px 9px;background:linear-gradient(180deg,#30394d 0%,#30394d 78%,rgba(48,57,77,.93) 90%,rgba(48,57,77,0) 100%)}
+    .growth-sticky-head h2{margin:0}.growth-sticky-head .section-title-line{margin-bottom:7px}
+    .compact-resource{display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;padding:8px 10px;border-radius:13px;background:rgba(14,20,34,.74);border:1px solid rgba(255,255,255,.08);backdrop-filter:blur(12px);box-shadow:0 8px 18px rgba(0,0,0,.18)}
+    .compact-resource-main{min-width:0}.compact-resource-label{font-size:9.5px;color:var(--muted);line-height:1}.compact-resource-money{margin-top:2px;font-size:18px;font-weight:950;color:var(--accent);line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .compact-resource-tears{text-align:center;padding:0 7px;border-left:1px solid rgba(255,255,255,.08);border-right:1px solid rgba(255,255,255,.08)}.compact-resource-tears .v{display:block;margin-top:2px;font-size:16px;font-weight:950;color:var(--tear)}
+    .compact-resource-total{text-align:right}.compact-resource-total .v{display:block;margin-top:2px;font-size:11px;font-weight:850;color:#dce5f5}
+    .desc{font-size:13px;color:var(--muted);line-height:1.55}
+
+    .target-panel{position:relative;align-self:stretch;overflow-y:auto;overflow-x:hidden;display:flex;flex-direction:column;align-items:center;min-height:0;background:radial-gradient(circle at top,rgba(255,255,255,.07),rgba(255,255,255,.02) 35%,transparent 60%),linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.02));transition:background .25s ease,box-shadow .25s ease}
+    .target-panel.black-boss-stage{background:radial-gradient(circle at 50% 20%,rgba(225,55,55,.22),rgba(20,0,0,.08) 42%,rgba(0,0,0,.28) 75%),linear-gradient(180deg,rgba(70,0,0,.18),rgba(0,0,0,.12));box-shadow:inset 0 0 70px rgba(255,0,0,.09),0 14px 36px rgba(0,0,0,.3)}
+    .stage-line{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:4px;color:var(--muted);font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+    .stage-line .boss-badge{display:none;background:rgba(255,70,70,.14);border:1px solid rgba(255,95,95,.4);color:#ff9e9e;border-radius:999px;padding:4px 9px;letter-spacing:.03em}
+    .target-panel.black-boss-stage .boss-badge{display:inline-block}
+    .boss-name{font-size:32px;font-weight:900;margin:3px 0 6px;letter-spacing:-.04em;color:#fff;text-shadow:0 6px 16px rgba(0,0,0,.25)}
+    .target-panel.black-boss-stage .boss-name{color:#ff8f8f;text-shadow:0 0 18px rgba(255,42,42,.35)}
+    .boss-trait-card{display:none;width:min(100%,590px);margin:-1px 0 9px;padding:8px 11px;border-radius:13px;background:linear-gradient(180deg,rgba(145,66,180,.16),rgba(48,18,62,.15));border:1px solid rgba(215,144,255,.25);text-align:center;box-shadow:inset 0 0 18px rgba(190,100,230,.05)}
+    .boss-trait-card.show{display:block}.boss-trait-title{font-size:11px;font-weight:1000;color:#efc1ff;letter-spacing:.04em}.boss-trait-status{margin-top:3px;font-size:10.5px;font-weight:800;color:#d4bbdc;line-height:1.4}
+    .target-panel.attribute-boss-stage .boss-badge{background:rgba(165,74,210,.16);border-color:rgba(216,133,255,.45);color:#edb7ff}.target-panel.attribute-boss-stage .boss-name{color:#eab0ff;text-shadow:0 0 20px rgba(205,82,255,.34)}
+    .target-panel.attribute-boss-stage .health-fill{background:linear-gradient(90deg,#a648c4,#e37aff)}
+    .stage-line .gold-badge{display:none;background:rgba(255,213,64,.15);border:1px solid rgba(255,222,88,.55);color:#ffe66d;border-radius:999px;padding:4px 9px;letter-spacing:.03em}
+    .target-panel.golden-stage{background:radial-gradient(circle at 50% 20%,rgba(255,215,80,.24),rgba(85,55,0,.07) 42%,rgba(0,0,0,.18) 76%),linear-gradient(180deg,rgba(110,78,0,.13),rgba(0,0,0,.08));box-shadow:inset 0 0 80px rgba(255,210,60,.11),0 14px 36px rgba(0,0,0,.28)}
+    .target-panel.golden-stage .gold-badge{display:inline-block}.target-panel.golden-stage .boss-name{color:#ffe06a;text-shadow:0 0 20px rgba(255,211,68,.48)}.target-panel.golden-stage .health-fill{background:linear-gradient(90deg,#e9a519,#ffe66a)}
+    .target-panel.golden-stage .target-btn{filter:drop-shadow(0 23px 31px rgba(0,0,0,.42)) drop-shadow(0 0 24px rgba(255,202,45,.55))}.target-panel.golden-stage .target-btn img{filter:sepia(1) saturate(3.1) brightness(1.08) contrast(1.06)}
+
+    .floor-progress{display:flex;gap:7px;align-items:center;justify-content:center;margin-bottom:10px}
+    .floor-dot{width:38px;height:27px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.08);color:var(--muted)}
+    .floor-dot.done{background:rgba(123,241,168,.13);color:var(--good);border-color:rgba(123,241,168,.28)}
+    .floor-dot.current{background:rgba(255,203,71,.18);color:var(--accent);border-color:rgba(255,203,71,.45);box-shadow:0 0 16px rgba(255,203,71,.08)}
+    .floor-dot.boss-floor{border-color:rgba(255,88,88,.35)}
+
+    /* beta 0.203: compact combat HUD */
+    .target-panel{padding:12px}
+    .combat-hud{width:min(100%,620px);display:grid;grid-template-columns:150px minmax(260px,1fr) 118px;gap:8px;align-items:stretch;margin:0 0 7px}
+    .hud-stage{display:flex;flex-direction:column;justify-content:center;gap:5px;padding:7px 8px;border-radius:13px;background:rgba(0,0,0,.16);border:1px solid rgba(255,255,255,.07)}
+    .combat-hud .stage-line{margin:0;font-size:10px;line-height:1.2;letter-spacing:.045em;justify-content:flex-start;gap:5px;white-space:nowrap}
+    .combat-hud .stage-line .boss-badge,.combat-hud .stage-line .gold-badge{padding:2px 5px;font-size:8px}
+    .combat-hud .floor-progress{margin:0;gap:3px;justify-content:flex-start}
+    .combat-hud .floor-dot{width:24px;height:19px;border-radius:6px;font-size:9px}
+    .combat-hud .energy-card{width:100%;height:100%;margin:0;padding:7px 9px;border-radius:13px;display:flex;flex-direction:column;justify-content:center}
+    .combat-hud .energy-head{margin-bottom:4px;gap:6px}
+    .energy-title-wrap{display:flex;align-items:center;gap:5px;min-width:0}.combat-hud .energy-title-wrap .info-icon{width:15px;height:15px;line-height:13px;font-size:9px}
+    .combat-hud .energy-title{font-size:10px}.combat-hud .energy-value{font-size:11px}
+    .combat-hud .energy-bar{height:8px}
+    .combat-hud .energy-bottom{display:flex;justify-content:flex-end;align-items:center;gap:6px;margin-top:5px}
+    .combat-hud .energy-info{display:none}
+    .combat-hud .frenzy-btn{padding:5px 8px;border-radius:8px;font-size:9px;line-height:1.1}
+    .combat-hud .frenzy-status{margin-top:3px;min-height:0;font-size:9px;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .combat-hud .frenzy-meta{display:none}
+    .combat-hud .auto-frenzy-row{margin-top:3px;padding-top:3px;font-size:8.5px;gap:5px}
+    .combat-hud .auto-frenzy-toggle{padding:3px 7px;font-size:8.5px;min-width:38px}
+    .combat-hud .challenge-strip{width:100%;height:100%;display:flex;flex-direction:column;justify-content:center;gap:5px;margin:0}
+    .combat-hud .timer-box{padding:7px 8px;border-radius:11px;text-align:center}
+    .combat-hud .timer-label{display:none}
+    .combat-hud .timer-value{font-size:17px;line-height:1.15}
+    .combat-hud .mode-badge{min-width:0;padding:6px 7px;border-radius:10px;font-size:9.5px;line-height:1.15}
+    .mode-info-row{display:flex;align-items:center;justify-content:center;gap:5px}.mode-info-row .info-icon{width:15px;height:15px;line-height:13px;font-size:9px}
+    .target-panel .health-wrap{margin-bottom:4px}
+    .target-panel .health-top{font-size:10.5px;margin-bottom:4px}
+    .target-panel .health-bar{height:16px}
+    .target-panel .hint{display:none}
+    .combat-hud .hud-retry-btn{width:100%;margin:0;padding:6px 6px;border-radius:9px;font-size:9.5px;line-height:1.2;white-space:normal}
+    .combat-hud .hud-retry-btn.show{display:block}
+    .combat-hud .challenge-strip:has(.hud-retry-btn.show) .timer-box{display:none}
+    .target-panel .hit-zone{min-height:360px}
+
+    .challenge-strip{width:min(100%,590px);display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;margin-bottom:10px}
+    .timer-box{background:rgba(0,0,0,.2);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:9px 12px}
+    .timer-label{font-size:11px;color:var(--muted);margin-bottom:3px}.timer-value{font-size:24px;font-weight:950;letter-spacing:.02em}
+    .timer-value.danger{color:#ff8080;animation:pulseTimer .65s infinite alternate}
+    @keyframes pulseTimer{from{opacity:1}to{opacity:.55}}
+    .mode-badge{border-radius:12px;padding:9px 12px;font-size:12px;font-weight:900;background:rgba(255,203,71,.14);color:var(--accent);border:1px solid rgba(255,203,71,.28);text-align:center;min-width:130px}
+    .mode-badge.farm{background:rgba(123,241,168,.12);color:var(--good);border-color:rgba(123,241,168,.25)}
+
+    .energy-card{width:min(100%,590px);margin:0 0 10px;padding:10px 12px;border-radius:15px;background:linear-gradient(180deg,rgba(120,55,145,.16),rgba(20,8,30,.24));border:1px solid rgba(204,118,255,.24);box-shadow:inset 0 0 22px rgba(145,60,190,.06)}
+    .energy-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:7px}.energy-title{font-size:12px;font-weight:950;color:#e7b4ff;letter-spacing:.01em}.energy-value{font-size:13px;font-weight:950;color:#f1c8ff}
+    .energy-bar{height:14px;border-radius:999px;overflow:hidden;background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.08);box-shadow:inset 0 2px 8px rgba(0,0,0,.3)}.energy-fill{height:100%;width:0;background:linear-gradient(90deg,#6f278d,#bf56e8 58%,#f0a4ff);transition:width .16s ease;box-shadow:0 0 16px rgba(210,105,255,.42)}
+    .energy-bottom{display:grid;grid-template-columns:1fr auto;gap:9px;align-items:center;margin-top:8px}.energy-info{font-size:10.5px;color:var(--muted);line-height:1.4}.frenzy-btn{border:1px solid rgba(236,154,255,.38);border-radius:11px;padding:8px 11px;background:linear-gradient(180deg,#c95ef0,#722792);color:white;font-size:11px;font-weight:950;cursor:pointer;box-shadow:0 7px 18px rgba(136,42,168,.22);transition:.15s ease;white-space:nowrap}.frenzy-btn:hover:not(:disabled){transform:translateY(-1px);filter:brightness(1.08)}.frenzy-btn:disabled{cursor:not-allowed;opacity:.42;box-shadow:none}
+    .frenzy-status{margin-top:7px;min-height:16px;font-size:11px;font-weight:900;color:#f0b6ff;text-align:center}.frenzy-meta{margin-top:6px;font-size:10.5px;color:#d8b9e7;text-align:center;line-height:1.4}.auto-frenzy-row{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.08);font-size:11px;color:var(--muted)}.auto-frenzy-toggle{min-width:58px;border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:6px 10px;background:rgba(255,255,255,.08);color:#d8dce7;font-size:11px;font-weight:950;cursor:pointer;transition:.15s ease}.auto-frenzy-toggle.on{background:linear-gradient(180deg,#c95ef0,#722792);color:white;border-color:rgba(236,154,255,.45);box-shadow:0 0 14px rgba(197,94,240,.22)}.energy-card.ready{border-color:rgba(239,166,255,.65);box-shadow:0 0 22px rgba(195,77,235,.15),inset 0 0 22px rgba(195,77,235,.08)}.energy-card.ready .energy-fill{animation:energyReadyPulse .65s infinite alternate}
+    @keyframes energyReadyPulse{from{filter:brightness(1)}to{filter:brightness(1.35)}}
+    .target-panel.frenzy-active{background:radial-gradient(circle at 50% 25%,rgba(154,0,195,.25),rgba(45,0,55,.13) 42%,rgba(0,0,0,.23) 78%),linear-gradient(180deg,rgba(65,0,80,.18),rgba(0,0,0,.10));box-shadow:inset 0 0 90px rgba(196,44,255,.13),0 14px 36px rgba(0,0,0,.3);animation:frenzyPanelPulse .48s infinite alternate}
+    .target-panel.frenzy-active .target-btn{filter:drop-shadow(0 24px 32px rgba(0,0,0,.45)) drop-shadow(0 0 26px rgba(214,83,255,.62))}
+    .target-panel.frenzy-active .target-btn img{filter:saturate(1.18) contrast(1.08)}
+    .target-panel.black-boss-stage.frenzy-active .target-btn img{filter:grayscale(1) brightness(.31) contrast(1.9) saturate(.35)}
+    .target-panel.golden-stage.frenzy-active .target-btn img{filter:sepia(1) saturate(3.4) brightness(1.13) contrast(1.08)}
+    .target-panel.frenzy-active .boss-name{text-shadow:0 0 16px rgba(224,124,255,.42),0 6px 16px rgba(0,0,0,.28)}
+    @keyframes frenzyPanelPulse{from{box-shadow:inset 0 0 65px rgba(196,44,255,.10),0 14px 36px rgba(0,0,0,.3)}to{box-shadow:inset 0 0 105px rgba(224,70,255,.20),0 14px 36px rgba(0,0,0,.3)}}
+
+    .anti-auto-warning{display:none;width:min(100%,590px);margin:0 0 10px;padding:10px 12px;border-radius:13px;background:rgba(255,78,78,.14);border:1px solid rgba(255,105,105,.42);color:#ffc0c0;font-size:11.5px;font-weight:850;line-height:1.45;text-align:center;box-shadow:0 0 20px rgba(255,65,65,.08)}
+    .anti-auto-warning.show{display:block;animation:antiAutoPulse .7s infinite alternate}
+    .target-panel.input-blocked .target-btn{filter:grayscale(.35) drop-shadow(0 24px 30px rgba(0,0,0,.35))}
+    @keyframes antiAutoPulse{from{border-color:rgba(255,105,105,.35)}to{border-color:rgba(255,105,105,.78)}}
+    .health-wrap{width:min(100%,590px);margin-bottom:8px}.health-top{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:7px;gap:12px}
+    .health-bar{width:100%;height:22px;background:rgba(255,255,255,.08);border-radius:999px;overflow:hidden;border:1px solid rgba(255,255,255,.08)}
+    .health-fill{height:100%;width:100%;background:linear-gradient(90deg,#ff6b6b 0%,#ff9f43 100%);transition:width .14s ease;box-shadow:inset 0 0 10px rgba(255,255,255,.25)}
+    .target-panel.black-boss-stage .health-fill{background:linear-gradient(90deg,#6b0000,#ff3e3e)}
+    .hint{font-size:13px;color:var(--muted);margin:6px 0 0;min-height:20px;text-align:center}
+    .retry-btn{display:none;border:none;border-radius:12px;padding:9px 15px;font-weight:900;cursor:pointer;background:linear-gradient(180deg,#8cf3b3,#49c77a);color:#12351f}.retry-btn.show{display:inline-block}.retry-btn.boss-retry{background:linear-gradient(180deg,#ff8e8e,#e23f3f);color:white}
+
+    .hit-zone{position:relative;width:min(100%,650px);flex:1;display:flex;justify-content:center;align-items:center;user-select:none;isolation:isolate}
+    .target-btn{position:relative;border:none;background:transparent;cursor:pointer;padding:0;transform-origin:center bottom;transition:transform .06s ease,filter .2s ease;outline:none;filter:drop-shadow(0 24px 30px rgba(0,0,0,.35));z-index:3}
+    .target-btn:hover{transform:scale(1.01)}.target-btn:active{transform:scale(.97)}
+    .target-btn.shake-a{animation:shakeA .18s linear}.target-btn.shake-b{animation:shakeB .2s linear}.target-btn.bounce{animation:bounceHit .22s ease}
+    @keyframes shakeA{0%{transform:translateX(0) rotate(0)}25%{transform:translateX(-8px) rotate(-2deg)}50%{transform:translateX(7px) rotate(2deg)}75%{transform:translateX(-4px) rotate(-1deg)}100%{transform:translateX(0)}}
+    @keyframes shakeB{0%{transform:translateY(0) scale(1)}30%{transform:translateY(7px) scale(.97)}65%{transform:translateY(-5px) scale(1.02)}100%{transform:translateY(0) scale(1)}}
+    @keyframes bounceHit{0%{transform:scale(1)}45%{transform:scale(.94) rotate(1.5deg)}100%{transform:scale(1)}}
+    .target-btn img{width:min(100%,420px);max-height:535px;object-fit:contain;image-rendering:auto;pointer-events:none;transition:filter .25s ease}
+    .target-panel.black-boss-stage .target-btn img{filter:grayscale(1) brightness(.28) contrast(1.8) saturate(.3);}
+    .target-panel.black-boss-stage .target-btn{filter:drop-shadow(0 22px 30px rgba(0,0,0,.65)) drop-shadow(0 0 18px rgba(255,40,40,.3))}
+
+    .speech-bubble{position:absolute;left:50%;top:26px;transform:translateX(-50%) translateY(6px);max-width:min(84%,540px);background:rgba(255,255,255,.98);color:#182034;border:3px solid rgba(24,32,52,.18);border-radius:22px;padding:13px 17px;font-size:17px;font-weight:850;line-height:1.38;text-align:center;box-shadow:0 14px 30px rgba(0,0,0,.24);z-index:12;opacity:0;pointer-events:none;transition:opacity .16s ease,transform .16s ease}
+    .speech-bubble::after{content:"";position:absolute;left:50%;bottom:-17px;transform:translateX(-50%);border:9px solid transparent;border-top-color:rgba(255,255,255,.98)}
+    .speech-bubble.show{opacity:1;transform:translateX(-50%) translateY(0)}
+    .target-panel.black-boss-stage .speech-bubble{background:#170e12;color:#ffb5b5;border-color:#73333c}.target-panel.black-boss-stage .speech-bubble::after{border-top-color:#170e12}
+
+    .drop-text{position:absolute;font-weight:950;pointer-events:none;text-shadow:0 2px 10px rgba(0,0,0,.55);animation:floatUp .9s ease forwards;white-space:nowrap;z-index:15}
+    @keyframes floatUp{0%{opacity:0;transform:translate(-50%,0) scale(.9)}10%{opacity:1;transform:translate(-50%,-10px) scale(1)}100%{opacity:0;transform:translate(-50%,-85px) scale(1.08)}}
+    .impact-ring{position:absolute;width:42px;height:42px;border:5px solid #fff;border-radius:50%;pointer-events:none;z-index:10;animation:ringBurst .48s ease-out forwards;box-shadow:0 0 14px rgba(255,255,255,.65)}
+    @keyframes ringBurst{0%{opacity:.95;transform:translate(-50%,-50%) scale(.35)}100%{opacity:0;transform:translate(-50%,-50%) scale(2.1)}}
+    .comic-hit{position:absolute;pointer-events:none;z-index:14;font-weight:1000;font-size:34px;color:#ffe45e;-webkit-text-stroke:2px #3a2100;text-shadow:3px 4px 0 rgba(0,0,0,.22);animation:comicPop .55s ease-out forwards;transform-origin:center}
+    @keyframes comicPop{0%{opacity:0;transform:translate(-50%,-50%) scale(.35) rotate(-12deg)}30%{opacity:1;transform:translate(-50%,-50%) scale(1.2) rotate(5deg)}100%{opacity:0;transform:translate(-50%,-85%) scale(.9) rotate(-4deg)}}
+    .slash{position:absolute;width:80px;height:5px;border-radius:999px;background:white;box-shadow:0 0 10px white;pointer-events:none;z-index:11;animation:slashFlash .38s ease-out forwards;transform-origin:center}
+    @keyframes slashFlash{0%{opacity:0;transform:translate(-50%,-50%) rotate(var(--r)) scaleX(.15)}25%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) rotate(var(--r)) scaleX(1.3)}}
+    .spark{position:absolute;pointer-events:none;z-index:10;font-size:24px;animation:sparkFly .55s ease-out forwards}
+    @keyframes sparkFly{0%{opacity:1;transform:translate(-50%,-50%) scale(.5)}100%{opacity:0;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(1.2) rotate(120deg)}}
+
+    .notice{position:absolute;left:50%;top:48%;transform:translate(-50%,-50%);z-index:30;background:rgba(10,16,28,.93);border:1px solid rgba(255,255,255,.13);border-radius:18px;padding:18px 22px;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,.45);opacity:0;pointer-events:none;transition:opacity .18s ease;max-width:80%}.notice.show{opacity:1}.notice .big{font-size:25px;font-weight:950;margin-bottom:5px}.notice .small{font-size:13px;color:var(--muted);line-height:1.5}
+
+    .growth-tabs{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:18px;padding:5px;background:rgba(0,0,0,.18);border:1px solid rgba(255,255,255,.07);border-radius:15px}
+    .growth-tab{border:0;border-radius:11px;padding:10px 8px;background:transparent;color:var(--muted);font-weight:900;font-size:13px;cursor:pointer;transition:.16s ease}
+    .growth-tab:hover{background:rgba(255,255,255,.06);color:#fff}.growth-tab.active{background:linear-gradient(180deg,rgba(255,214,95,.98),rgba(255,182,41,.96));color:#392500;box-shadow:0 5px 15px rgba(255,182,41,.16)}
+    .growth-tab.blessing-tab.active{background:linear-gradient(180deg,#ccefff,#7ccdf7);color:#0c3550;box-shadow:0 5px 15px rgba(124,205,247,.16)}
+    .growth-pane{margin-top:11px}.growth-pane.hidden{display:none}.growth-pane-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:9px}.growth-pane-title{font-size:14px;font-weight:900;color:#fff}.growth-pane-note{font-size:11px;color:var(--muted)}
+    .buy-mode-row{display:flex;align-items:center;gap:6px;margin:0 0 10px;padding:7px 8px;border-radius:13px;background:rgba(0,0,0,.14);border:1px solid rgba(255,255,255,.06)}.buy-mode-label{font-size:11px;color:var(--muted);font-weight:850;margin-right:auto}.buy-mode-btn{min-width:48px;border:1px solid rgba(255,255,255,.10);border-radius:9px;padding:6px 8px;background:rgba(255,255,255,.07);color:var(--muted);font-size:11px;font-weight:950;cursor:pointer}.buy-mode-btn.active{background:linear-gradient(180deg,#ffd65f,#ffb629);color:#392500;border-color:rgba(255,203,71,.45)}.blessing-pane .buy-mode-btn.active{background:linear-gradient(180deg,#ccefff,#7ccdf7);color:#0c3550;border-color:rgba(124,205,247,.4)}
+    .upgrade-list{display:flex;flex-direction:column;gap:10px}.upgrade{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:11px}.upgrade-top{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:start;gap:8px;margin-bottom:6px}.upgrade-title-row{justify-content:space-between;min-width:0}.upgrade-title{font-size:15px;font-weight:900;min-width:0}.upgrade-title-row .info-icon{width:17px;height:17px;line-height:15px;font-size:10px}.upgrade-title-row .info-icon::after{width:210px}.lv{font-size:10px;color:var(--muted);background:rgba(255,255,255,.08);padding:4px 7px;border-radius:999px}.upgrade-desc{font-size:10.5px;color:#e4ebf6;line-height:1.35;margin-bottom:7px;min-height:0}.upgrade-desc strong{font-weight:800}.upgrade-bottom{display:flex;justify-content:space-between;align-items:center;gap:8px}.cost{font-weight:850;color:var(--accent);font-size:12px}
+    .blessing-note{font-size:11px;color:var(--tear);font-weight:800}.blessing .cost{color:var(--tear)}.blessing strong{color:#d9f2ff}.blessing button.buy{background:linear-gradient(180deg,#ccefff,#7ccdf7);color:#0c3550;box-shadow:0 8px 18px rgba(124,205,247,.16)}
+    .blessing-reset-box{margin-top:11px;padding:11px;border-radius:15px;background:rgba(155,220,255,.07);border:1px solid rgba(155,220,255,.16)}.blessing-reset-info{font-size:11px;color:var(--muted);line-height:1.45;margin-bottom:8px}.blessing-reset-btn{width:100%;border:1px solid rgba(155,220,255,.28);border-radius:11px;padding:9px 11px;background:rgba(155,220,255,.12);color:#dff5ff;font-weight:900;cursor:pointer}.blessing-reset-btn:hover:not(:disabled){background:rgba(155,220,255,.19)}.blessing-reset-btn:disabled{opacity:.4;cursor:not-allowed}
+    .achievement-toast-stack{position:fixed;top:64px;right:22px;z-index:10020;width:min(320px,calc(100vw - 30px));pointer-events:none}.achievement-toast{padding:12px 13px;border-radius:14px;background:linear-gradient(180deg,rgba(49,42,22,.98),rgba(22,25,35,.98));border:1px solid rgba(255,203,71,.45);box-shadow:0 14px 34px rgba(0,0,0,.44);opacity:0;transform:translateY(-10px) scale(.98);animation:achievementToastIn 3.2s ease forwards}.achievement-toast-kicker{font-size:10px;font-weight:1000;color:var(--accent);letter-spacing:.05em}.achievement-toast-name{margin-top:3px;font-size:15px;font-weight:950;color:#fff}.achievement-toast-sub{margin-top:3px;font-size:10.5px;color:var(--muted)}@keyframes achievementToastIn{0%{opacity:0;transform:translateY(-10px) scale(.98)}10%,82%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-5px) scale(.99)}}
+    .rebirth-flash{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;pointer-events:none;opacity:0;background:radial-gradient(circle at center,rgba(255,255,255,1) 0%,rgba(225,247,255,.98) 24%,rgba(126,205,255,.58) 52%,rgba(16,29,58,.05) 78%)}.rebirth-flash.play{animation:rebirthFlash .95s ease-out forwards}.rebirth-flash-content{text-align:center;color:#102640;text-shadow:0 2px 12px rgba(255,255,255,.85);transform:scale(.7);opacity:0}.rebirth-flash.play .rebirth-flash-content{animation:rebirthText .95s ease-out forwards}.rebirth-flash-title{font-size:clamp(44px,9vw,88px);font-weight:1000;letter-spacing:-.05em}.rebirth-flash-sub{margin-top:5px;font-size:clamp(17px,3vw,28px);font-weight:950}
+    @keyframes rebirthFlash{0%{opacity:0}10%{opacity:1}28%{opacity:1}100%{opacity:0}}@keyframes rebirthText{0%,12%{opacity:0;transform:scale(.65)}28%{opacity:1;transform:scale(1.12)}48%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(1.04)}}
+    .rebirth-card{margin-top:18px;padding:14px;border-radius:18px;background:linear-gradient(180deg,rgba(155,220,255,.11),rgba(255,255,255,.05));border:1px solid rgba(155,220,255,.22)}.rebirth-title{font-size:19px;font-weight:900;margin-bottom:7px}.rebirth-info{font-size:12px;color:var(--muted);line-height:1.55}.rebirth-reward{margin:11px 0;font-size:15px;font-weight:900;color:var(--tear)}.rebirth-btn{width:100%;border:none;border-radius:12px;padding:11px 12px;font-weight:900;cursor:pointer;background:linear-gradient(180deg,#b9e9ff,#63bce8);color:#0b3147}.rebirth-btn:disabled{opacity:.4;cursor:not-allowed}.rebirth-count{margin-top:8px;font-size:11px;color:var(--muted);text-align:center}
+    .achievement-card{margin-top:18px;padding:14px;border-radius:18px;background:linear-gradient(180deg,rgba(255,203,71,.10),rgba(255,255,255,.045));border:1px solid rgba(255,203,71,.20)}.achievement-head{display:flex;justify-content:space-between;align-items:center;gap:10px}.achievement-title{font-size:19px;font-weight:950}.achievement-ready{font-size:10.5px;color:#392500;background:var(--accent);font-weight:950;border-radius:999px;padding:5px 8px}.achievement-ready.zero{opacity:.38}.achievement-ready.has-ready{animation:readyPulse 1.4s ease-in-out infinite}.achievement-summary,.achievement-mults{display:none}.achievement-tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:10px 0 8px}.achievement-tab{display:flex;align-items:center;justify-content:center;gap:5px;border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:7px 8px;background:rgba(255,255,255,.06);color:var(--muted);font-weight:900;cursor:pointer}.achievement-tab.active{background:rgba(255,203,71,.17);border-color:rgba(255,203,71,.38);color:var(--accent)}.achievement-tab-badge{display:none;min-width:17px;height:17px;align-items:center;justify-content:center;border-radius:999px;padding:0 5px;background:var(--accent);color:#392500;font-size:9px;font-weight:1000}.achievement-tab-badge.show{display:inline-flex}@keyframes readyPulse{0%,100%{box-shadow:0 0 0 rgba(255,203,71,0)}50%{box-shadow:0 0 14px rgba(255,203,71,.34)}}.achievement-pane.hidden{display:none}.achievement-list{display:flex;flex-direction:column;gap:7px;max-height:470px;overflow:auto;padding-right:2px}.achievement-item{padding:10px;border-radius:13px;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.065)}.achievement-item.ready{border-color:rgba(255,203,71,.45);box-shadow:inset 0 0 16px rgba(255,203,71,.05)}.achievement-item.claimed{opacity:.65}.achievement-item.challenge{background:linear-gradient(180deg,rgba(204,133,255,.075),rgba(255,255,255,.045))}.achievement-item-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}.achievement-name{font-size:13px;font-weight:950}.achievement-kind{font-size:9px;border-radius:999px;padding:3px 6px;background:rgba(255,255,255,.08);color:var(--muted);white-space:nowrap}.achievement-condition{margin-top:4px;font-size:10.5px;color:var(--muted);line-height:1.4}.achievement-progress{margin-top:4px;font-size:10px;color:#dce5f5}.achievement-bottom{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:7px}.achievement-reward{font-size:10.5px;font-weight:900;color:var(--tear)}.achievement-item.challenge .achievement-reward{color:#e9b6ff}.achievement-claim{border:none;border-radius:9px;padding:6px 8px;font-size:10.5px;font-weight:950;cursor:pointer;background:linear-gradient(180deg,#ffd65f,#ffb629);color:#392500;white-space:nowrap}.achievement-item.challenge .achievement-claim{background:linear-gradient(180deg,#edc4ff,#ba71e7);color:#351347}.achievement-claim:disabled{opacity:.38;cursor:not-allowed}
+    button.buy,.utility-btn{border:none;border-radius:12px;padding:9px 11px;font-weight:850;cursor:pointer;background:linear-gradient(180deg,#ffd65f,#ffb629);color:#392500;box-shadow:0 8px 18px rgba(255,182,41,.18);transition:.15s ease}button.buy:hover,.utility-btn:hover{transform:translateY(-1px)}button.buy:disabled{cursor:not-allowed;opacity:.45;transform:none;box-shadow:none}
+    .stat-table{display:grid;gap:9px}.stat-row{display:flex;justify-content:space-between;gap:10px;font-size:13px;padding:11px 13px;border-radius:13px;background:rgba(255,255,255,.06)}.stat-row .l{color:var(--muted)}.stat-row .r{font-weight:850}
+    .tools{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.utility-btn:disabled{opacity:.4;cursor:not-allowed;transform:none}.utility-btn.secondary{background:rgba(255,255,255,.12);color:white;box-shadow:none;border:1px solid rgba(255,255,255,.08)}.save-msg{margin-top:10px;min-height:18px;font-size:12px;color:var(--good)}.footer-note{margin-top:10px;color:var(--muted);font-size:12px;line-height:1.55}.help-toggle{margin-top:10px;border-top:1px solid rgba(255,255,255,.07);padding-top:9px}
+    .help-toggle summary{display:flex;align-items:center;justify-content:space-between;gap:8px;list-style:none;cursor:pointer;padding:7px 9px;border-radius:10px;background:rgba(255,255,255,.055);color:#e9eff9;font-size:11px;font-weight:900;user-select:none}
+    .help-toggle summary::-webkit-details-marker{display:none}
+    .help-toggle summary:hover{background:rgba(255,255,255,.085)}
+    .help-chevron{font-size:10px;color:var(--muted);transition:transform .16s ease}
+    .help-toggle[open] .help-chevron{transform:rotate(180deg)}
+    .help-content{margin-top:7px;padding:10px 11px;border-radius:11px;background:rgba(8,13,24,.58);border:1px solid rgba(255,255,255,.07);font-size:10.5px;line-height:1.6;color:#dfe7f4}
+    .help-content div+div{margin-top:5px}
+    .backup-row{display:flex;align-items:center;justify-content:flex-end;gap:6px;margin-top:7px;font-size:10.5px;color:var(--muted)}
+    .backup-row .info-icon{width:16px;height:16px;line-height:14px;font-size:9px}
+    .backup-status{color:#cfe9d9;font-weight:800}
+    @media(max-width:1130px){body{height:auto;min-height:100vh;overflow:auto}.wrap{height:auto;min-height:100vh;display:block;overflow:visible}.titlebar{align-items:flex-start;flex-wrap:wrap}.top-stats{width:100%;justify-content:flex-start;flex-wrap:wrap}.layout{grid-template-columns:1fr;align-items:stretch;display:grid;min-height:0;overflow:visible}.layout>section{height:auto;min-height:0;overflow:visible;overscroll-behavior:auto;scrollbar-gutter:auto}.target-panel{align-self:stretch;min-height:0;overflow:visible;order:-2}.layout>section:first-child{order:-1}}
+    @media(max-width:900px) and (min-width:701px){.combat-hud{grid-template-columns:135px minmax(220px,1fr) 105px}.combat-hud .floor-dot{width:21px}}
+    @media(max-width:700px){.wrap{padding:9px}.titlebar{padding:8px;margin-bottom:9px}.brand-line{width:100%;justify-content:space-between}.top-stats{gap:2px}.mini-card{padding:3px 6px}.mini-card .k{font-size:8.5px}.mini-card .v{font-size:10.5px}.boss-name{font-size:28px}.combat-hud{grid-template-columns:1fr;margin-bottom:8px}.hud-stage{align-items:center}.combat-hud .stage-line,.combat-hud .floor-progress{justify-content:center}.combat-hud .challenge-strip{display:grid;grid-template-columns:1fr auto}.combat-hud .challenge-strip .hud-retry-btn{grid-column:1/-1}.combat-hud .timer-label{display:block}.combat-hud .floor-dot{width:30px;height:22px}.combat-hud .energy-info{display:none}.target-btn img{width:min(100%,330px)}.target-panel{min-height:650px}.speech-bubble{font-size:15px;top:18px}.mode-badge{min-width:0}.energy-bottom{grid-template-columns:1fr}.frenzy-btn{width:auto}.achievement-list{max-height:390px}.achievement-toast-stack{top:12px;right:10px}.info-icon::after{width:220px}.backup-row{justify-content:flex-start}}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="titlebar">
+    <div class="brand-line">
+      <h1>이수영 줘패기</h1>
+      <div class="version-tag">beta 0.203</div>
+    </div>
+    <div class="top-stats">
+      <div class="mini-card"><span class="k">재화</span><span class="v" id="moneyTop">0원</span></div>
+      <div class="mini-card tear"><span class="k">눈물</span><span class="v" id="tearTop">0</span></div>
+      <div class="mini-card"><span class="k">공격</span><span class="v" id="atkTop">1</span></div>
+      <div class="mini-card"><span class="k">자동</span><span class="v" id="autoTop">0</span></div>
+      <div class="mini-card"><span class="k">진행</span><span class="v" id="stageTop">1-1F</span></div>
+    </div>
+  </div>
+
+  <div class="layout">
+    <section class="panel">
+      <div class="growth-sticky-head">
+        <div class="section-title-line">
+          <h2>재화 & 성장</h2>
+          <button class="info-icon" type="button" aria-label="성장 시스템 설명" data-tip="1~4층은 시간 제한 없이 진행됩니다. 5층만 제한시간이 있으며, 일반 5층 실패 시 성장 모드에서 재화를 모은 뒤 재도전할 수 있습니다. 일반 업그레이드는 환생 시 초기화되고 용사의 축복은 유지됩니다.">i</button>
+        </div>
+        <div class="compact-resource">
+          <div class="compact-resource-main">
+            <div class="compact-resource-label">보유 재화</div>
+            <div class="compact-resource-money" id="money">0원</div>
+          </div>
+          <div class="compact-resource-tears">
+            <div class="compact-resource-label">눈물</div>
+            <span class="v" id="tears">0</span>
+          </div>
+          <div class="compact-resource-total">
+            <div class="compact-resource-label">누적</div>
+            <span class="v" id="totalEarned">0원</span>
+          </div>
+        </div>
+      </div>
+      <div class="growth-tabs" role="tablist" aria-label="성장 메뉴">
+        <button class="growth-tab active" id="upgradeTab" role="tab" aria-selected="true" aria-controls="upgradePane">업그레이드</button>
+        <button class="growth-tab blessing-tab" id="blessingTab" role="tab" aria-selected="false" aria-controls="blessingPane">용사의 축복</button>
+      </div>
+
+      <div class="growth-pane" id="upgradePane" role="tabpanel" aria-labelledby="upgradeTab">
+        <div class="growth-pane-head"><span class="growth-pane-title">일반 업그레이드</span><span class="growth-pane-note">환생 시 초기화</span></div>
+        <div class="buy-mode-row">
+          <span class="buy-mode-label">구매 수량</span>
+          <button class="buy-mode-btn" type="button" data-buy-mode="1">×1</button>
+          <button class="buy-mode-btn" type="button" data-buy-mode="10">×10</button>
+          <button class="buy-mode-btn" type="button" data-buy-mode="max">MAX</button>
+        </div>
+        <div class="upgrade-list" id="upgrades"></div>
+      </div>
+
+      <div class="growth-pane hidden blessing-pane" id="blessingPane" role="tabpanel" aria-labelledby="blessingTab">
+        <div class="growth-pane-head"><span class="growth-pane-title">용사의 축복</span><span class="blessing-note">환생 후에도 유지</span></div>
+        <div class="buy-mode-row">
+          <span class="buy-mode-label">구매 수량</span>
+          <button class="buy-mode-btn" type="button" data-buy-mode="1">×1</button>
+          <button class="buy-mode-btn" type="button" data-buy-mode="10">×10</button>
+          <button class="buy-mode-btn" type="button" data-buy-mode="max">MAX</button>
+        </div>
+        <div class="upgrade-list" id="blessings"></div>
+        <div class="blessing-reset-box">
+          <div class="blessing-reset-info" id="blessingResetInfo">투자한 검은수영의 눈물을 100% 회수하고 모든 용사의 축복을 Lv.0으로 되돌립니다.</div>
+          <button class="blessing-reset-btn" id="blessingResetBtn" type="button">용사의 축복 초기화</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel target-panel" id="targetPanel">
+      <div class="boss-name" id="enemyName">이수영</div>
+      <div class="boss-trait-card" id="bossTraitCard">
+        <div class="boss-trait-title" id="bossTraitTitle"></div>
+        <div class="boss-trait-status" id="bossTraitStatus"></div>
+      </div>
+
+      <div class="combat-hud">
+        <div class="hud-stage">
+          <div class="stage-line"><span id="stageLabel">STAGE 1 · FLOOR 1</span><span class="boss-badge">BLACK BOSS</span><span class="gold-badge">GOLDEN!</span></div>
+          <div class="floor-progress" id="floorProgress"></div>
+        </div>
+
+        <div class="energy-card" id="energyCard">
+          <div class="energy-head">
+            <span class="energy-title-wrap"><span class="energy-title">검은수영의 기운</span><button class="info-icon tip-left" id="energyInfoIcon" type="button" aria-label="검은수영의 기운 설명">i</button></span>
+            <span class="energy-value" id="energyValue">0 / 100</span>
+          </div>
+          <div class="energy-bar"><div class="energy-fill" id="energyFill"></div></div>
+          <div class="energy-bottom">
+            <div class="energy-info" id="energyInfo">수동 공격 시 +1 · 자동 공격으로는 충전되지 않습니다.</div>
+            <button class="frenzy-btn" id="frenzyBtn" disabled>기운 100 필요</button>
+          </div>
+          <div class="frenzy-status" id="frenzyStatus"></div>
+          <div class="frenzy-meta" id="frenzyMeta">폭주 지속시간 12초</div>
+          <div class="auto-frenzy-row">
+            <span>자동 폭주</span>
+            <button class="auto-frenzy-toggle" id="autoFrenzyToggle" type="button" aria-pressed="false">OFF</button>
+          </div>
+        </div>
+
+        <div class="challenge-strip">
+          <div class="timer-box"><div class="timer-label">남은 시간</div><div class="timer-value" id="timerValue">∞</div></div>
+          <div class="mode-info-row"><div class="mode-badge" id="modeBadge">도전 중</div><button class="info-icon" id="combatInfoIcon" type="button" aria-label="현재 전투 설명">i</button></div>
+          <button class="retry-btn hud-retry-btn" id="retryBtn">5층 재도전</button>
+        </div>
+      </div>
+
+      <div class="anti-auto-warning" id="antiAutoWarning">비정상적으로 일정한 입력이 감지되어 수동 공격이 잠시 차단되었습니다.</div>
+
+      <div class="health-wrap">
+        <div class="health-top"><span id="hpLabel">체력 50 / 50</span><span id="killBonus">처치 보너스: 25원</span></div>
+        <div class="health-bar"><div class="health-fill" id="hpFill"></div></div>
+      </div>
+      <div class="hint" id="hintText">시간 제한 없이 처치하면 다음 층으로 올라갑니다.</div>
+      <div class="hit-zone" id="hitZone">
+        <div class="speech-bubble" id="speechBubble"></div>
+        <button class="target-btn" id="targetBtn" aria-label="공격하기"><img id="targetImg" src="target.png" alt="이수영 목표 이미지"></button>
+        <div class="notice" id="notice"><div class="big" id="noticeBig"></div><div class="small" id="noticeSmall"></div></div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>전투 수치</h2>
+      <div class="stat-table">
+        <div class="stat-row"><span class="l">공격력</span><span class="r" id="statAtk">1</span></div>
+        <div class="stat-row"><span class="l">크리티컬 확률</span><span class="r" id="statCritChance">5%</span></div>
+        <div class="stat-row"><span class="l">크리티컬 배율</span><span class="r" id="statCritDamage">150%</span></div>
+        <div class="stat-row"><span class="l">초당 자동 공격력</span><span class="r" id="statAuto">0</span></div>
+        <div class="stat-row"><span class="l">초당 기대 수입</span><span class="r" id="statGps">0원</span></div>
+        <div class="stat-row"><span class="l">총 클릭 수</span><span class="r" id="statClicks">0</span></div>
+        <div class="stat-row"><span class="l">처치 수</span><span class="r" id="statKills">0</span></div>
+        <div class="stat-row"><span class="l">최대 한 방</span><span class="r" id="statMaxHit">0</span></div>
+        <div class="stat-row"><span class="l">최고 도달</span><span class="r" id="statBest">1-1F</span></div>
+      </div>
+      <div class="rebirth-card">
+        <div class="title-with-info"><div class="rebirth-title">환생</div><button class="info-icon" type="button" aria-label="환생 설명" data-tip="10스테이지부터 환생할 수 있습니다. 환생하면 일반 재화·일반 능력치·일반 업그레이드·스테이지 진행도가 초기화됩니다. 검은수영의 눈물, 용사의 축복, 업적 보상은 유지됩니다.">i</button></div>
+        <div class="rebirth-reward" id="rebirthReward">현재 환생 보상: 0개</div>
+        <button class="rebirth-btn" id="rebirthBtn" disabled>10스테이지부터 환생 가능</button>
+        <div class="rebirth-count" id="rebirthCount">누적 환생 0회</div>
+      </div>
+      <div class="achievement-card">
+        <div class="achievement-head">
+          <div class="title-with-info"><div class="achievement-title">업적</div><button class="info-icon tip-left" id="achievementInfoIcon" type="button" aria-label="업적 설명">i</button></div>
+          <div class="achievement-ready" id="achievementReady">수령 가능 0</div>
+        </div>
+        <div class="achievement-summary" id="achievementSummary">달성한 업적의 보상은 직접 수령해야 적용됩니다.</div>
+        <div class="achievement-mults" id="achievementMultiplierSummary">영구 배율: 모든 피해 ×1.00 · 수동 ×1.00 · 자동 ×1.00 · 재화 ×1.00 · 보스 ×1.00</div>
+        <div class="achievement-tabs">
+          <button class="achievement-tab active" id="achievementNormalTab" type="button">일반 업적 <span class="achievement-tab-badge" id="achievementNormalBadge"></span></button>
+          <button class="achievement-tab" id="achievementChallengeTab" type="button">도전 업적 <span class="achievement-tab-badge" id="achievementChallengeBadge"></span></button>
+        </div>
+        <div class="achievement-pane" id="achievementNormalPane"><div class="achievement-list" id="achievementNormalList"></div></div>
+        <div class="achievement-pane hidden" id="achievementChallengePane"><div class="achievement-list" id="achievementChallengeList"></div></div>
+      </div>
+      <div class="tools">
+        <button class="utility-btn" id="saveBtn">저장</button>
+        <button class="utility-btn secondary" id="backupBtn">자동 백업 복구</button>
+        <button class="utility-btn secondary" id="resetBtn">초기화</button>
+        <button class="utility-btn secondary" id="exportBtn">저장데이터 복사</button>
+        <button class="utility-btn secondary" id="importBtn">저장데이터 불러오기</button>
+      </div>
+      <div class="save-msg" id="saveMsg"></div>
+      <details class="help-toggle">
+        <summary><span>도움말</span><span class="help-chevron">▼</span></summary>
+        <div class="help-content">
+          <div><b>수동 공격</b> · 사진 클릭 또는 사진 위에서 Space</div>
+          <div><b>폭주</b> · 기운 100에서 Ctrl로 수동 발동</div>
+          <div><b>층 진행</b> · 1~4층은 시간 제한 없음 / 5층은 기본 60초</div>
+          <div><b>검은수영</b> · 5스테이지마다 등장</div>
+          <div><b>황금수영</b> · 일반 적에서 5% 확률 / 체력 2배 / 보상 50배</div>
+          <div><b>속성수영</b> · Stage 10부터 등장 가능 / 처치 시 눈물 2배</div>
+          <div><b>업적</b> · 달성 후 직접 보상을 수령해야 적용</div>
+          <div><b>오프라인 보상</b> · 자동 공격 기대수입 100% / 최대 24시간</div>
+        </div>
+      </details>
+      <div class="backup-row">
+        <span class="backup-status" id="backupStatus">자동 백업 준비 중</span>
+        <button class="info-icon" type="button" aria-label="자동 백업 설명" data-tip="현재 저장본의 직전 정상 상태를 약 1분 간격으로 1개 자동 보관합니다. 저장 데이터가 손상되면 자동으로 백업을 시도하며, ‘자동 백업 복구’ 버튼으로 직접 복구할 수도 있습니다.">i</button>
+      </div>
+    </section>
+  </div>
+</div>
+
+<div class="achievement-toast-stack" id="achievementToastStack"></div>
+
+<div class="rebirth-flash" id="rebirthFlash">
+  <div class="rebirth-flash-content">
+    <div class="rebirth-flash-title">환생!</div>
+    <div class="rebirth-flash-sub" id="rebirthFlashSub">검은수영의 눈물 +0</div>
+  </div>
+</div>
+
+<script>
+  const SAVE_GENERATION = 'beta0.16';
+  const SAVE_KEY = 'blacklee_save_beta016_v1';
+  const BACKUP_KEY = 'blacklee_save_beta016_backup_v1';
+  const BACKUP_INTERVAL_MS = 60000;
+  const TARGET_NORMAL_SRC = 'target.png';
+  const TARGET_HURT_SRC = 'target_hurt.png';
+  const TARGET_HURT_DURATION_MS = 1000;
+  const BOSS_TRAIT_KEYS = ['pride','greed','lust','envy','gluttony','wrath','sloth'];
+
+  const defaultState = () => ({
+    saveGeneration:SAVE_GENERATION,
+    money:0,totalEarned:0,tears:0,energy:0,autoFrenzy:false,buyMode:'1',balanceVersion:11,
+    attack:1,critChance:.05,critDamage:1.5,autoAttack:0,
+    clicks:0,kills:0,maxHit:0,rebirths:0,
+    stage:1,floor:1,bestStage:1,bestFloor:1,
+    enemyMaxHp:50,enemyHp:50,enemyReward:25,isGolden:null,
+    bossTrait:null,bossCycleElapsed:0,bossCharmRemaining:0,bossWrathRemaining:0,bossWrathTriggered:false,
+    mode:'challenge',timeRemaining:0,bossRetryReady:false,lastActiveAt:Date.now(),
+    upgrades:{attack:0,critChance:0,critDamage:0,autoAttack:0},
+    blessings:{damage:0,gold:0,time:0,crit:0,auto:0},
+    blessingSpent:{damage:0,gold:0,time:0,crit:0,auto:0},
+    achievementClaims:{},achievementNotified:{},achievementNoticeVersion:0,
+    totalTearsEarned:0,goldenKills:0,blackBossKills:0,attributeBossKills:0,frenzyUses:0,maxFrenzyCombo:0,
+    traitKills:{pride:0,greed:0,lust:0,envy:0,gluttony:0,wrath:0,sloth:0}
+  });
+
+  let loadedFromBackup = false;
+  let lastBackupWriteAt = 0;
+  let state = loadGame() || defaultState();
+  let combatLocked = false;
+  let lastTimerStamp = performance.now();
+  let frenzyEndAt = 0;
+  let frenzyCombo = 0;
+  let achievementTab = 'normal';
+
+  const MANUAL_ATTACK_COOLDOWN_MS = 100;
+  const AUTOCLICK_TOLERANCE_MS = 3;
+  const AUTOCLICK_REQUIRED_INTERVALS = 30;
+  const AUTOCLICK_UNLOCK_WINDOW = 8;
+  let lastManualAttackAt = -Infinity;
+  let lastRawManualInputAt = null;
+  let suspiciousIntervalReference = null;
+  let suspiciousIntervalRun = 0;
+  let manualInputBlocked = false;
+  let unlockIntervals = [];
+  let targetHovered = false;
+  let lastPointerClientX = null;
+  let lastPointerClientY = null;
+  let ctrlFrenzyArmed = false;
+  let hurtTargetUntil = 0;
+  let hurtTargetTimer = null;
+
+  const el = {
+    money:document.getElementById('money'), moneyTop:document.getElementById('moneyTop'), totalEarned:document.getElementById('totalEarned'),
+    tears:document.getElementById('tears'), tearTop:document.getElementById('tearTop'), atkTop:document.getElementById('atkTop'), autoTop:document.getElementById('autoTop'), stageTop:document.getElementById('stageTop'),
+    targetPanel:document.getElementById('targetPanel'), stageLabel:document.getElementById('stageLabel'), enemyName:document.getElementById('enemyName'), floorProgress:document.getElementById('floorProgress'),
+    bossTraitCard:document.getElementById('bossTraitCard'), bossTraitTitle:document.getElementById('bossTraitTitle'), bossTraitStatus:document.getElementById('bossTraitStatus'),
+    timerValue:document.getElementById('timerValue'), modeBadge:document.getElementById('modeBadge'),
+    energyCard:document.getElementById('energyCard'), energyValue:document.getElementById('energyValue'), energyFill:document.getElementById('energyFill'), energyInfo:document.getElementById('energyInfo'), energyInfoIcon:document.getElementById('energyInfoIcon'), frenzyBtn:document.getElementById('frenzyBtn'), frenzyStatus:document.getElementById('frenzyStatus'), frenzyMeta:document.getElementById('frenzyMeta'), autoFrenzyToggle:document.getElementById('autoFrenzyToggle'), combatInfoIcon:document.getElementById('combatInfoIcon'),
+    antiAutoWarning:document.getElementById('antiAutoWarning'),
+    hpLabel:document.getElementById('hpLabel'), hpFill:document.getElementById('hpFill'), killBonus:document.getElementById('killBonus'), hintText:document.getElementById('hintText'), retryBtn:document.getElementById('retryBtn'),
+    hitZone:document.getElementById('hitZone'), targetBtn:document.getElementById('targetBtn'), targetImg:document.getElementById('targetImg'), speechBubble:document.getElementById('speechBubble'), notice:document.getElementById('notice'), noticeBig:document.getElementById('noticeBig'), noticeSmall:document.getElementById('noticeSmall'),
+    upgrades:document.getElementById('upgrades'), blessings:document.getElementById('blessings'), upgradeTab:document.getElementById('upgradeTab'), blessingTab:document.getElementById('blessingTab'), upgradePane:document.getElementById('upgradePane'), blessingPane:document.getElementById('blessingPane'), statAtk:document.getElementById('statAtk'), statCritChance:document.getElementById('statCritChance'), statCritDamage:document.getElementById('statCritDamage'), statAuto:document.getElementById('statAuto'), statGps:document.getElementById('statGps'), statClicks:document.getElementById('statClicks'), statKills:document.getElementById('statKills'), statMaxHit:document.getElementById('statMaxHit'), statBest:document.getElementById('statBest'),
+    rebirthReward:document.getElementById('rebirthReward'), rebirthBtn:document.getElementById('rebirthBtn'), rebirthCount:document.getElementById('rebirthCount'),
+    achievementReady:document.getElementById('achievementReady'), achievementSummary:document.getElementById('achievementSummary'), achievementMultiplierSummary:document.getElementById('achievementMultiplierSummary'), achievementInfoIcon:document.getElementById('achievementInfoIcon'),
+    achievementNormalTab:document.getElementById('achievementNormalTab'), achievementChallengeTab:document.getElementById('achievementChallengeTab'), achievementNormalBadge:document.getElementById('achievementNormalBadge'), achievementChallengeBadge:document.getElementById('achievementChallengeBadge'),
+    achievementNormalPane:document.getElementById('achievementNormalPane'), achievementChallengePane:document.getElementById('achievementChallengePane'),
+    achievementNormalList:document.getElementById('achievementNormalList'), achievementChallengeList:document.getElementById('achievementChallengeList'),
+    blessingResetInfo:document.getElementById('blessingResetInfo'), blessingResetBtn:document.getElementById('blessingResetBtn'),
+    rebirthFlash:document.getElementById('rebirthFlash'), rebirthFlashSub:document.getElementById('rebirthFlashSub'), achievementToastStack:document.getElementById('achievementToastStack'),
+    saveBtn:document.getElementById('saveBtn'), backupBtn:document.getElementById('backupBtn'), resetBtn:document.getElementById('resetBtn'), exportBtn:document.getElementById('exportBtn'), importBtn:document.getElementById('importBtn'), saveMsg:document.getElementById('saveMsg'), backupStatus:document.getElementById('backupStatus')
+  };
+
+  const hitDialogues = [
+    '거너비 거너비 골~든 우어어어~~',
+    '아이고!!!!!!!!!! 아이고!!!!!!!!!',
+    '무지개를 보면? 무지개운해~ㅋㅋㅋㅋㅋ',
+    '어.. 미안한데.. 조금 아프네..?',
+    '나같은 전문연구원은 이런거 하나도 안 아프지 뿌직뿌딕',
+    '진짜 금지임.',
+    '암 온더 넥수트 레베루 업!!!!!!!',
+    '응~ 니보다 큼~',
+    '으아~ 뿌딕~ 으아~ 뿌딕~'
+  ];
+  let lastDialogueIndex = -1;
+  let dialogueLocked = false;
+
+  function normalUpgradeGain(level){
+    const nextLevel=Math.max(0,Math.floor(level||0))+1;
+    const tier=Math.floor((nextLevel-1)/10);
+    if(tier===0) return 2;
+    return 5*Math.pow(2,tier-1);
+  }
+  function normalUpgradeTotal(level){
+    level=Math.max(0,Math.floor(level||0));
+    let total=0;
+    for(let lv=0;lv<level;lv++) total+=normalUpgradeGain(lv);
+    return total;
+  }
+
+  const upgradeDefs = [
+    {key:'attack',title:'공격력 강화',desc:'레벨 구간에 따라 공격력 증가폭이 커집니다. Lv.1~10 +2, Lv.11~20 +5, 이후 10레벨마다 증가폭이 2배가 됩니다.',baseCost:10,growth:1.25,effectText:()=>`현재 기본 공격력: ${formatNum(state.attack)} · 다음 +${formatNum(normalUpgradeGain(state.upgrades.attack))}`,buy(){state.attack+=normalUpgradeGain(state.upgrades.attack);state.upgrades.attack+=1;}},
+    {key:'critChance',title:'치명타 확률 강화',desc:'기본 치명타 확률이 2%p 증가합니다. 치명타 확률은 강력한 만큼 천천히 성장합니다. (일반 강화 최대 75%)',baseCost:60,growth:1.55,maxLevel:35,effectText:()=>`현재 기본 확률: ${(state.critChance*100).toFixed(1)}%`,buy(){state.critChance=Math.min(.75,state.critChance+.02);state.upgrades.critChance+=1;}},
+    {key:'critDamage',title:'치명타 피해 강화',desc:'기본 치명타 피해 배율이 25%p 증가합니다.',baseCost:100,growth:1.60,effectText:()=>`현재 기본 배율: ${(state.critDamage*100).toFixed(0)}%`,buy(){state.critDamage+=.25;state.upgrades.critDamage+=1;}},
+    {key:'autoAttack',title:'자동 줘패기',desc:'레벨 구간에 따라 자동 공격 증가폭이 커집니다. Lv.1~10 +2/초, Lv.11~20 +5/초, 이후 10레벨마다 증가폭이 2배가 됩니다. 실제 타격은 0.5초마다 적용됩니다.',baseCost:75,growth:1.30,effectText:()=>`현재 기본 자동 공격: ${formatNum(state.autoAttack)} /초 · 다음 +${formatNum(normalUpgradeGain(state.upgrades.autoAttack))}/초`,buy(){state.autoAttack+=normalUpgradeGain(state.upgrades.autoAttack);state.upgrades.autoAttack+=1;}}
+  ];
+
+  function switchGrowthTab(tab){
+    const showBlessing=tab==='blessing';
+    el.upgradeTab.classList.toggle('active',!showBlessing);
+    el.blessingTab.classList.toggle('active',showBlessing);
+    el.upgradeTab.setAttribute('aria-selected',String(!showBlessing));
+    el.blessingTab.setAttribute('aria-selected',String(showBlessing));
+    el.upgradePane.classList.toggle('hidden',showBlessing);
+    el.blessingPane.classList.toggle('hidden',!showBlessing);
+  }
+
+  function tieredBlessingBonus(level, basePerLevel){
+    level=Math.max(0,Math.floor(level||0));
+    let total=0;
+    for(let lv=1;lv<=level;lv++){
+      // 1~10: 기본 증가폭, 11~20부터 10레벨마다 +5%p.
+      // 41~50 구간의 증가폭을 51레벨 이후에도 그대로 유지한다.
+      const tier=Math.min(Math.floor((lv-1)/10),4);
+      total+=basePerLevel+tier*5;
+    }
+    return total;
+  }
+  function tieredNextGain(level, basePerLevel){
+    const nextLevel=Math.max(0,Math.floor(level||0))+1;
+    const tier=Math.min(Math.floor((nextLevel-1)/10),4);
+    return basePerLevel+tier*5;
+  }
+  function tieredNextMilestone(level){
+    level=Math.max(0,Math.floor(level||0));
+    if(level>=40) return 'Lv.41부터 최고 증가폭 유지';
+    const next=Math.floor(level/10+1)*10+1;
+    return `Lv.${next}부터 레벨당 증가폭 +5%p`;
+  }
+
+  const blessingDefs = [
+    {key:'damage',title:'현진의 엔젤링버스터',desc:'모든 피해량 증가. 10레벨마다 레벨당 증가폭이 +5%p씩 커지며, 50레벨 이후에는 증가폭이 고정됩니다.',baseCost:1,growth:1.45,effectText:()=>{const lv=state.blessings.damage||0;return `모든 피해 +${tieredBlessingBonus(lv,15)}% · 다음 강화 +${tieredNextGain(lv,15)}% · ${tieredNextMilestone(lv)}`;}},
+    {key:'gold',title:'은아의 해변 김치축제',desc:'획득하는 일반 재화 증가. 10레벨마다 레벨당 증가폭이 +5%p씩 커지며, 50레벨 이후에는 증가폭이 고정됩니다.',baseCost:1,growth:1.45,effectText:()=>{const lv=state.blessings.gold||0;return `재화 획득 +${tieredBlessingBonus(lv,10)}% · 다음 강화 +${tieredNextGain(lv,10)}% · ${tieredNextMilestone(lv)}`;}},
+    {key:'time',title:'상원의 멍멍 짖기',desc:'수동 공격 시 검은수영의 기운이 총 +2 충전될 확률이 레벨당 5%p 증가합니다. (최대 Lv.10)',baseCost:3,growth:1.8,maxLevel:10,effectText:()=>`수동 공격 시 기운 +2 확률 ${Math.min(50,(state.blessings.time||0)*5)}%`},
+    {key:'crit',title:'한이의 혈뇨 방출',desc:'레벨당 치명타 확률 +1%p, 치명타 피해 +10%p가 영구 적용됩니다.',baseCost:2,growth:1.8,effectText:()=>`치명타 확률 +${state.blessings.crit}%p / 피해 +${state.blessings.crit*10}%p`},
+    {key:'auto',title:'준서의 쌀먹머신 지원',desc:'자동 공격 피해량이 레벨당 50% 증가합니다.',baseCost:1,growth:1.5,effectText:()=>`자동 공격 피해 +${state.blessings.auto*50}%`}
+  ];
+
+  const bossTraitDefs = {
+    pride:{label:'오만',en:'PRIDE',desc:'체력 70% 이상일 때 받는 피해 -35%'},
+    greed:{label:'탐욕',en:'GREED',desc:'체력 +50% · 처치 일반 재화 보상 ×50'},
+    lust:{label:'색욕',en:'LUST',desc:'10초마다 매혹 · 4초 동안 플레이어 피해 -50%'},
+    envy:{label:'질투',en:'ENVY',desc:'보유 재화가 현재 보스 체력보다 많으면 받는 피해 -50%'},
+    gluttony:{label:'탐식',en:'GLUTTONY',desc:'10초마다 최대 체력의 5% 회복'},
+    wrath:{label:'분노',en:'WRATH',desc:'체력 30% 미만 진입 시 5초 동안 받는 피해 -90%'},
+    sloth:{label:'나태',en:'SLOTH',desc:'평소 받는 피해 -90% · 7초마다 3초간 수면, 수면 중 받는 피해 ×2'}
+  };
+
+  const normalAchievementDefs = [
+    {id:'boss_first',name:'첫 번째 눈물',conditionText:'첫 검은수영 처치',reward:{type:'tears',amount:1},done:()=>state.blackBossKills>=1,progress:()=>`${Math.min(state.blackBossKills,1)} / 1`},
+    {id:'stage_10',name:'이제 시작이다',conditionText:'10스테이지 도달',reward:{type:'tears',amount:2},done:()=>state.bestStage>=10,progress:()=>`${Math.min(state.bestStage,10)} / 10`},
+    {id:'stage_25',name:'제법 올라왔는데?',conditionText:'25스테이지 도달',reward:{type:'tears',amount:5},done:()=>state.bestStage>=25,progress:()=>`${Math.min(state.bestStage,25)} / 25`},
+    {id:'stage_50',name:'절반의 백',conditionText:'50스테이지 도달',reward:{type:'tears',amount:10},done:()=>state.bestStage>=50,progress:()=>`${Math.min(state.bestStage,50)} / 50`},
+    {id:'rebirth_1',name:'다시 태어났다',conditionText:'첫 환생',reward:{type:'tears',amount:2},done:()=>state.rebirths>=1,progress:()=>`${Math.min(state.rebirths,1)} / 1`},
+    {id:'rebirth_10',name:'환생 중독',conditionText:'환생 10회',reward:{type:'tears',amount:5},done:()=>state.rebirths>=10,progress:()=>`${Math.min(state.rebirths,10)} / 10`},
+    {id:'rebirth_25',name:'또 태어났어?',conditionText:'환생 25회',reward:{type:'tears',amount:10},done:()=>state.rebirths>=25,progress:()=>`${Math.min(state.rebirths,25)} / 25`},
+    {id:'rebirth_50',name:'몇 번째 인생이냐',conditionText:'환생 50회',reward:{type:'tears',amount:20},done:()=>state.rebirths>=50,progress:()=>`${Math.min(state.rebirths,50)} / 50`},
+    {id:'frenzy_first',name:'처음 느껴보는 기운',conditionText:'첫 폭주 발동',reward:{type:'tears',amount:1},done:()=>state.frenzyUses>=1,progress:()=>`${Math.min(state.frenzyUses,1)} / 1`},
+    {id:'frenzy_combo_10',name:'손이 좀 풀리는데?',conditionText:'폭주 중 10콤보 달성',reward:{type:'tears',amount:1},done:()=>state.maxFrenzyCombo>=10,progress:()=>`${Math.min(state.maxFrenzyCombo,10)} / 10`},
+    {id:'frenzy_combo_25',name:'멈출 수 없다',conditionText:'폭주 중 25콤보 달성',reward:{type:'tears',amount:2},done:()=>state.maxFrenzyCombo>=25,progress:()=>`${Math.min(state.maxFrenzyCombo,25)} / 25`},
+    {id:'frenzy_combo_50',name:'폭주기관차',conditionText:'폭주 중 50콤보 달성',reward:{type:'tears',amount:5},done:()=>state.maxFrenzyCombo>=50,progress:()=>`${Math.min(state.maxFrenzyCombo,50)} / 50`},
+    {id:'golden_1',name:'황금 발견!',conditionText:'황금수영 첫 처치',reward:{type:'tears',amount:2},done:()=>state.goldenKills>=1,progress:()=>`${Math.min(state.goldenKills,1)} / 1`},
+    {id:'golden_10',name:'황금사냥꾼',conditionText:'황금수영 10회 처치',reward:{type:'tears',amount:5},done:()=>state.goldenKills>=10,progress:()=>`${Math.min(state.goldenKills,10)} / 10`},
+    {id:'golden_25',name:'황금수집가',conditionText:'황금수영 25회 처치',reward:{type:'tears',amount:10},done:()=>state.goldenKills>=25,progress:()=>`${Math.min(state.goldenKills,25)} / 25`},
+    {id:'golden_50',name:'황금수영 전문 사냥꾼',conditionText:'황금수영 50회 처치',reward:{type:'tears',amount:20},done:()=>state.goldenKills>=50,progress:()=>`${Math.min(state.goldenKills,50)} / 50`},
+    {id:'attribute_first',name:'죄악과의 첫 만남',conditionText:'속성수영 첫 처치',reward:{type:'tears',amount:3},done:()=>state.attributeBossKills>=1,progress:()=>`${Math.min(state.attributeBossKills,1)} / 1`},
+    {id:'tears_100',name:'눈물 부자',conditionText:'검은수영의 눈물 누적 100개 획득',reward:{type:'tears',amount:10},done:()=>state.totalTearsEarned>=100,progress:()=>`${formatNum(Math.min(state.totalTearsEarned,100))} / 100`}
+  ];
+
+  const challengeAchievementDefs = [
+    {id:'hit_100k',name:'강해지는 주먹 I',conditionText:'한 방 피해 100K 달성',reward:{type:'mult',stat:'allDamage',value:1.03},done:()=>state.maxHit>=1e5,progress:()=>`${formatNum(Math.min(state.maxHit,1e5))} / 100K`},
+    {id:'hit_1m',name:'강해지는 주먹 II',conditionText:'한 방 피해 1M 달성',reward:{type:'mult',stat:'allDamage',value:1.05},done:()=>state.maxHit>=1e6,progress:()=>`${formatNum(Math.min(state.maxHit,1e6))} / 1M`},
+    {id:'hit_1b',name:'일격필살',conditionText:'한 방 피해 1B 달성',reward:{type:'mult',stat:'allDamage',value:1.08},done:()=>state.maxHit>=1e9,progress:()=>`${formatNum(Math.min(state.maxHit,1e9))} / 1B`},
+    {id:'blessing_10',name:'축복받은 자 I',conditionText:'용사의 축복 총합 Lv.10 달성',reward:{type:'mult',stat:'allDamage',value:1.03},done:()=>totalBlessingLevels()>=10,progress:()=>`${Math.min(totalBlessingLevels(),10)} / 10`},
+    {id:'blessing_25',name:'축복받은 자 II',conditionText:'용사의 축복 총합 Lv.25 달성',reward:{type:'mult',stat:'allDamage',value:1.05},done:()=>totalBlessingLevels()>=25,progress:()=>`${Math.min(totalBlessingLevels(),25)} / 25`},
+    {id:'blessing_50',name:'축복받은 자 III',conditionText:'용사의 축복 총합 Lv.50 달성',reward:{type:'mult',stat:'allDamage',value:1.08},done:()=>totalBlessingLevels()>=50,progress:()=>`${Math.min(totalBlessingLevels(),50)} / 50`},
+    {id:'money_1b',name:'자본주의의 승리',conditionText:'누적 일반 재화 1B 획득',reward:{type:'mult',stat:'gold',value:1.05},done:()=>state.totalEarned>=1e9,progress:()=>`${formatNum(Math.min(state.totalEarned,1e9))} / 1B`},
+    {id:'money_1t',name:'재벌 수영',conditionText:'누적 일반 재화 1T 획득',reward:{type:'mult',stat:'gold',value:1.08},done:()=>state.totalEarned>=1e12,progress:()=>`${formatNum(Math.min(state.totalEarned,1e12))} / 1T`},
+    {id:'auto_50',name:'쌀먹 전문가',conditionText:'자동 줘패기 Lv.50 달성',reward:{type:'mult',stat:'autoDamage',value:1.10},done:()=>state.upgrades.autoAttack>=50,progress:()=>`${Math.min(state.upgrades.autoAttack,50)} / 50`},
+    {id:'click_100k',name:'손가락 파괴자',conditionText:'수동 공격 100,000회',reward:{type:'mult',stat:'manualDamage',value:1.10},done:()=>state.clicks>=100000,progress:()=>`${formatNum(Math.min(state.clicks,100000))} / 100K`},
+    {id:'sins_all',name:'칠죄종 정복자',conditionText:'7대 죄악 속성수영을 각각 1회 이상 처치',reward:{type:'mult',stat:'allDamage',value:1.10},done:()=>BOSS_TRAIT_KEYS.every(k=>(state.traitKills[k]||0)>=1),progress:()=>`${BOSS_TRAIT_KEYS.filter(k=>(state.traitKills[k]||0)>=1).length} / 7`},
+    {id:'boss_100',name:'검은수영 학살자',conditionText:'검은수영 계열 100회 처치',reward:{type:'mult',stat:'bossDamage',value:1.10},done:()=>state.blackBossKills>=100,progress:()=>`${Math.min(state.blackBossKills,100)} / 100`}
+  ];
+
+  const allAchievementDefs = [...normalAchievementDefs,...challengeAchievementDefs];
+
+  function achievementRewardText(def){
+    const r=def.reward;
+    if(r.type==='tears')return `검은수영의 눈물 ${r.amount}개`;
+    const names={allDamage:'모든 피해',manualDamage:'수동 공격 피해',autoDamage:'자동 공격 피해',gold:'재화 획득',bossDamage:'검은수영 상대 피해'};
+    return `${names[r.stat]||r.stat} ×${r.value.toFixed(2)}`;
+  }
+  function achievementMultiplier(stat){
+    let mult=1;
+    challengeAchievementDefs.forEach(def=>{
+      if(def.reward.stat===stat&&state.achievementClaims&&state.achievementClaims[def.id])mult*=def.reward.value;
+    });
+    return mult;
+  }
+  function achievementReadyCount(){
+    return allAchievementDefs.reduce((n,def)=>n+(!state.achievementClaims[def.id]&&def.done()?1:0),0);
+  }
+
+  const achievementToastQueue=[];
+  let achievementToastBusy=false;
+  function enqueueAchievementToast(def){achievementToastQueue.push(def);playNextAchievementToast();}
+  function playNextAchievementToast(){
+    if(achievementToastBusy||achievementToastQueue.length===0||!el.achievementToastStack)return;
+    achievementToastBusy=true;
+    const def=achievementToastQueue.shift();
+    const toast=document.createElement('div');
+    toast.className='achievement-toast';
+    toast.innerHTML=`<div class="achievement-toast-kicker">업적 달성!</div><div class="achievement-toast-name">${def.name}</div><div class="achievement-toast-sub">업적창에서 보상을 받을 수 있습니다.</div>`;
+    el.achievementToastStack.replaceChildren(toast);
+    setTimeout(()=>{toast.remove();achievementToastBusy=false;playNextAchievementToast();},3250);
+  }
+  function checkAchievementUnlocks(){
+    state.achievementNotified={...(state.achievementNotified||{})};
+    if((state.achievementNoticeVersion||0)<1){
+      allAchievementDefs.forEach(def=>{if(state.achievementClaims[def.id]||def.done())state.achievementNotified[def.id]=true;});
+      state.achievementNoticeVersion=1;
+      return;
+    }
+    const unlocked=[];
+    allAchievementDefs.forEach(def=>{
+      if(!state.achievementClaims[def.id]&&!state.achievementNotified[def.id]&&def.done()){state.achievementNotified[def.id]=true;unlocked.push(def);}
+    });
+    unlocked.forEach(enqueueAchievementToast);
+    if(unlocked.length)saveGame(false);
+  }
+  function switchAchievementTab(tab){
+    achievementTab=tab==='challenge'?'challenge':'normal';
+    el.achievementNormalTab.classList.toggle('active',achievementTab==='normal');
+    el.achievementChallengeTab.classList.toggle('active',achievementTab==='challenge');
+    el.achievementNormalPane.classList.toggle('hidden',achievementTab!=='normal');
+    el.achievementChallengePane.classList.toggle('hidden',achievementTab!=='challenge');
+  }
+  function claimAchievement(id){
+    const def=allAchievementDefs.find(a=>a.id===id);
+    if(!def||state.achievementClaims[id]||!def.done())return;
+    state.achievementClaims[id]=true;
+    if(def.reward.type==='tears'){
+      state.tears+=def.reward.amount;
+      state.totalTearsEarned+=def.reward.amount;
+    }
+    render();
+    saveGame(false);
+    showNotice('업적 보상 획득!',`${def.name} · ${achievementRewardText(def)}`,1800);
+  }
+  function renderAchievementList(defs,container,challenge=false){
+    container.innerHTML='';
+    defs.forEach(def=>{
+      const claimed=!!state.achievementClaims[def.id];
+      const ready=!claimed&&def.done();
+      const item=document.createElement('div');
+      item.className=`achievement-item${challenge?' challenge':''}${ready?' ready':''}${claimed?' claimed':''}`;
+      item.innerHTML=`<div class="achievement-item-top"><div class="achievement-name">${def.name}</div><div class="achievement-kind">${challenge?'도전':'일반'}</div></div><div class="achievement-condition">${def.conditionText}</div><div class="achievement-progress">${claimed?'완료':def.progress()}</div><div class="achievement-bottom"><div class="achievement-reward">${achievementRewardText(def)}</div><button class="achievement-claim" ${ready?'':'disabled'}>${claimed?'수령 완료':(ready?'보상 받기':'진행 중')}</button></div>`;
+      item.querySelector('button').addEventListener('click',()=>claimAchievement(def.id));
+      container.appendChild(item);
+    });
+  }
+  function renderAchievements(){
+    const claimedCount=allAchievementDefs.filter(def=>state.achievementClaims[def.id]).length;
+    const readyCount=achievementReadyCount();
+    const normalReady=normalAchievementDefs.reduce((n,def)=>n+(!state.achievementClaims[def.id]&&def.done()?1:0),0);
+    const challengeReady=challengeAchievementDefs.reduce((n,def)=>n+(!state.achievementClaims[def.id]&&def.done()?1:0),0);
+    el.achievementReady.textContent=`수령 가능 ${readyCount}`;
+    el.achievementReady.classList.toggle('zero',readyCount===0);
+    el.achievementReady.classList.toggle('has-ready',readyCount>0);
+    el.achievementNormalBadge.textContent=normalReady||'';
+    el.achievementChallengeBadge.textContent=challengeReady||'';
+    el.achievementNormalBadge.classList.toggle('show',normalReady>0);
+    el.achievementChallengeBadge.classList.toggle('show',challengeReady>0);
+    el.achievementSummary.textContent=`업적 ${claimedCount} / ${allAchievementDefs.length} 수령 완료 · 누적 눈물 획득 ${formatNum(state.totalTearsEarned)}개`;
+    el.achievementMultiplierSummary.textContent=`영구 배율: 모든 피해 ×${achievementMultiplier('allDamage').toFixed(2)} · 수동 ×${achievementMultiplier('manualDamage').toFixed(2)} · 자동 ×${achievementMultiplier('autoDamage').toFixed(2)} · 재화 ×${achievementMultiplier('gold').toFixed(2)} · 보스 ×${achievementMultiplier('bossDamage').toFixed(2)}`;
+    if(el.achievementInfoIcon)el.achievementInfoIcon.dataset.tip=`달성한 업적의 보상은 직접 수령해야 적용됩니다.\n${el.achievementSummary.textContent}\n${el.achievementMultiplierSummary.textContent}`;
+    renderAchievementList(normalAchievementDefs,el.achievementNormalList,false);
+    renderAchievementList(challengeAchievementDefs,el.achievementChallengeList,true);
+    switchAchievementTab(achievementTab);
+  }
+
+  function isBlackBoss(stage=state.stage,floor=state.floor){ return stage%5===0 && floor===5; }
+  function isAttributeBoss(stage=state.stage,floor=state.floor){
+    return isBlackBoss(stage,floor)&&BOSS_TRAIT_KEYS.includes(state.bossTrait);
+  }
+  function rollBossTrait(stage=state.stage){
+    if(stage===5)return 'normal';
+    if(stage<10||stage%5!==0)return 'normal';
+    if(Math.random()>=.5)return 'normal';
+    return BOSS_TRAIT_KEYS[Math.floor(Math.random()*BOSS_TRAIT_KEYS.length)];
+  }
+  function ensureBossTrait(){
+    if(!isBlackBoss())return;
+    if(state.stage===5){state.bossTrait='normal';return;}
+    if(state.bossTrait!=='normal'&&!BOSS_TRAIT_KEYS.includes(state.bossTrait))state.bossTrait=rollBossTrait(state.stage);
+  }
+  function resetBossTraitBattleState(){
+    state.bossCycleElapsed=0;
+    state.bossCharmRemaining=0;
+    state.bossWrathRemaining=0;
+    state.bossWrathTriggered=false;
+  }
+  function currentBossTraitDef(){
+    return isAttributeBoss()?bossTraitDefs[state.bossTrait]:null;
+  }
+  function bossTearMultiplier(){
+    return isAttributeBoss()?2:1;
+  }
+  function bossIncomingDamageMultiplier(){
+    if(!isAttributeBoss())return 1;
+    const ratio=state.enemyMaxHp>0?state.enemyHp/state.enemyMaxHp:0;
+    switch(state.bossTrait){
+      case 'pride': return ratio>=.70?.65:1;
+      case 'envy': return state.money>state.enemyHp?.5:1;
+      case 'wrath': return state.bossWrathRemaining>0?.10:1;
+      case 'sloth': return state.bossCycleElapsed>=7?2:.10;
+      default:return 1;
+    }
+  }
+  function playerTraitDamageMultiplier(){
+    return isAttributeBoss()&&state.bossTrait==='lust'&&state.bossCharmRemaining>0?.5:1;
+  }
+  function triggerWrathIfNeeded(){
+    if(!isAttributeBoss()||state.bossTrait!=='wrath'||state.bossWrathTriggered||state.enemyHp<=0||state.enemyMaxHp<=0)return;
+    if(state.enemyHp/state.enemyMaxHp<.30){
+      state.bossWrathTriggered=true;
+      state.bossWrathRemaining=5;
+      showNotice('분노의 장막!','5초 동안 분노의 검은수영이 받는 피해가 90% 감소합니다.',1600);
+    }
+  }
+  function rollGoldenEnemy(stage=state.stage,floor=state.floor){
+    return !isBlackBoss(stage,floor)&&Math.random()<.05;
+  }
+  function damageMultiplier(){ return (1 + tieredBlessingBonus(state.blessings.damage,15)/100)*achievementMultiplier('allDamage'); }
+  function goldMultiplier(){ return (1 + tieredBlessingBonus(state.blessings.gold,10)/100)*achievementMultiplier('gold'); }
+  function autoMultiplier(){ return (1 + state.blessings.auto*.50)*achievementMultiplier('autoDamage'); }
+  function effectiveCritChance(){ return Math.min(.95,state.critChance + state.blessings.crit*.01); }
+  function effectiveCritDamage(){ return state.critDamage + state.blessings.crit*.10; }
+  function dogEnergyChance(){ return Math.min(.50,(state.blessings.time||0)*.05); }
+  function totalBlessingLevels(){
+    return Object.values(state.blessings||{}).reduce((sum,v)=>sum+Math.max(0,Math.floor(Number(v)||0)),0);
+  }
+  function frenzyDurationBonus(){ return Math.min(10,Math.floor(totalBlessingLevels()/5)); }
+  function frenzyDurationSeconds(){ return 12+frenzyDurationBonus(); }
+  function isFrenzyActive(now=performance.now()){ return frenzyEndAt>now; }
+  function frenzyDamageMultiplier(combo=frenzyCombo){
+    if(combo<=10)return 8;
+    if(combo<=20)return 9;
+    if(combo<=30)return 10;
+    return 12;
+  }
+  function chargeManualEnergy(){
+    if(isFrenzyActive())return 0;
+    const doubled=Math.random()<dogEnergyChance();
+    const gain=doubled?2:1;
+    state.energy=Math.min(100,Math.max(0,Number(state.energy)||0)+gain);
+    return gain;
+  }
+  function activateFrenzy(){
+    if(isFrenzyActive()||Math.max(0,Number(state.energy)||0)<100)return false;
+    const duration=frenzyDurationSeconds();
+    state.energy=0;
+    frenzyCombo=0;
+    state.frenzyUses=(state.frenzyUses||0)+1;
+    frenzyEndAt=performance.now()+duration*1000;
+    el.targetPanel.classList.add('frenzy-active');
+    showNotice('검은수영의 기운 폭주!!!',`${duration}초 동안 수동 공격이 폭발적으로 강화됩니다.`,1300);
+    updateFrenzyUI();
+    render();
+    return true;
+  }
+  function maybeAutoActivateFrenzy(){
+    if(!state.autoFrenzy||isFrenzyActive()||combatLocked||Math.max(0,Number(state.energy)||0)<100)return false;
+    return activateFrenzy();
+  }
+  function toggleAutoFrenzy(){
+    state.autoFrenzy=!state.autoFrenzy;
+    saveGame(false);
+    updateFrenzyUI();
+    if(state.autoFrenzy&&Math.max(0,Number(state.energy)||0)>=100&&!isFrenzyActive()&&!combatLocked) activateFrenzy();
+  }
+  function updateFrenzyUI(now=performance.now()){
+    const active=isFrenzyActive(now);
+    const energy=Math.min(100,Math.max(0,Number(state.energy)||0));
+    el.energyValue.textContent=`${Math.floor(energy)} / 100`;
+    el.energyFill.style.width=`${energy}%`;
+    el.energyCard.classList.toggle('ready',!active&&energy>=100);
+    el.targetPanel.classList.toggle('frenzy-active',active);
+    const chance=Math.round(dogEnergyChance()*100);
+    const totalBlessings=totalBlessingLevels();
+    const durationBonus=frenzyDurationBonus();
+    const duration=frenzyDurationSeconds();
+    el.energyInfo.textContent=chance>0?`수동 공격 시 +1 · ${chance}% 확률로 총 +2 · 자동 공격은 충전 불가`:'수동 공격 시 +1 · 자동 공격으로는 충전되지 않습니다.';
+    el.frenzyMeta.textContent=`폭주 지속시간 ${duration}초 · 용사의 축복 합계 Lv.${totalBlessings}${durationBonus>0?` (+${durationBonus}초)`:''}`;
+    if(el.energyInfoIcon)el.energyInfoIcon.dataset.tip=`수동 공격 시 기운 +1${chance>0?` · ${chance}% 확률로 총 +2`:''}. 자동 공격은 기운을 충전하지 않습니다. 기운 100에서 Ctrl로 수동 폭주 발동. 폭주 지속시간 ${duration}초${durationBonus>0?` (축복으로 +${durationBonus}초)`:''}. 자동 폭주 ON이면 기운 100 도달 시 자동 발동합니다.`;
+    el.autoFrenzyToggle.classList.toggle('on',!!state.autoFrenzy);
+    el.autoFrenzyToggle.textContent=state.autoFrenzy?'ON':'OFF';
+    el.autoFrenzyToggle.setAttribute('aria-pressed',state.autoFrenzy?'true':'false');
+    if(active){
+      const left=Math.max(0,(frenzyEndAt-now)/1000);
+      el.frenzyBtn.disabled=true;
+      el.frenzyBtn.textContent=`폭주 중 ${left.toFixed(1)}초`;
+      el.frenzyStatus.textContent=`수동 피해 ×${frenzyDamageMultiplier()} · 수동 재화 ×5 · 치명타 +30%p · 콤보 ${frenzyCombo}`;
+      if(left<=0){
+        frenzyEndAt=0;frenzyCombo=0;
+        el.targetPanel.classList.remove('frenzy-active');
+      }
+    }else{
+      el.frenzyBtn.disabled=energy<100;
+      el.frenzyBtn.textContent=energy>=100?'폭주 발동 · Ctrl':'기운 100 필요 · Ctrl';
+      el.frenzyStatus.textContent=energy>=100?(state.autoFrenzy?'기운이 가득 찼습니다. 자동 폭주를 준비합니다.':'기운이 가득 찼습니다. 원하는 순간에 발동하세요.'):(state.autoFrenzy?'자동 폭주 ON':'');
+    }
+  }
+  function floorLimit(floor=state.floor){ return floor===5 ? 60 : 0; }
+  function floorIndex(stage=state.stage,floor=state.floor){ return (stage-1)*5+(floor-1); }
+  function blackBossTearReward(stage=state.stage){
+    return stage>=5 && stage%5===0 ? Math.floor(stage/5) : 0;
+  }
+  function rebirthReward(stage=state.stage){
+    if(stage<10) return 0;
+    const k=Math.max(0,Math.floor(stage/5)-2);
+    return 1 + (k*(k+1))/2;
+  }
+  function calcEnemyStats(stage=state.stage,floor=state.floor){
+    const idx=floorIndex(stage,floor);
+    let hp=Math.floor(50*Math.pow(1.205,idx));
+    if(floor===5)hp=Math.floor(hp*1.8);
+    const black=isBlackBoss(stage,floor);
+    if(black)hp=Math.floor(hp*4.5);
+
+    const baseBossReward=Math.max(25,Math.floor(hp*.42));
+    let reward=baseBossReward;
+
+    if(black&&state.bossTrait==='greed'){
+      hp=Math.floor(hp*1.5);
+      reward=Math.floor(baseBossReward*50);
+    }
+
+    const golden=!black&&state.isGolden===true;
+    if(golden){
+      hp=Math.floor(hp*2);
+      reward=Math.floor(reward*50);
+    }
+    return {hp,reward};
+  }
+
+  function syncEnemyStats(fullHeal=false){
+    let variantInitialized=false;
+    if(isBlackBoss()){
+      const before=state.bossTrait;
+      ensureBossTrait();
+      if(before!==state.bossTrait)variantInitialized=true;
+      if(state.isGolden!==false)variantInitialized=true;
+      state.isGolden=false;
+    }else{
+      if(!state.bossRetryReady)state.bossTrait=null;
+      if(typeof state.isGolden!=='boolean'){
+        state.isGolden=rollGoldenEnemy();
+        variantInitialized=true;
+      }
+    }
+    const stats=calcEnemyStats();
+    state.enemyMaxHp=stats.hp;state.enemyReward=stats.reward;
+    if(fullHeal||variantInitialized||!Number.isFinite(state.enemyHp)||state.enemyHp<=0||state.enemyHp>state.enemyMaxHp)state.enemyHp=state.enemyMaxHp;
+  }
+
+  function announceGolden(){
+    if(state.isGolden===true&&!isBlackBoss())showNotice('황금수영 등장!','체력 2배 · 처치 보상 50배',1350);
+  }
+
+  function announceBossTrait(){
+    const def=currentBossTraitDef();
+    if(!def)return;
+    showNotice(`${def.label}의 검은수영 등장!`,`${def.desc} · 눈물 보상 ×2`,2500);
+  }
+
+  function updateBossTraitUI(){
+    const def=currentBossTraitDef();
+    if(!def){
+      el.bossTraitCard.classList.remove('show');
+      el.bossTraitTitle.textContent='';
+      el.bossTraitStatus.textContent='';
+      return;
+    }
+    el.bossTraitCard.classList.add('show');
+    el.bossTraitTitle.textContent=`${def.label.toUpperCase()} · ${def.en} · 속성 보스 눈물 ×2`;
+
+    const ratio=state.enemyMaxHp>0?state.enemyHp/state.enemyMaxHp:0;
+    let status=def.desc;
+    if(state.bossTrait==='pride')status=ratio>=.70?'오만의 장막 활성 · 받는 피해 -35%':'오만의 장막 해제 · 정상 피해';
+    else if(state.bossTrait==='envy')status=state.money>state.enemyHp?'질투 활성 · 보유 재화 > 현재 체력 · 받는 피해 -50%':'질투 대기 · 보유 재화가 현재 체력 이하';
+    else if(state.bossTrait==='lust')status=state.bossCharmRemaining>0?`매혹됨 · 플레이어 피해 -50% · ${state.bossCharmRemaining.toFixed(1)}초`:`다음 매혹까지 ${Math.max(0,10-state.bossCycleElapsed).toFixed(1)}초`;
+    else if(state.bossTrait==='gluttony')status=`다음 5% 회복까지 ${Math.max(0,10-state.bossCycleElapsed).toFixed(1)}초`;
+    else if(state.bossTrait==='wrath')status=state.bossWrathRemaining>0?`분노의 장막 활성 · 받는 피해 -90% · ${state.bossWrathRemaining.toFixed(1)}초`:(state.bossWrathTriggered?'분노의 장막 종료 · 정상 피해':'체력 30% 미만에서 분노의 장막 발동');
+    else if(state.bossTrait==='sloth'){
+      const sleeping=state.bossCycleElapsed>=7;
+      status=sleeping?`ZZZ… 수면 중 · 받는 피해 ×2 · ${Math.max(0,10-state.bossCycleElapsed).toFixed(1)}초`:`깨어있음 · 받는 피해 -90% · 수면까지 ${Math.max(0,7-state.bossCycleElapsed).toFixed(1)}초`;
+    }
+    el.bossTraitStatus.textContent=status;
+  }
+
+  function updateBossTraitEffects(dt){
+    if(!isAttributeBoss()||state.mode!=='challenge'||combatLocked||state.enemyHp<=0)return;
+    dt=Math.max(0,Number(dt)||0);
+
+    if(state.bossTrait==='lust'){
+      state.bossCharmRemaining=Math.max(0,state.bossCharmRemaining-dt);
+      state.bossCycleElapsed+=dt;
+      if(state.bossCycleElapsed>=10){
+        state.bossCycleElapsed%=10;
+        state.bossCharmRemaining=4;
+        showNotice('매혹!', '4초 동안 플레이어가 주는 모든 피해가 50% 감소합니다.',1400);
+      }
+    }else if(state.bossTrait==='gluttony'){
+      state.bossCycleElapsed+=dt;
+      if(state.bossCycleElapsed>=10){
+        state.bossCycleElapsed%=10;
+        const before=state.enemyHp;
+        const heal=Math.max(1,Math.round(state.enemyMaxHp*.05));
+        state.enemyHp=Math.min(state.enemyMaxHp,state.enemyHp+heal);
+        const actual=Math.max(0,state.enemyHp-before);
+        if(actual>0){
+          showFloatingText(`탐식! +${formatNum(actual)} HP`,el.hitZone.clientWidth/2,110,'#9cff9c',24);
+          showNotice('탐식의 회복!',`최대 체력의 5% 회복 · +${formatNum(actual)} HP`,1300);
+          render();
+        }
+      }
+    }else if(state.bossTrait==='wrath'){
+      state.bossWrathRemaining=Math.max(0,state.bossWrathRemaining-dt);
+    }else if(state.bossTrait==='sloth'){
+      const wasSleeping=state.bossCycleElapsed>=7;
+      state.bossCycleElapsed=(state.bossCycleElapsed+dt)%10;
+      const sleeping=state.bossCycleElapsed>=7;
+      if(!wasSleeping&&sleeping)showNotice('ZZZ… 나태의 검은수영이 잠들었습니다!','3초 동안 받는 피해 ×2',1300);
+    }
+
+    updateBossTraitUI();
+  }
+
+  function formatNum(n){
+    if(!Number.isFinite(n)) return '0';
+    if(n>=1e15)return(n/1e15).toFixed(2).replace(/\.00$/,'')+'Q';
+    if(n>=1e12)return(n/1e12).toFixed(2).replace(/\.00$/,'')+'T';
+    if(n>=1e9)return(n/1e9).toFixed(2).replace(/\.00$/,'')+'B';
+    if(n>=1e6)return(n/1e6).toFixed(2).replace(/\.00$/,'')+'M';
+    if(n>=1e3)return(n/1e3).toFixed(2).replace(/\.00$/,'')+'K';
+    return Number(n.toFixed?n.toFixed(2):n).toLocaleString('ko-KR',{maximumFractionDigits:2});
+  }
+  function getCostAtLevel(def,level){ return Math.floor(def.baseCost*Math.pow(def.growth,level)); }
+  function getBlessingCostAtLevel(def,level){ return Math.ceil(def.baseCost*Math.pow(def.growth,level)); }
+  function getCost(def){ return getCostAtLevel(def,state.upgrades[def.key]||0); }
+  function getBlessingCost(def){ return getBlessingCostAtLevel(def,state.blessings[def.key]||0); }
+
+  function normalizedBuyMode(){
+    return ['1','10','max'].includes(String(state.buyMode))?String(state.buyMode):'1';
+  }
+  function setBuyMode(mode){
+    state.buyMode=['1','10','max'].includes(String(mode))?String(mode):'1';
+    render();
+  }
+  function renderBuyModeControls(){
+    const mode=normalizedBuyMode();
+    document.querySelectorAll('.buy-mode-btn').forEach(btn=>btn.classList.toggle('active',btn.dataset.buyMode===mode));
+  }
+  function bulkPlan(def,type){
+    const blessing=type==='blessing';
+    const level=Math.max(0,Math.floor(Number(blessing?state.blessings[def.key]:state.upgrades[def.key])||0));
+    const maxLevel=Number.isFinite(def.maxLevel)?def.maxLevel:Infinity;
+    const remaining=Math.max(0,maxLevel-level);
+    if(remaining<=0)return {count:0,total:0,affordable:false,maxed:true};
+    const balance=blessing?state.tears:state.money;
+    const mode=normalizedBuyMode();
+    const requested=mode==='max'?Infinity:Math.min(Number(mode),remaining);
+    let count=0,total=0;
+    const hardCap=100000;
+    while(count<requested&&count<remaining&&count<hardCap){
+      const cost=blessing?getBlessingCostAtLevel(def,level+count):getCostAtLevel(def,level+count);
+      if(mode==='max'&&total+cost>balance)break;
+      total+=cost;
+      count++;
+    }
+    const affordable=count>0&&(mode==='max'||balance>=total);
+    return {count,total,affordable,maxed:false};
+  }
+  function purchaseNormalBulk(def){
+    const plan=bulkPlan(def,'normal');
+    if(!plan.affordable||plan.count<=0)return;
+    state.money-=plan.total;
+    for(let i=0;i<plan.count;i++)def.buy();
+    render();
+  }
+  function purchaseBlessingBulk(def){
+    const plan=bulkPlan(def,'blessing');
+    if(!plan.affordable||plan.count<=0)return;
+    state.tears-=plan.total;
+    state.blessings[def.key]=(state.blessings[def.key]||0)+plan.count;
+    state.blessingSpent[def.key]=(state.blessingSpent[def.key]||0)+plan.total;
+    render();
+  }
+  function totalBlessingSpent(){
+    return Object.values(state.blessingSpent||{}).reduce((sum,v)=>sum+Math.max(0,Number(v)||0),0);
+  }
+  function resetBlessings(){
+    const refund=totalBlessingSpent();
+    const currentLevels=totalBlessingLevels();
+    if(currentLevels<=0&&refund<=0)return;
+    if(!confirm(`모든 용사의 축복을 Lv.0으로 초기화합니다.\n\n지금까지 투자한 검은수영의 눈물 ${formatNum(refund)}개를 100% 반환받습니다.\n\n초기화하시겠습니까?`))return;
+    state.tears+=refund;
+    state.blessings={damage:0,gold:0,time:0,crit:0,auto:0};
+    state.blessingSpent={damage:0,gold:0,time:0,crit:0,auto:0};
+    render();
+    saveGame(false);
+    showNotice('용사의 축복 초기화',`검은수영의 눈물 ${formatNum(refund)}개를 회수했습니다.`,1500);
+  }
+  function expectedGps(){
+    const base=state.autoAttack*autoMultiplier()*damageMultiplier();
+    const expectedDamage=base*(1+effectiveCritChance()*(effectiveCritDamage()-1));
+    return expectedDamage*goldMultiplier();
+  }
+
+  function formatOfflineDuration(seconds){
+    seconds=Math.max(0,Math.floor(seconds));
+    const h=Math.floor(seconds/3600);
+    const m=Math.floor((seconds%3600)/60);
+    const sec=seconds%60;
+    if(h>0)return `${h}시간 ${m}분`;
+    if(m>0)return `${m}분 ${sec}초`;
+    return `${sec}초`;
+  }
+  function applyOfflineReward(show=true){
+    const now=Date.now();
+    const last=Number(state.lastActiveAt)||now;
+    const elapsed=Math.min(24*3600,Math.max(0,(now-last)/1000));
+    state.lastActiveAt=now;
+    if(elapsed<1||state.autoAttack<=0)return {elapsed,reward:0};
+    const reward=Math.max(0,Math.floor(expectedGps()*elapsed));
+    if(reward>0){
+      state.money+=reward;
+      state.totalEarned+=reward;
+      if(show)showNotice('오프라인 보상!',`${formatOfflineDuration(elapsed)} · 자동 줘패기 기대수입 100% · +${formatNum(reward)}원`,3600);
+    }
+    return {elapsed,reward};
+  }
+
+  function renderFloorProgress(){
+    el.floorProgress.innerHTML='';
+    for(let f=1;f<=5;f++){
+      const d=document.createElement('div');d.className='floor-dot';d.textContent=`${f}F`;
+      if(f<state.floor)d.classList.add('done');
+      if(f===state.floor)d.classList.add('current');
+      if(state.stage%5===0&&f===5)d.classList.add('boss-floor');
+      el.floorProgress.appendChild(d);
+    }
+  }
+
+  function renderUpgrades(){
+    el.upgrades.innerHTML='';
+    upgradeDefs.forEach(def=>{
+      const lv=state.upgrades[def.key]||0;
+      const maxed=Number.isFinite(def.maxLevel)&&lv>=def.maxLevel;
+      const plan=bulkPlan(def,'normal');
+      const nextCost=getCost(def);
+      const mode=normalizedBuyMode();
+      let costText=maxed?'최대 레벨':'';
+      if(!maxed){
+        if(mode==='max'){
+          costText=plan.count>0?`MAX ${plan.count}레벨 · 비용: ${formatNum(plan.total)}원`:`다음 비용: ${formatNum(nextCost)}원`;
+        }else{
+          costText=`${plan.count}레벨 비용: ${formatNum(plan.total)}원`;
+        }
+      }
+      const buttonText=maxed?'MAX':(mode==='max'?`MAX 구매${plan.count>0?` (${plan.count})`:''}`:`×${plan.count} 구매`);
+      const card=document.createElement('div');card.className='upgrade';
+      card.innerHTML=`<div class="upgrade-top"><div class="upgrade-title-row"><div class="upgrade-title">${def.title}</div><button class="info-icon" type="button" aria-label="${def.title} 설명">i</button></div><div class="lv">LV ${lv}${maxed?' · MAX':''}</div></div><div class="upgrade-desc"><strong>${def.effectText()}</strong></div><div class="upgrade-bottom"><div class="cost">${costText}</div><button class="buy" ${(maxed||!plan.affordable)?'disabled':''}>${buttonText}</button></div>`;
+      card.querySelector('.info-icon').dataset.tip=def.desc;
+      card.querySelector('button.buy').addEventListener('click',()=>purchaseNormalBulk(def));
+      el.upgrades.appendChild(card);
+    });
+  }
+
+  function renderBlessings(){
+    el.blessings.innerHTML='';
+    blessingDefs.forEach(def=>{
+      const lv=state.blessings[def.key]||0;
+      const maxed=Number.isFinite(def.maxLevel)&&lv>=def.maxLevel;
+      const plan=bulkPlan(def,'blessing');
+      const nextCost=getBlessingCost(def);
+      const mode=normalizedBuyMode();
+      let costText=maxed?'최대 레벨':'';
+      if(!maxed){
+        if(mode==='max'){
+          costText=plan.count>0?`MAX ${plan.count}레벨 · 눈물 ${formatNum(plan.total)}개`:`다음 비용: 눈물 ${formatNum(nextCost)}개`;
+        }else{
+          costText=`${plan.count}레벨 비용: 눈물 ${formatNum(plan.total)}개`;
+        }
+      }
+      const buttonText=maxed?'MAX':(mode==='max'?`MAX 구매${plan.count>0?` (${plan.count})`:''}`:`×${plan.count} 강화`);
+      const card=document.createElement('div');card.className='upgrade blessing';
+      card.innerHTML=`<div class="upgrade-top"><div class="upgrade-title-row"><div class="upgrade-title">${def.title}</div><button class="info-icon" type="button" aria-label="${def.title} 설명">i</button></div><div class="lv">LV ${lv}${maxed?' · MAX':''}</div></div><div class="upgrade-desc"><strong>${def.effectText()}</strong></div><div class="upgrade-bottom"><div class="cost">${costText}</div><button class="buy" ${(maxed||!plan.affordable)?'disabled':''}>${buttonText}</button></div>`;
+      card.querySelector('.info-icon').dataset.tip=def.desc;
+      card.querySelector('button.buy').addEventListener('click',()=>purchaseBlessingBulk(def));
+      el.blessings.appendChild(card);
+    });
+    const refund=totalBlessingSpent();
+    const hasBlessings=totalBlessingLevels()>0||refund>0;
+    el.blessingResetBtn.disabled=!hasBlessings;
+    el.blessingResetBtn.textContent=hasBlessings?`용사의 축복 초기화 · ${formatNum(refund)}개 회수`:'용사의 축복 초기화';
+    el.blessingResetInfo.textContent=hasBlessings?`현재 초기화 시 검은수영의 눈물 ${formatNum(refund)}개를 100% 회수합니다.`:'투자한 검은수영의 눈물을 100% 회수하고 모든 용사의 축복을 Lv.0으로 되돌립니다.';
+    renderBuyModeControls();
+  }
+
+  function render(){
+    const black=isBlackBoss();
+    const attribute=isAttributeBoss();
+    const traitDef=currentBossTraitDef();
+    const golden=state.isGolden===true&&!black;
+    const timedFloor=state.floor===5;
+    const actualReward=Math.max(1,Math.round(state.enemyReward*goldMultiplier()));
+    const actualBossTears=black?blackBossTearReward()*bossTearMultiplier():0;
+    el.targetPanel.classList.toggle('black-boss-stage',black);
+    el.targetPanel.classList.toggle('attribute-boss-stage',attribute);
+    el.targetPanel.classList.toggle('golden-stage',golden);
+    el.enemyName.textContent=black?(attribute?`${traitDef.label}의 검은수영`:'검은수영'):(golden?'황금수영':'이수영');
+    el.stageLabel.textContent=`STAGE ${state.stage} · FLOOR ${state.floor}`;
+    el.stageTop.textContent=`${state.stage}-${state.floor}F`;
+    el.money.textContent=`${formatNum(state.money)}원`;el.moneyTop.textContent=`${formatNum(state.money)}원`;el.totalEarned.textContent=`${formatNum(state.totalEarned)}원`;
+    el.tears.textContent=formatNum(state.tears);el.tearTop.textContent=formatNum(state.tears);
+    el.atkTop.textContent=formatNum(state.attack*damageMultiplier()*achievementMultiplier('manualDamage'));el.autoTop.textContent=formatNum(state.autoAttack*autoMultiplier()*damageMultiplier());
+    const hpPct=Math.max(0,Math.min(100,state.enemyHp/state.enemyMaxHp*100));el.hpFill.style.width=`${hpPct}%`;el.hpLabel.textContent=`체력 ${formatNum(state.enemyHp)} / ${formatNum(state.enemyMaxHp)}`;
+    el.killBonus.textContent=black?`처치 보너스: ${formatNum(actualReward)}원 + 눈물 ${formatNum(actualBossTears)}개${attribute?' (×2)':''}`:`처치 보너스: ${formatNum(actualReward)}원${golden?' (×50)':''}`;
+
+    if(state.mode==='challenge'){
+      if(timedFloor){
+        el.timerValue.textContent=`${Math.max(0,state.timeRemaining).toFixed(1)}초`;el.timerValue.classList.toggle('danger',state.timeRemaining<=10);
+        el.modeBadge.textContent=black?(attribute?`${traitDef.label} 보스`:'검은수영 도전'):(golden?'황금수영 도전':'5층 도전');
+        el.hintText.textContent=black?(attribute?'속성 검은수영을 처치하면 해당 스테이지의 검은수영의 눈물을 2배 획득합니다.':'제한시간 안에 검은수영을 처치하면 검은수영의 눈물을 얻습니다.'):(golden?'황금수영: 체력 2배 · 처치 보상 50배':'제한시간 안에 처치하면 다음 스테이지로 넘어갑니다.');
+      }else{
+        el.timerValue.textContent='∞';el.timerValue.classList.remove('danger');el.modeBadge.textContent=golden?'황금수영 출현':'진행 중';
+        el.hintText.textContent=golden?'황금수영: 체력 2배 · 처치 보상 50배':'시간 제한 없이 처치하면 다음 층으로 올라갑니다.';
+      }
+      el.modeBadge.classList.remove('farm');el.retryBtn.classList.remove('show','boss-retry');
+    }else{
+      el.timerValue.textContent='∞';el.timerValue.classList.remove('danger');el.modeBadge.textContent='성장 모드';el.modeBadge.classList.add('farm');
+      const pendingTrait=state.bossRetryReady&&BOSS_TRAIT_KEYS.includes(state.bossTrait)?bossTraitDefs[state.bossTrait]:null;
+      el.hintText.textContent=state.bossRetryReady?`${pendingTrait?pendingTrait.label+'의 ':''}검은수영 도전에 실패했습니다. 4층에서 재화를 모은 뒤 같은 보스에게 다시 도전하세요.`:'5층 도전에 실패했습니다. 시간 제한 없이 반복 처치해 재화를 모은 뒤 다시 도전하세요.';
+      el.retryBtn.textContent=state.bossRetryReady?`${pendingTrait?pendingTrait.label+'의 ':''}검은수영 재도전`:'5층 재도전';el.retryBtn.classList.add('show');el.retryBtn.classList.toggle('boss-retry',state.bossRetryReady);
+    }
+    if(el.combatInfoIcon)el.combatInfoIcon.dataset.tip=el.hintText.textContent;
+
+    const effAtk=state.attack*damageMultiplier()*achievementMultiplier('manualDamage'), effCrit=effectiveCritChance(), effCritDmg=effectiveCritDamage(), effAuto=state.autoAttack*autoMultiplier()*damageMultiplier();
+    el.statAtk.textContent=`${formatNum(effAtk)}${state.blessings.damage?` (축복 +${tieredBlessingBonus(state.blessings.damage,15)}%)`:''}`;
+    el.statCritChance.textContent=`${(effCrit*100).toFixed(1)}%`;el.statCritDamage.textContent=`${(effCritDmg*100).toFixed(0)}%`;el.statAuto.textContent=`${formatNum(effAuto)} /초`;el.statGps.textContent=`${formatNum(expectedGps())}원`;el.statClicks.textContent=formatNum(state.clicks);el.statKills.textContent=formatNum(state.kills);el.statMaxHit.textContent=formatNum(state.maxHit);el.statBest.textContent=`${state.bestStage}-${state.bestFloor}F`;
+
+    const rr=rebirthReward();
+    el.rebirthReward.textContent=state.stage>=10?`현재 환생 보상: 검은수영의 눈물 ${formatNum(rr)}개`:`현재 환생 보상: 0개 · ${10-state.stage}스테이지 남음`;
+    el.rebirthBtn.disabled=state.stage<10;
+    el.rebirthBtn.textContent=state.stage>=10?`환생하고 눈물 ${formatNum(rr)}개 받기`:'10스테이지부터 환생 가능';
+    el.rebirthCount.textContent=`누적 환생 ${formatNum(state.rebirths)}회`;
+    renderFloorProgress();renderUpgrades();renderBlessings();renderBuyModeControls();updateFrenzyUI();updateBossTraitUI();checkAchievementUnlocks();renderAchievements();updateBackupStatus();refreshTargetSprite();
+  }
+
+  function updateBest(){
+    if(state.stage>state.bestStage||(state.stage===state.bestStage&&state.floor>state.bestFloor)){state.bestStage=state.stage;state.bestFloor=state.floor;}
+  }
+
+  function showNotice(big,small='',duration=1500){
+    el.noticeBig.textContent=big;el.noticeSmall.textContent=small;el.notice.classList.add('show');
+    clearTimeout(showNotice._t);showNotice._t=setTimeout(()=>el.notice.classList.remove('show'),duration);
+  }
+
+  function canUseHurtTargetSprite(){
+    return !isBlackBoss() && !state.isGolden;
+  }
+
+  function refreshTargetSprite(){
+    if(!el.targetImg)return;
+    const now=Date.now();
+    const useHurt=canUseHurtTargetSprite() && hurtTargetUntil>now;
+    const nextSrc=useHurt?TARGET_HURT_SRC:TARGET_NORMAL_SRC;
+    const current=el.targetImg.getAttribute('src');
+    if(current!==nextSrc)el.targetImg.setAttribute('src',nextSrc);
+  }
+
+  function triggerHurtTargetSprite(){
+    if(!canUseHurtTargetSprite()){
+      hurtTargetUntil=0;
+      if(hurtTargetTimer){clearTimeout(hurtTargetTimer);hurtTargetTimer=null;}
+      refreshTargetSprite();
+      return;
+    }
+    hurtTargetUntil=Date.now()+TARGET_HURT_DURATION_MS;
+    refreshTargetSprite();
+    if(hurtTargetTimer)clearTimeout(hurtTargetTimer);
+    hurtTargetTimer=setTimeout(()=>{
+      hurtTargetTimer=null;
+      refreshTargetSprite();
+    },TARGET_HURT_DURATION_MS);
+  }
+
+  function showHitDialogue(){
+    if(dialogueLocked)return;
+    dialogueLocked=true;
+    let idx=Math.floor(Math.random()*hitDialogues.length);
+    if(hitDialogues.length>1&&idx===lastDialogueIndex){
+      idx=(idx+1+Math.floor(Math.random()*(hitDialogues.length-1)))%hitDialogues.length;
+    }
+    lastDialogueIndex=idx;
+    el.speechBubble.textContent=hitDialogues[idx];
+    el.speechBubble.classList.add('show');
+    setTimeout(()=>el.speechBubble.classList.remove('show'),2200);
+    setTimeout(()=>{dialogueLocked=false;},3000);
+  }
+
+  function showFloatingText(text,x,y,color='#fff',size=23){
+    const d=document.createElement('div');d.className='drop-text';d.textContent=text;d.style.left=`${x}px`;d.style.top=`${y}px`;d.style.color=color;d.style.fontSize=`${size}px`;el.hitZone.appendChild(d);setTimeout(()=>d.remove(),900);
+  }
+
+  function createHitEffect(x,y,isCrit,isFrenzy=false){
+    const choice=Math.floor(Math.random()*5);
+    const anims=['shake-a','shake-b','bounce'];el.targetBtn.classList.remove(...anims);void el.targetBtn.offsetWidth;el.targetBtn.classList.add(anims[Math.floor(Math.random()*anims.length)]);
+    if(choice===0){
+      const r=document.createElement('div');r.className='impact-ring';r.style.left=`${x}px`;r.style.top=`${y}px`;r.style.borderColor=isCrit?'#ffd54d':'#fff';el.hitZone.appendChild(r);setTimeout(()=>r.remove(),500);
+    }else if(choice===1){
+      const words=['퍽!','쾅!','퍼억!','탁!','콰직!'];const w=document.createElement('div');w.className='comic-hit';w.textContent=words[Math.floor(Math.random()*words.length)];w.style.left=`${x}px`;w.style.top=`${y}px`;if(isCrit)w.textContent='CRIT!';el.hitZone.appendChild(w);setTimeout(()=>w.remove(),600);
+    }else if(choice===2){
+      for(let i=0;i<5;i++){const s=document.createElement('div');s.className='spark';s.textContent=isCrit?'★':'✦';s.style.left=`${x}px`;s.style.top=`${y}px`;s.style.setProperty('--dx',`${Math.cos(i*1.256)*55}px`);s.style.setProperty('--dy',`${Math.sin(i*1.256)*55}px`);s.style.color=isCrit?'#ffd54d':'#fff';el.hitZone.appendChild(s);setTimeout(()=>s.remove(),600);}
+    }else if(choice===3){
+      for(const rot of [-36,36]){const s=document.createElement('div');s.className='slash';s.style.left=`${x}px`;s.style.top=`${y}px`;s.style.setProperty('--r',`${rot}deg`);if(isCrit)s.style.background='#ffd54d';el.hitZone.appendChild(s);setTimeout(()=>s.remove(),450);}
+    }else{
+      const r=document.createElement('div');r.className='impact-ring';r.style.left=`${x}px`;r.style.top=`${y}px`;r.style.width='24px';r.style.height='24px';r.style.borderWidth='7px';r.style.borderColor=isCrit?'#ffcf33':'#ff8d8d';el.hitZone.appendChild(r);setTimeout(()=>r.remove(),500);
+      for(let i=0;i<3;i++){const s=document.createElement('div');s.className='spark';s.textContent='✹';s.style.left=`${x}px`;s.style.top=`${y}px`;s.style.setProperty('--dx',`${(i-1)*50}px`);s.style.setProperty('--dy',`${-35-Math.random()*30}px`);s.style.color='#ffef9a';el.hitZone.appendChild(s);setTimeout(()=>s.remove(),600);}
+    }
+    if(isFrenzy){
+      const aura=document.createElement('div');aura.className='impact-ring';aura.style.left=`${x}px`;aura.style.top=`${y}px`;aura.style.width='58px';aura.style.height='58px';aura.style.borderWidth='7px';aura.style.borderColor='#dc72ff';aura.style.boxShadow='0 0 25px rgba(220,114,255,.95)';el.hitZone.appendChild(aura);setTimeout(()=>aura.remove(),520);
+      for(let i=0;i<6;i++){const sp=document.createElement('div');sp.className='spark';sp.textContent='✦';sp.style.left=`${x}px`;sp.style.top=`${y}px`;sp.style.setProperty('--dx',`${Math.cos(i*Math.PI/3)*75}px`);sp.style.setProperty('--dy',`${Math.sin(i*Math.PI/3)*75}px`);sp.style.color='#e9a3ff';el.hitZone.appendChild(sp);setTimeout(()=>sp.remove(),620);}
+    }
+  }
+
+  function enterFloor(stage,floor,mode='challenge',preserveBossTrait=false){
+    const pendingTrait=state.bossTrait;
+    state.stage=stage;state.floor=floor;state.mode=mode;state.bossRetryReady=false;state.timeRemaining=floorLimit(floor);
+
+    if(isBlackBoss(stage,floor)){
+      state.isGolden=false;
+      state.bossTrait=(preserveBossTrait&&(pendingTrait==='normal'||BOSS_TRAIT_KEYS.includes(pendingTrait)))?pendingTrait:rollBossTrait(stage);
+      resetBossTraitBattleState();
+    }else{
+      state.bossTrait=null;
+      resetBossTraitBattleState();
+      state.isGolden=rollGoldenEnemy(stage,floor);
+    }
+
+    syncEnemyStats(true);updateBest();combatLocked=false;lastTimerStamp=performance.now();render();
+    if(isAttributeBoss())announceBossTrait();else announceGolden();
+    maybeAutoActivateFrenzy();
+  }
+
+  function advanceFloor(){
+    if(state.floor<5)enterFloor(state.stage,state.floor+1,'challenge');else enterFloor(state.stage+1,1,'challenge');
+  }
+
+  function handleTimeout(){
+    if(state.mode!=='challenge'||combatLocked||state.floor!==5)return;
+    combatLocked=true;state.timeRemaining=0;
+    if(isBlackBoss()){
+      const def=currentBossTraitDef();
+      showNotice(`${def?def.label+'의 ':''}검은수영 도전 실패`,'보스 속성은 유지됩니다. 4층에서 성장한 뒤 같은 보스에게 재도전할 수 있습니다.',2100);
+      setTimeout(()=>{state.floor=4;state.mode='farm';state.bossRetryReady=true;state.timeRemaining=0;state.isGolden=rollGoldenEnemy(state.stage,4);resetBossTraitBattleState();syncEnemyStats(true);combatLocked=false;render();announceGolden();maybeAutoActivateFrenzy();},2150);
+    }else{
+      state.mode='farm';state.timeRemaining=0;combatLocked=false;showNotice('5층 시간 초과!','이 층이 성장 모드로 전환되었습니다.',1450);render();
+    }
+  }
+
+  function defeatEnemy(){
+    if(combatLocked)return;combatLocked=true;state.kills+=1;
+    const golden=state.isGolden===true&&!isBlackBoss();
+    const reward=Math.max(1,Math.round(state.enemyReward*goldMultiplier()));
+    state.money+=reward;state.totalEarned+=reward;
+    const black=isBlackBoss();
+    const attribute=isAttributeBoss();
+    const traitDef=currentBossTraitDef();
+    const bossTears=black?blackBossTearReward()*bossTearMultiplier():0;
+    if(golden)state.goldenKills=(state.goldenKills||0)+1;
+    if(black&&state.mode==='challenge'){
+      state.blackBossKills=(state.blackBossKills||0)+1;
+      if(attribute){
+        state.attributeBossKills=(state.attributeBossKills||0)+1;
+        state.traitKills[state.bossTrait]=(state.traitKills[state.bossTrait]||0)+1;
+      }
+    }
+    if(black&&state.mode==='challenge'&&bossTears>0){
+      state.tears+=bossTears;
+      state.totalTearsEarned=(state.totalTearsEarned||0)+bossTears;
+      showFloatingText(`검은수영의 눈물 +${formatNum(bossTears)}`,el.hitZone.clientWidth/2,105,'#9bdcff',27);
+    }
+    showFloatingText(`${golden?'황금 처치!':'처치!'} +${formatNum(reward)}원`,el.hitZone.clientWidth/2,145,golden?'#ffe06a':'#7bf1a8',27);
+
+    if(state.mode==='farm'){
+      setTimeout(()=>{
+        state.isGolden=rollGoldenEnemy();
+        syncEnemyStats(true);combatLocked=false;render();announceGolden();maybeAutoActivateFrenzy();
+      },420);
+      return;
+    }
+
+    const clearedStage=state.stage,clearedFloor=state.floor;
+    const title=black?(attribute?`${traitDef.label}의 검은수영 격파!`:'검은수영 격파!'):(golden?'황금수영 격파!':`${clearedFloor}층 클리어!`);
+    const small=black
+      ?`검은수영의 눈물 ${formatNum(bossTears)}개 획득${attribute?' · 속성 보스 ×2':''}`
+      :(golden
+        ?`처치 보상 50배!${clearedFloor===5?` · ${clearedStage}스테이지 돌파`:''}`
+        :(clearedFloor===5?`${clearedStage}스테이지 돌파`:'다음 층으로 이동합니다.'));
+    showNotice(title,small,850);
+    setTimeout(()=>{advanceFloor();},900);
+  }
+
+  function resetManualInputGuard(){
+    lastRawManualInputAt=null;
+    suspiciousIntervalReference=null;
+    suspiciousIntervalRun=0;
+    manualInputBlocked=false;
+    unlockIntervals=[];
+    if(el.targetPanel)el.targetPanel.classList.remove('input-blocked');
+    if(el.antiAutoWarning)el.antiAutoWarning.classList.remove('show');
+  }
+
+  function setManualInputBlocked(blocked){
+    manualInputBlocked=blocked;
+    el.targetPanel.classList.toggle('input-blocked',blocked);
+    el.antiAutoWarning.classList.toggle('show',blocked);
+    if(blocked){
+      unlockIntervals=[];
+      el.antiAutoWarning.textContent='비정상적으로 일정한 입력이 30회 연속 감지되었습니다. 수동 공격이 차단되었습니다. 자연스러운 입력 패턴을 확인 중입니다.';
+      showNotice('수동 공격 차단','지나치게 일정한 연속 입력이 감지되었습니다.',1700);
+    }else{
+      el.antiAutoWarning.textContent='비정상적으로 일정한 입력이 감지되어 수동 공격이 잠시 차단되었습니다.';
+      showNotice('수동 공격 재개','자연스러운 입력 패턴이 확인되었습니다.',1200);
+    }
+  }
+
+  function looksNaturalForUnlock(intervals){
+    if(intervals.length<AUTOCLICK_UNLOCK_WINDOW)return false;
+    const a=intervals.slice(-AUTOCLICK_UNLOCK_WINDOW);
+    const range=Math.max(...a)-Math.min(...a);
+    let variedTransitions=0;
+    for(let i=1;i<a.length;i++){
+      if(Math.abs(a[i]-a[i-1])>AUTOCLICK_TOLERANCE_MS)variedTransitions++;
+    }
+    return range>=12&&variedTransitions>=4;
+  }
+
+  function registerRawManualInput(now=performance.now()){
+    if(lastRawManualInputAt===null){
+      lastRawManualInputAt=now;
+      return !manualInputBlocked;
+    }
+
+    const interval=now-lastRawManualInputAt;
+    lastRawManualInputAt=now;
+
+    if(interval>2000){
+      suspiciousIntervalReference=null;
+      suspiciousIntervalRun=0;
+      if(manualInputBlocked){
+        unlockIntervals=[];
+        el.antiAutoWarning.textContent='수동 공격 차단 중 · 자연스러운 입력 패턴을 확인 중입니다. (0/8)';
+      }
+      return !manualInputBlocked;
+    }
+
+    if(manualInputBlocked){
+      unlockIntervals.push(interval);
+      if(unlockIntervals.length>AUTOCLICK_UNLOCK_WINDOW)unlockIntervals.shift();
+      el.antiAutoWarning.textContent=`수동 공격 차단 중 · 자연스러운 입력 패턴을 확인 중입니다. (${unlockIntervals.length}/${AUTOCLICK_UNLOCK_WINDOW})`;
+      if(looksNaturalForUnlock(unlockIntervals)){
+        setManualInputBlocked(false);
+        suspiciousIntervalReference=null;
+        suspiciousIntervalRun=0;
+        unlockIntervals=[];
+        lastManualAttackAt=-Infinity;
+        return true;
+      }
+      return false;
+    }
+
+    if(suspiciousIntervalReference===null){
+      suspiciousIntervalReference=interval;
+      suspiciousIntervalRun=1;
+    }else if(Math.abs(interval-suspiciousIntervalReference)<=AUTOCLICK_TOLERANCE_MS){
+      suspiciousIntervalRun++;
+      suspiciousIntervalReference=(suspiciousIntervalReference*.9)+(interval*.1);
+    }else{
+      suspiciousIntervalReference=interval;
+      suspiciousIntervalRun=1;
+    }
+
+    if(suspiciousIntervalRun>=AUTOCLICK_REQUIRED_INTERVALS){
+      setManualInputBlocked(true);
+      suspiciousIntervalReference=null;
+      suspiciousIntervalRun=0;
+      return false;
+    }
+    return true;
+  }
+
+  function tryManualAttack(clientX=null,clientY=null){
+    const now=performance.now();
+    if(!registerRawManualInput(now))return false;
+    if(now-lastManualAttackAt<MANUAL_ATTACK_COOLDOWN_MS)return false;
+    if(combatLocked||state.enemyHp<=0||state.attack<=0)return false;
+    lastManualAttackAt=now;
+    applyHit(state.attack,'click',clientX,clientY);
+    return true;
+  }
+
+  function applyHit(baseDamage,source='click',clientX=null,clientY=null){
+    if(combatLocked||state.enemyHp<=0||baseDamage<=0)return;
+    showHitDialogue();
+
+    const manual=source==='click';
+    const frenzy=manual&&isFrenzyActive();
+    let energyGain=0;
+
+    if(manual){
+      state.clicks+=1;
+      triggerHurtTargetSprite();
+      if(frenzy){
+        frenzyCombo+=1;
+        state.maxFrenzyCombo=Math.max(state.maxFrenzyCombo||0,frenzyCombo);
+      }else energyGain=chargeManualEnergy();
+    }
+
+    let modifiedBase=baseDamage*damageMultiplier();
+    if(source==='auto') modifiedBase*=autoMultiplier();
+    if(manual) modifiedBase*=achievementMultiplier('manualDamage');
+    if(isBlackBoss()) modifiedBase*=achievementMultiplier('bossDamage');
+    if(frenzy) modifiedBase*=frenzyDamageMultiplier(frenzyCombo);
+
+    const critChance=Math.min(1,effectiveCritChance()+(frenzy?.30:0));
+    const isCrit=Math.random()<critChance;
+    const critMult=effectiveCritDamage()*(frenzy?1.5:1);
+    let damage=modifiedBase*(isCrit?critMult:1);
+    damage*=playerTraitDamageMultiplier();
+    damage*=bossIncomingDamageMultiplier();
+    damage=Math.max(1,Math.round(damage));
+
+    const manualGoldMult=frenzy?5:1;
+    const goldGain=Math.max(1,Math.round(damage*goldMultiplier()*manualGoldMult));
+    state.enemyHp=Math.max(0,state.enemyHp-damage);
+    triggerWrathIfNeeded();
+    state.money+=goldGain;
+    state.totalEarned+=goldGain;
+    state.maxHit=Math.max(state.maxHit,damage);
+
+    const rect=el.hitZone.getBoundingClientRect();
+    const x=clientX!=null?clientX-rect.left:rect.width/2+(Math.random()*110-55);
+    const y=clientY!=null?clientY-rect.top:rect.height/2+(Math.random()*90-45);
+
+    createHitEffect(x,y,isCrit,frenzy);
+    showFloatingText(`${isCrit?'치명타! ':''}-${formatNum(damage)} / +${formatNum(goldGain)}원`,x,y,isCrit?'#ffd34e':'#fff',isCrit?26:21);
+    if(energyGain===2) showFloatingText('멍멍 짖기! 기운 +2',x,y+38,'#e7a3ff',16);
+
+    updateFrenzyUI();
+    if(state.enemyHp<=0){render();setTimeout(defeatEnemy,130);}else{
+      render();
+      if(manual&&!frenzy&&state.autoFrenzy&&state.energy>=100) maybeAutoActivateFrenzy();
+    }
+  }
+
+  function retryCurrent(){
+    if(state.bossRetryReady){enterFloor(state.stage,5,'challenge',true);return;}
+    enterFloor(state.stage,state.floor,'challenge');showNotice('재도전!','제한시간이 다시 시작됩니다.',900);
+  }
+
+  function playRebirthEffect(reward,onPeak){
+    el.rebirthFlashSub.textContent=`검은수영의 눈물 +${formatNum(reward)}`;
+    el.rebirthFlash.classList.remove('play');
+    void el.rebirthFlash.offsetWidth;
+    el.rebirthFlash.classList.add('play');
+    setTimeout(()=>{if(typeof onPeak==='function')onPeak();},230);
+    setTimeout(()=>el.rebirthFlash.classList.remove('play'),1000);
+  }
+
+  function doRebirth(){
+    const reward=rebirthReward();
+    if(state.stage<10||reward<=0)return;
+    if(!confirm(`현재 ${state.stage}스테이지에서 환생하면 검은수영의 눈물 ${reward}개를 획득합니다.\n\n일반 재화, 일반 능력치, 일반 업그레이드, 스테이지 진행도가 초기화됩니다.\n용사의 축복과 검은수영의 눈물, 최고 기록은 유지됩니다.\n\n환생하시겠습니까?`))return;
+    combatLocked=true;
+    playRebirthEffect(reward,()=>{
+      const keep={
+        tears:state.tears+reward,
+        blessings:{...state.blessings},
+        blessingSpent:{...state.blessingSpent},
+        achievementClaims:{...state.achievementClaims},
+        totalTearsEarned:(state.totalTearsEarned||0)+reward,
+        goldenKills:state.goldenKills||0,blackBossKills:state.blackBossKills||0,attributeBossKills:state.attributeBossKills||0,
+        frenzyUses:state.frenzyUses||0,maxFrenzyCombo:state.maxFrenzyCombo||0,traitKills:{...state.traitKills},
+        autoFrenzy:!!state.autoFrenzy,
+        rebirths:(state.rebirths||0)+1,
+        bestStage:state.bestStage,bestFloor:state.bestFloor,
+        totalEarned:state.totalEarned,clicks:state.clicks,kills:state.kills,maxHit:state.maxHit
+      };
+      const fresh=defaultState();
+      state={...fresh,...keep,blessings:keep.blessings,blessingSpent:keep.blessingSpent,achievementClaims:keep.achievementClaims,traitKills:keep.traitKills};
+      frenzyEndAt=0;frenzyCombo=0;lastManualAttackAt=-Infinity;resetManualInputGuard();
+      syncEnemyStats(true);combatLocked=false;lastTimerStamp=performance.now();
+      render();saveGame(false);
+    });
+  }
+
+  function hydrateSaveObject(p){
+    if(!p||p.saveGeneration!==SAVE_GENERATION)return null;
+    const d=defaultState();
+    return {
+      ...d,...p,
+      saveGeneration:SAVE_GENERATION,
+      balanceVersion:11,
+      buyMode:['1','10','max'].includes(String(p.buyMode))?String(p.buyMode):'1',
+      isGolden:typeof p.isGolden==='boolean'?p.isGolden:null,
+      bossTrait:(p.bossTrait==='normal'||BOSS_TRAIT_KEYS.includes(p.bossTrait))?p.bossTrait:null,
+      bossCycleElapsed:Math.max(0,Number(p.bossCycleElapsed)||0),
+      bossCharmRemaining:Math.max(0,Number(p.bossCharmRemaining)||0),
+      bossWrathRemaining:Math.max(0,Number(p.bossWrathRemaining)||0),
+      bossWrathTriggered:!!p.bossWrathTriggered,
+      achievementClaims:{...(p.achievementClaims||{})},
+      achievementNotified:{...(p.achievementNotified||{})},
+      achievementNoticeVersion:Math.max(0,Math.floor(Number(p.achievementNoticeVersion)||0)),
+      totalTearsEarned:Number.isFinite(Number(p.totalTearsEarned))?Math.max(0,Number(p.totalTearsEarned)):Math.max(0,Number(p.tears)||0)+Object.values(p.blessingSpent||{}).reduce((a,v)=>a+Math.max(0,Number(v)||0),0),
+      goldenKills:Math.max(0,Math.floor(Number(p.goldenKills)||0)),
+      blackBossKills:Math.max(Math.max(0,Math.floor(Number(p.blackBossKills)||0)),Math.floor((Math.max(1,Number(p.bestStage)||1)-1)/5),Math.max(0,Math.floor(Number(p.rebirths)||0))),
+      attributeBossKills:Math.max(0,Math.floor(Number(p.attributeBossKills)||0)),
+      frenzyUses:Math.max(0,Math.floor(Number(p.frenzyUses)||0)),
+      maxFrenzyCombo:Math.max(0,Math.floor(Number(p.maxFrenzyCombo)||0)),
+      traitKills:{...d.traitKills,...(p.traitKills||{})},
+      upgrades:{...d.upgrades,...(p.upgrades||{})},
+      blessings:{...d.blessings,...(p.blessings||{})},
+      blessingSpent:{...d.blessingSpent,...(p.blessingSpent||{})}
+    };
+  }
+
+  function readSaveKey(key){
+    try{
+      const raw=localStorage.getItem(key);
+      if(!raw)return null;
+      return hydrateSaveObject(JSON.parse(raw));
+    }catch{return null;}
+  }
+
+  function createAutoBackup(force=false){
+    if(!force&&Date.now()-lastBackupWriteAt<BACKUP_INTERVAL_MS)return false;
+    try{
+      const raw=localStorage.getItem(SAVE_KEY);
+      if(!raw)return false;
+      const parsed=JSON.parse(raw);
+      if(!hydrateSaveObject(parsed))return false;
+      localStorage.setItem(BACKUP_KEY,raw);
+      lastBackupWriteAt=Date.now();
+      return true;
+    }catch{return false;}
+  }
+
+  function updateBackupStatus(){
+    if(!el||!el.backupStatus||!el.backupBtn)return;
+    const backup=readSaveKey(BACKUP_KEY);
+    if(!backup){
+      el.backupStatus.textContent='자동 백업 준비 중';
+      el.backupBtn.disabled=true;
+      return;
+    }
+    el.backupBtn.disabled=false;
+    const d=new Date(Number(backup.lastActiveAt)||Date.now());
+    const hh=String(d.getHours()).padStart(2,'0');
+    const mm=String(d.getMinutes()).padStart(2,'0');
+    el.backupStatus.textContent=`자동 백업 ${hh}:${mm}`;
+  }
+
+  function saveGame(showMsg=false,skipBackup=false){
+    state.saveGeneration=SAVE_GENERATION;
+    state.balanceVersion=11;
+    state.lastActiveAt=Date.now();
+    if(!skipBackup)createAutoBackup(showMsg);
+    localStorage.setItem(SAVE_KEY,JSON.stringify(state));
+    if(showMsg){el.saveMsg.textContent='저장되었습니다.';setTimeout(()=>el.saveMsg.textContent='',1200);}
+    updateBackupStatus();
+  }
+
+  function loadGame(){
+    const primary=readSaveKey(SAVE_KEY);
+    if(primary)return primary;
+    const backup=readSaveKey(BACKUP_KEY);
+    if(backup){loadedFromBackup=true;return backup;}
+    return null;
+  }
+
+  function restoreAutoBackup(){
+    const backup=readSaveKey(BACKUP_KEY);
+    if(!backup){alert('복구할 자동 백업이 없습니다.');return;}
+    const d=new Date(Number(backup.lastActiveAt)||Date.now());
+    if(!confirm(`자동 백업을 복구하시겠습니까?\n\n백업 시각: ${d.toLocaleString()}\n스테이지: ${backup.stage}-${backup.floor}층\n검은수영의 눈물: ${backup.tears||0}개\n\n현재 진행 상황은 백업 시점으로 되돌아갑니다.`))return;
+    state=backup;
+    hurtTargetUntil=0;if(hurtTargetTimer){clearTimeout(hurtTargetTimer);hurtTargetTimer=null;}
+    frenzyEndAt=0;frenzyCombo=0;lastManualAttackAt=-Infinity;resetManualInputGuard();
+    combatLocked=false;lastTimerStamp=performance.now();
+    syncEnemyStats(false);
+    render();
+    saveGame(false,true);
+    el.saveMsg.textContent='자동 백업을 복구했습니다.';
+    showNotice('백업 복구 완료!','자동 백업 시점의 진행 상황으로 돌아왔습니다.',1900);
+    setTimeout(()=>el.saveMsg.textContent='',1800);
+  }
+
+  function resetGame(){
+    if(!confirm('정말 초기화하시겠습니까? 현재 저장 데이터가 삭제됩니다.'))return;
+    state=defaultState();
+    hurtTargetUntil=0;if(hurtTargetTimer){clearTimeout(hurtTargetTimer);hurtTargetTimer=null;}
+    frenzyEndAt=0;frenzyCombo=0;lastManualAttackAt=-Infinity;resetManualInputGuard();
+    syncEnemyStats(true);
+    localStorage.removeItem(SAVE_KEY);
+    localStorage.removeItem(BACKUP_KEY);
+    lastBackupWriteAt=0;
+    render();
+    el.saveMsg.textContent='초기화되었습니다.';
+    setTimeout(()=>el.saveMsg.textContent='',1200);
+  }
+
+  function exportSave(){
+    state.saveGeneration=SAVE_GENERATION;
+    state.balanceVersion=11;
+    state.lastActiveAt=Date.now();
+    const text=btoa(unescape(encodeURIComponent(JSON.stringify(state))));
+    navigator.clipboard.writeText(text).then(()=>{
+      el.saveMsg.textContent='저장 데이터가 클립보드에 복사되었습니다.';
+      setTimeout(()=>el.saveMsg.textContent='',1500);
+    }).catch(()=>prompt('아래 데이터를 복사하세요.',text));
+  }
+
+  function importSave(){
+    const input=prompt('beta 0.16 이후 버전에서 복사한 저장 데이터 문자열을 붙여넣으세요.\n현재 진행 상황은 불러온 데이터로 교체됩니다.');
+    if(input===null)return;
+    const text=input.trim();
+    if(!text){alert('저장 데이터가 입력되지 않았습니다.');return;}
+    try{
+      const decoded=decodeURIComponent(escape(atob(text)));
+      const p=JSON.parse(decoded);
+      if(!p||typeof p!=='object')throw new Error('invalid');
+      if(p.saveGeneration!==SAVE_GENERATION){
+        alert('이전 버전의 저장 데이터입니다.\n\nBeta 0.16부터 밸런스가 대폭 개편되어 beta 0.15 이하의 저장 데이터는 사용할 수 없습니다.\n새 게임으로 시작해 주세요.');
+        return;
+      }
+      if(!p.upgrades||!p.blessings)throw new Error('invalid');
+
+      const loaded=hydrateSaveObject(p);
+      if(!loaded)throw new Error('invalid');
+
+      if(!confirm(`저장 데이터를 불러오시겠습니까?\n\n스테이지: ${loaded.stage}-${loaded.floor}층\n검은수영의 눈물: ${loaded.tears||0}개\n환생: ${loaded.rebirths||0}회\n\n현재 이 기기의 진행 상황은 덮어씌워집니다.`))return;
+
+      createAutoBackup(true);
+      state=loaded;
+      hurtTargetUntil=0;if(hurtTargetTimer){clearTimeout(hurtTargetTimer);hurtTargetTimer=null;}
+      frenzyEndAt=0;frenzyCombo=0;lastManualAttackAt=-Infinity;resetManualInputGuard();
+      combatLocked=false;
+      lastTimerStamp=performance.now();
+      const importedOffline=applyOfflineReward(false);
+      render();
+      saveGame(false);
+      el.saveMsg.textContent='저장 데이터를 불러왔습니다.';
+      showNotice(
+        '불러오기 완료!',
+        importedOffline.reward>0
+          ?`오프라인 ${formatOfflineDuration(importedOffline.elapsed)} · +${formatNum(importedOffline.reward)}원`
+          :'진행 상황을 이어서 플레이합니다.',
+        importedOffline.reward>0?3000:1500
+      );
+      setTimeout(()=>el.saveMsg.textContent='',1800);
+    }catch(err){
+      alert('저장 데이터를 읽지 못했습니다. 저장 문자열 전체가 정확히 붙여넣어졌는지 확인해 주세요.');
+    }
+  }
+
+  el.targetBtn.addEventListener('click',e=>tryManualAttack(e.clientX,e.clientY));
+  el.targetBtn.addEventListener('pointerenter',e=>{targetHovered=true;lastPointerClientX=e.clientX;lastPointerClientY=e.clientY;});
+  el.targetBtn.addEventListener('pointermove',e=>{targetHovered=true;lastPointerClientX=e.clientX;lastPointerClientY=e.clientY;});
+  el.targetBtn.addEventListener('pointerleave',()=>{targetHovered=false;});
+  window.addEventListener('blur',()=>{targetHovered=false;lastRawManualInputAt=null;suspiciousIntervalReference=null;suspiciousIntervalRun=0;if(manualInputBlocked)unlockIntervals=[];});
+
+  document.addEventListener('keydown',e=>{
+    const active=document.activeElement;
+    const editing=active&&(active.tagName==='INPUT'||active.tagName==='TEXTAREA'||active.tagName==='SELECT'||active.isContentEditable);
+
+    if(e.key==='Control'){
+      if(!e.repeat&&!editing)ctrlFrenzyArmed=true;
+      return;
+    }
+    if(e.ctrlKey)ctrlFrenzyArmed=false;
+
+    if(e.code!=='Space'||e.repeat||!targetHovered||editing)return;
+    e.preventDefault();
+    tryManualAttack(lastPointerClientX,lastPointerClientY);
+  });
+  document.addEventListener('keyup',e=>{
+    if(e.key==='Control'){
+      if(ctrlFrenzyArmed)activateFrenzy();
+      ctrlFrenzyArmed=false;
+      return;
+    }
+    if(e.code==='Space'&&targetHovered)e.preventDefault();
+  });
+
+  document.querySelectorAll('.buy-mode-btn').forEach(btn=>btn.addEventListener('click',()=>setBuyMode(btn.dataset.buyMode)));
+  el.achievementNormalTab.addEventListener('click',()=>{switchAchievementTab('normal');});
+  el.achievementChallengeTab.addEventListener('click',()=>{switchAchievementTab('challenge');});
+  el.frenzyBtn.addEventListener('click',activateFrenzy);
+  el.autoFrenzyToggle.addEventListener('click',toggleAutoFrenzy);
+  el.blessingResetBtn.addEventListener('click',resetBlessings);
+  el.upgradeTab.addEventListener('click',()=>switchGrowthTab('upgrade'));
+  el.blessingTab.addEventListener('click',()=>switchGrowthTab('blessing'));
+  el.retryBtn.addEventListener('click',retryCurrent);el.rebirthBtn.addEventListener('click',doRebirth);el.saveBtn.addEventListener('click',()=>saveGame(true));el.backupBtn.addEventListener('click',restoreAutoBackup);el.resetBtn.addEventListener('click',resetGame);el.exportBtn.addEventListener('click',exportSave);
+  el.importBtn.addEventListener('click',importSave);
+
+  setInterval(()=>{if(!document.hidden&&state.autoAttack>0)applyHit(state.autoAttack/2,'auto');},500);
+  setInterval(()=>{if(!document.hidden)saveGame(false);},10000);
+  window.addEventListener('beforeunload',()=>saveGame(false));
+  document.addEventListener('visibilitychange',()=>{
+    if(document.hidden){
+      saveGame(false);
+    }else{
+      applyOfflineReward(true);
+      lastTimerStamp=performance.now();
+      render();saveGame(false);
+    }
+  });
+
+  function timerLoop(now){
+    if(document.hidden){lastTimerStamp=now;requestAnimationFrame(timerLoop);return;}
+    const dt=(now-lastTimerStamp)/1000;lastTimerStamp=now;
+    if(state.mode==='challenge'&&state.floor===5&&!combatLocked){state.timeRemaining-=dt;if(state.timeRemaining<=0){state.timeRemaining=0;handleTimeout();}else{const txt=`${state.timeRemaining.toFixed(1)}초`;if(el.timerValue.textContent!==txt)el.timerValue.textContent=txt;el.timerValue.classList.toggle('danger',state.timeRemaining<=10);}}
+    updateBossTraitEffects(dt);
+    updateFrenzyUI(now);
+    requestAnimationFrame(timerLoop);
+  }
+
+  syncEnemyStats(false);
+  if(isBlackBoss()&&state.bossTrait===null){ensureBossTrait();syncEnemyStats(true);resetBossTraitBattleState();}
+  if(state.mode==='challenge'&&state.floor===5&&(!Number.isFinite(state.timeRemaining)||state.timeRemaining<=0)) state.timeRemaining=floorLimit();
+  if(state.mode==='challenge'&&state.floor<5) state.timeRemaining=0;
+  const offlineResult=applyOfflineReward(false);
+  render();
+  if(loadedFromBackup)showNotice('자동 백업 복구!','기본 저장본을 읽지 못해 직전 정상 백업으로 복구했습니다.',3600);
+  else if(offlineResult.reward>0)showNotice('오프라인 보상!',`${formatOfflineDuration(offlineResult.elapsed)} · 자동 줘패기 기대수입 100% · +${formatNum(offlineResult.reward)}원`,3600);
+  saveGame(false);maybeAutoActivateFrenzy();requestAnimationFrame(timerLoop);
+</script>
+</body>
+</html>
