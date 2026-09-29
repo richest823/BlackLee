@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>이수영 줘패기 - beta 0.204</title>
+  <title>이수영 줘패기 - beta 0.205</title>
   <style>
     :root {
       --bg1:#121826; --bg2:#1f2a44; --panel:rgba(255,255,255,.08);
@@ -65,7 +65,7 @@
     .floor-dot.current{background:rgba(255,203,71,.18);color:var(--accent);border-color:rgba(255,203,71,.45);box-shadow:0 0 16px rgba(255,203,71,.08)}
     .floor-dot.boss-floor{border-color:rgba(255,88,88,.35)}
 
-    /* beta 0.204: compact combat HUD */
+    /* beta 0.205: compact combat HUD */
     .target-panel{padding:12px}
     .combat-hud{width:min(100%,620px);display:grid;grid-template-columns:150px minmax(260px,1fr) 118px;gap:8px;align-items:stretch;margin:0 0 7px}
     .hud-stage{display:flex;flex-direction:column;justify-content:center;gap:5px;padding:7px 8px;border-radius:13px;background:rgba(0,0,0,.16);border:1px solid rgba(255,255,255,.07)}
@@ -178,7 +178,22 @@
     .achievement-card{margin-top:18px;padding:14px;border-radius:18px;background:linear-gradient(180deg,rgba(255,203,71,.10),rgba(255,255,255,.045));border:1px solid rgba(255,203,71,.20)}.achievement-head{display:flex;justify-content:space-between;align-items:center;gap:10px}.achievement-title{font-size:19px;font-weight:950}.achievement-ready{font-size:10.5px;color:#392500;background:var(--accent);font-weight:950;border-radius:999px;padding:5px 8px}.achievement-ready.zero{opacity:.38}.achievement-ready.has-ready{animation:readyPulse 1.4s ease-in-out infinite}.achievement-summary,.achievement-mults{display:none}.achievement-tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:10px 0 8px}.achievement-tab{display:flex;align-items:center;justify-content:center;gap:5px;border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:7px 8px;background:rgba(255,255,255,.06);color:var(--muted);font-weight:900;cursor:pointer}.achievement-tab.active{background:rgba(255,203,71,.17);border-color:rgba(255,203,71,.38);color:var(--accent)}.achievement-tab-badge{display:none;min-width:17px;height:17px;align-items:center;justify-content:center;border-radius:999px;padding:0 5px;background:var(--accent);color:#392500;font-size:9px;font-weight:1000}.achievement-tab-badge.show{display:inline-flex}@keyframes readyPulse{0%,100%{box-shadow:0 0 0 rgba(255,203,71,0)}50%{box-shadow:0 0 14px rgba(255,203,71,.34)}}.achievement-pane.hidden{display:none}.achievement-list{display:flex;flex-direction:column;gap:7px;max-height:470px;overflow:auto;padding-right:2px}.achievement-item{padding:10px;border-radius:13px;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.065)}.achievement-item.ready{border-color:rgba(255,203,71,.45);box-shadow:inset 0 0 16px rgba(255,203,71,.05)}.achievement-item.claimed{opacity:.65}.achievement-item.challenge{background:linear-gradient(180deg,rgba(204,133,255,.075),rgba(255,255,255,.045))}.achievement-item-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}.achievement-name{font-size:13px;font-weight:950}.achievement-kind{font-size:9px;border-radius:999px;padding:3px 6px;background:rgba(255,255,255,.08);color:var(--muted);white-space:nowrap}.achievement-condition{margin-top:4px;font-size:10.5px;color:var(--muted);line-height:1.4}.achievement-progress{margin-top:4px;font-size:10px;color:#dce5f5}.achievement-bottom{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:7px}.achievement-reward{font-size:10.5px;font-weight:900;color:var(--tear)}.achievement-item.challenge .achievement-reward{color:#e9b6ff}.achievement-claim{border:none;border-radius:9px;padding:6px 8px;font-size:10.5px;font-weight:950;cursor:pointer;background:linear-gradient(180deg,#ffd65f,#ffb629);color:#392500;white-space:nowrap}.achievement-item.challenge .achievement-claim{background:linear-gradient(180deg,#edc4ff,#ba71e7);color:#351347}.achievement-claim:disabled{opacity:.38;cursor:not-allowed}
     button.buy,.utility-btn{border:none;border-radius:12px;padding:9px 11px;font-weight:850;cursor:pointer;background:linear-gradient(180deg,#ffd65f,#ffb629);color:#392500;box-shadow:0 8px 18px rgba(255,182,41,.18);transition:.15s ease}button.buy:hover,.utility-btn:hover{transform:translateY(-1px)}button.buy:disabled{cursor:not-allowed;opacity:.45;transform:none;box-shadow:none}
     .stat-table{display:grid;gap:9px}.stat-row{display:flex;justify-content:space-between;gap:10px;font-size:13px;padding:11px 13px;border-radius:13px;background:rgba(255,255,255,.06)}.stat-row .l{color:var(--muted)}.stat-row .r{font-weight:850}
-    .tools{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.utility-btn:disabled{opacity:.4;cursor:not-allowed;transform:none}.utility-btn.secondary{background:rgba(255,255,255,.12);color:white;box-shadow:none;border:1px solid rgba(255,255,255,.08)}.save-msg{margin-top:10px;min-height:18px;font-size:12px;color:var(--good)}.footer-note{margin-top:10px;color:var(--muted);font-size:12px;line-height:1.55}.help-toggle{margin-top:10px;border-top:1px solid rgba(255,255,255,.07);padding-top:9px}
+    .tools{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.utility-btn:disabled{opacity:.4;cursor:not-allowed;transform:none}.utility-btn.secondary{background:rgba(255,255,255,.12);color:white;box-shadow:none;border:1px solid rgba(255,255,255,.08)}.save-msg{margin-top:10px;min-height:18px;font-size:12px;color:var(--good)}.footer-note{margin-top:10px;color:var(--muted);font-size:12px;line-height:1.55}
+    .ranking-card{margin-top:12px;padding:12px;border-radius:16px;background:linear-gradient(180deg,rgba(123,241,168,.095),rgba(255,255,255,.045));border:1px solid rgba(123,241,168,.20)}
+    .ranking-card-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
+    .ranking-card-title{font-size:16px;font-weight:950}.ranking-status{font-size:9.5px;font-weight:900;color:var(--muted);padding:4px 7px;border-radius:999px;background:rgba(255,255,255,.075)}
+    .ranking-status.online{color:#bff6d2;background:rgba(123,241,168,.10)}.ranking-status.error{color:#ffd2d2;background:rgba(255,100,100,.10)}
+    .ranking-profile{margin-top:7px;font-size:11px;line-height:1.45;color:#e8eef7}.ranking-open-btn{width:100%;margin-top:9px;border:1px solid rgba(123,241,168,.24);border-radius:10px;padding:8px 10px;background:rgba(123,241,168,.10);color:#dffbea;font-weight:950;cursor:pointer}.ranking-open-btn:hover{background:rgba(123,241,168,.16)}
+    .ranking-overlay{display:none;position:fixed;inset:0;z-index:3000;align-items:center;justify-content:center;padding:18px;background:rgba(4,8,16,.78);backdrop-filter:blur(8px)}.ranking-overlay.show{display:flex}
+    .ranking-modal{width:min(94vw,540px);max-height:min(88vh,760px);display:flex;flex-direction:column;border-radius:22px;background:linear-gradient(180deg,#202b46,#101828);border:1px solid rgba(255,255,255,.12);box-shadow:0 30px 90px rgba(0,0,0,.55);overflow:hidden}.ranking-modal.nickname{width:min(92vw,420px)}
+    .ranking-modal-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:15px 16px 12px;border-bottom:1px solid rgba(255,255,255,.08)}.ranking-modal-title{font-size:19px;font-weight:1000}.ranking-close-btn{width:30px;height:30px;border:none;border-radius:9px;background:rgba(255,255,255,.08);color:white;font-size:18px;cursor:pointer}
+    .ranking-modal-body{min-height:0;display:flex;flex-direction:column;padding:13px 16px 16px}.ranking-my-summary{padding:10px 11px;border-radius:12px;background:rgba(123,241,168,.08);border:1px solid rgba(123,241,168,.18);font-size:11px;line-height:1.5;color:#dffbea}
+    .ranking-toolbar{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:10px 0 8px}.ranking-caption{font-size:10.5px;color:var(--muted)}.ranking-refresh-btn{border:1px solid rgba(255,255,255,.10);border-radius:9px;padding:6px 9px;background:rgba(255,255,255,.07);color:#eef4ff;font-size:10px;font-weight:900;cursor:pointer}
+    .ranking-list{min-height:110px;max-height:54vh;overflow:auto;display:flex;flex-direction:column;gap:6px;padding-right:2px}.ranking-row{display:grid;grid-template-columns:40px minmax(0,1fr) auto;align-items:center;gap:8px;padding:9px 10px;border-radius:11px;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.055)}.ranking-row.me{border-color:rgba(255,203,71,.48);background:rgba(255,203,71,.10)}
+    .ranking-rank{font-size:11px;font-weight:950;color:var(--muted)}.ranking-row.me .ranking-rank{color:var(--accent)}.ranking-name{font-size:12px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ranking-record{font-size:12px;font-weight:1000;color:var(--accent);white-space:nowrap}.ranking-empty{padding:24px 12px;text-align:center;color:var(--muted);font-size:11px}
+    .nickname-copy{font-size:11.5px;line-height:1.65;color:#dfe7f4}.nickname-input{width:100%;margin-top:12px;border:1px solid rgba(255,255,255,.13);border-radius:11px;padding:11px 12px;background:rgba(0,0,0,.22);color:white;font-size:14px;font-weight:800;outline:none}.nickname-input:focus{border-color:rgba(123,241,168,.55);box-shadow:0 0 0 3px rgba(123,241,168,.08)}
+    .nickname-rule{margin-top:6px;font-size:10px;color:var(--muted)}.nickname-error{min-height:18px;margin-top:7px;font-size:10.5px;color:#ffb7b7}.nickname-actions{display:grid;grid-template-columns:1fr 1.4fr;gap:8px;margin-top:7px}.nickname-btn{border:none;border-radius:10px;padding:9px 10px;font-weight:950;cursor:pointer}.nickname-btn.secondary{background:rgba(255,255,255,.09);color:white}.nickname-btn.primary{background:linear-gradient(180deg,#9af6bb,#5fdc90);color:#10331e}.nickname-btn:disabled{opacity:.45;cursor:not-allowed}
+.help-toggle{margin-top:10px;border-top:1px solid rgba(255,255,255,.07);padding-top:9px}
     .help-toggle summary{display:flex;align-items:center;justify-content:space-between;gap:8px;list-style:none;cursor:pointer;padding:7px 9px;border-radius:10px;background:rgba(255,255,255,.055);color:#e9eff9;font-size:11px;font-weight:900;user-select:none}
     .help-toggle summary::-webkit-details-marker{display:none}
     .help-toggle summary:hover{background:rgba(255,255,255,.085)}
@@ -199,7 +214,7 @@
   <div class="titlebar">
     <div class="brand-line">
       <h1>이수영 줘패기</h1>
-      <div class="version-tag">beta 0.204</div>
+      <div class="version-tag">beta 0.205</div>
     </div>
     <div class="top-stats">
       <div class="mini-card"><span class="k">재화</span><span class="v" id="moneyTop">0원</span></div>
@@ -329,6 +344,11 @@
         <div class="stat-row"><span class="l">최대 한 방</span><span class="r" id="statMaxHit">0</span></div>
         <div class="stat-row"><span class="l">최고 도달</span><span class="r" id="statBest">1-1F</span></div>
       </div>
+      <div class="ranking-card">
+        <div class="ranking-card-head"><div class="ranking-card-title">온라인 랭킹</div><span class="ranking-status" id="rankingStatus">미등록</span></div>
+        <div class="ranking-profile" id="rankingProfile">닉네임을 등록하면 최고 스테이지·층 기록이 랭킹에 등록됩니다.</div>
+        <button class="ranking-open-btn" id="rankingOpenBtn" type="button">랭킹 보기</button>
+      </div>
       <div class="rebirth-card">
         <div class="title-with-info"><div class="rebirth-title">환생</div><button class="info-icon" type="button" aria-label="환생 설명" data-tip="10스테이지부터 환생할 수 있습니다. 환생하면 일반 재화·일반 능력치·일반 업그레이드·스테이지 진행도가 초기화됩니다. 검은수영의 눈물, 용사의 축복, 업적 보상은 유지됩니다.">i</button></div>
         <div class="rebirth-reward" id="rebirthReward">현재 환생 보상: 0개</div>
@@ -370,6 +390,7 @@
           <div><b>황금수영</b> · 일반 적에서 5% 확률 / 체력 2배 / 보상 50배</div>
           <div><b>속성수영</b> · Stage 10부터 등장 가능 / 처치 시 눈물 2배</div>
           <div><b>업적</b> · 달성 후 직접 보상을 수령해야 적용</div>
+          <div><b>온라인 랭킹</b> · 닉네임 등록 후 최고 스테이지·층 기록이 자동 갱신됩니다.</div>
           <div><b>오프라인 보상</b> · 자동 공격 기대수입 100% / 최대 24시간</div>
         </div>
       </details>
@@ -390,11 +411,45 @@
   </div>
 </div>
 
+
+<div class="ranking-overlay" id="rankingOverlay" aria-hidden="true">
+  <div class="ranking-modal" role="dialog" aria-modal="true" aria-labelledby="rankingModalTitle">
+    <div class="ranking-modal-head">
+      <div class="ranking-modal-title" id="rankingModalTitle">🏆 BlackLee 랭킹</div>
+      <button class="ranking-close-btn" id="rankingCloseBtn" type="button" aria-label="랭킹 닫기">×</button>
+    </div>
+    <div class="ranking-modal-body">
+      <div class="ranking-my-summary" id="rankingMySummary">내 기록을 불러오는 중입니다.</div>
+      <div class="ranking-toolbar"><span class="ranking-caption">최고 스테이지 · 최고 층 TOP 100</span><button class="ranking-refresh-btn" id="rankingRefreshBtn" type="button">새로고침</button></div>
+      <div class="ranking-list" id="rankingList"><div class="ranking-empty">랭킹을 불러오는 중입니다.</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="ranking-overlay" id="nicknameOverlay" aria-hidden="true">
+  <div class="ranking-modal nickname" role="dialog" aria-modal="true" aria-labelledby="nicknameModalTitle">
+    <div class="ranking-modal-head">
+      <div class="ranking-modal-title" id="nicknameModalTitle">랭킹 닉네임 등록</div>
+      <button class="ranking-close-btn" id="nicknameCloseBtn" type="button" aria-label="닉네임 등록 닫기">×</button>
+    </div>
+    <div class="ranking-modal-body">
+      <div class="nickname-copy">현재까지의 <b>최고 스테이지·층 기록</b>을 그대로 랭킹에 등록합니다. 기존 게임 진행 상황은 초기화되지 않습니다.</div>
+      <input class="nickname-input" id="nicknameInput" type="text" maxlength="12" autocomplete="off" placeholder="닉네임 2~12자">
+      <div class="nickname-rule">한글 · 영문 · 숫자만 사용할 수 있습니다. 같은 닉네임은 중복 등록할 수 없습니다.</div>
+      <div class="nickname-error" id="nicknameError"></div>
+      <div class="nickname-actions"><button class="nickname-btn secondary" id="nicknameLaterBtn" type="button">나중에</button><button class="nickname-btn primary" id="nicknameRegisterBtn" type="button">등록하기</button></div>
+    </div>
+  </div>
+</div>
+
 <script>
   const SAVE_GENERATION = 'beta0.16';
   const SAVE_KEY = 'blacklee_save_beta016_v1';
   const BACKUP_KEY = 'blacklee_save_beta016_backup_v1';
   const BACKUP_INTERVAL_MS = 60000;
+  const SUPABASE_URL = 'https://ljhmoalojpaapykgmwgb.supabase.co';
+  const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_LZ4B3UpN5Dqh-SVOHqVU8Q_iMWlzCdD';
+  const RANKING_TABLE = 'blacklee_rankings';
   const TARGET_NORMAL_SRC = 'target.png';
   const TARGET_HURT_SRC = 'target_hurt.png';
   const TARGET_HURT_DURATION_MS = 1000;
@@ -413,6 +468,7 @@
     blessings:{damage:0,gold:0,time:0,crit:0,auto:0},
     blessingSpent:{damage:0,gold:0,time:0,crit:0,auto:0},
     achievementClaims:{},achievementNotified:{},achievementNoticeVersion:0,
+    nickname:null,playerId:null,rankingRegistered:false,rankingPromptDismissed:false,
     totalTearsEarned:0,goldenKills:0,blackBossKills:0,attributeBossKills:0,frenzyUses:0,maxFrenzyCombo:0,
     traitKills:{pride:0,greed:0,lust:0,envy:0,gluttony:0,wrath:0,sloth:0}
   });
@@ -442,6 +498,8 @@
   let ctrlFrenzyArmed = false;
   let hurtTargetUntil = 0;
   let hurtTargetTimer = null;
+  let rankingSyncInFlight = false;
+  let lastRankingSyncAt = 0;
 
   const el = {
     money:document.getElementById('money'), moneyTop:document.getElementById('moneyTop'), totalEarned:document.getElementById('totalEarned'),
@@ -461,7 +519,10 @@
     achievementNormalList:document.getElementById('achievementNormalList'), achievementChallengeList:document.getElementById('achievementChallengeList'),
     blessingResetInfo:document.getElementById('blessingResetInfo'), blessingResetBtn:document.getElementById('blessingResetBtn'),
     rebirthFlash:document.getElementById('rebirthFlash'), rebirthFlashSub:document.getElementById('rebirthFlashSub'), achievementToastStack:document.getElementById('achievementToastStack'),
-    saveBtn:document.getElementById('saveBtn'), backupBtn:document.getElementById('backupBtn'), downloadSaveBtn:document.getElementById('downloadSaveBtn'), loadSaveFileBtn:document.getElementById('loadSaveFileBtn'), saveFileInput:document.getElementById('saveFileInput'), resetBtn:document.getElementById('resetBtn'), exportBtn:document.getElementById('exportBtn'), importBtn:document.getElementById('importBtn'), saveMsg:document.getElementById('saveMsg'), backupStatus:document.getElementById('backupStatus')
+    saveBtn:document.getElementById('saveBtn'), backupBtn:document.getElementById('backupBtn'), downloadSaveBtn:document.getElementById('downloadSaveBtn'), loadSaveFileBtn:document.getElementById('loadSaveFileBtn'), saveFileInput:document.getElementById('saveFileInput'), resetBtn:document.getElementById('resetBtn'), exportBtn:document.getElementById('exportBtn'), importBtn:document.getElementById('importBtn'), saveMsg:document.getElementById('saveMsg'), backupStatus:document.getElementById('backupStatus'),
+    rankingStatus:document.getElementById('rankingStatus'), rankingProfile:document.getElementById('rankingProfile'), rankingOpenBtn:document.getElementById('rankingOpenBtn'),
+    rankingOverlay:document.getElementById('rankingOverlay'), rankingCloseBtn:document.getElementById('rankingCloseBtn'), rankingRefreshBtn:document.getElementById('rankingRefreshBtn'), rankingMySummary:document.getElementById('rankingMySummary'), rankingList:document.getElementById('rankingList'),
+    nicknameOverlay:document.getElementById('nicknameOverlay'), nicknameCloseBtn:document.getElementById('nicknameCloseBtn'), nicknameInput:document.getElementById('nicknameInput'), nicknameError:document.getElementById('nicknameError'), nicknameLaterBtn:document.getElementById('nicknameLaterBtn'), nicknameRegisterBtn:document.getElementById('nicknameRegisterBtn')
   };
 
   const hitDialogues = [
@@ -1159,11 +1220,184 @@
     el.rebirthBtn.disabled=state.stage<10;
     el.rebirthBtn.textContent=state.stage>=10?`환생하고 눈물 ${formatNum(rr)}개 받기`:'10스테이지부터 환생 가능';
     el.rebirthCount.textContent=`누적 환생 ${formatNum(state.rebirths)}회`;
-    renderFloorProgress();renderUpgrades();renderBlessings();renderBuyModeControls();updateFrenzyUI();updateBossTraitUI();checkAchievementUnlocks();renderAchievements();updateBackupStatus();refreshTargetSprite();
+    renderFloorProgress();renderUpgrades();renderBlessings();renderBuyModeControls();updateFrenzyUI();updateBossTraitUI();checkAchievementUnlocks();renderAchievements();updateBackupStatus();refreshTargetSprite();renderRankingCard();
+  }
+
+  function generatePlayerId(){
+    if(window.crypto&&typeof window.crypto.randomUUID==='function')return window.crypto.randomUUID();
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{
+      const r=Math.random()*16|0,v=c==='x'?r:(r&3|8);
+      return v.toString(16);
+    });
+  }
+
+  function rankingHeaders(extra={}){
+    return {'apikey':SUPABASE_PUBLISHABLE_KEY,'Content-Type':'application/json',...extra};
+  }
+
+  async function rankingRequest(path='',options={}){
+    const response=await fetch(`${SUPABASE_URL}/rest/v1/${RANKING_TABLE}${path}`,{
+      cache:'no-store',
+      ...options,
+      headers:rankingHeaders(options.headers||{})
+    });
+    if(!response.ok){
+      let message='';
+      try{const body=await response.json();message=body?.message||body?.details||body?.hint||'';}catch(_){}
+      const err=new Error(message||`HTTP ${response.status}`);
+      err.status=response.status;
+      throw err;
+    }
+    if(response.status===204)return null;
+    const text=await response.text();
+    return text?JSON.parse(text):null;
+  }
+
+  function renderRankingCard(){
+    if(!el.rankingStatus||!el.rankingProfile)return;
+    if(state.nickname&&state.playerId){
+      el.rankingStatus.textContent=state.rankingRegistered?'등록됨':'동기화 대기';
+      el.rankingStatus.classList.toggle('online',!!state.rankingRegistered);
+      el.rankingStatus.classList.remove('error');
+      el.rankingProfile.textContent=`${state.nickname} · 최고 ${state.bestStage}-${state.bestFloor}F`;
+      el.rankingOpenBtn.textContent='랭킹 보기';
+    }else{
+      el.rankingStatus.textContent='미등록';
+      el.rankingStatus.classList.remove('online','error');
+      el.rankingProfile.textContent='닉네임을 등록하면 최고 스테이지·층 기록이 랭킹에 등록됩니다.';
+      el.rankingOpenBtn.textContent='닉네임 등록 / 랭킹 보기';
+    }
+  }
+
+  function setRankingConnectionError(){
+    if(!el.rankingStatus)return;
+    el.rankingStatus.textContent='연결 실패';
+    el.rankingStatus.classList.remove('online');
+    el.rankingStatus.classList.add('error');
+  }
+
+  async function syncRankingRecord(force=false){
+    if(!state.nickname||!state.playerId||rankingSyncInFlight)return false;
+    const now=Date.now();
+    if(!force&&now-lastRankingSyncAt<3000)return false;
+    rankingSyncInFlight=true;
+    try{
+      const payload={player_id:state.playerId,nickname:state.nickname,best_stage:Math.max(1,Math.floor(Number(state.bestStage)||1)),best_floor:Math.min(5,Math.max(1,Math.floor(Number(state.bestFloor)||1)))};
+      await rankingRequest('?on_conflict=player_id',{method:'POST',headers:{'Prefer':'resolution=merge-duplicates,return=minimal'},body:JSON.stringify(payload)});
+      state.rankingRegistered=true;
+      lastRankingSyncAt=Date.now();
+      localStorage.setItem(SAVE_KEY,JSON.stringify(state));
+      renderRankingCard();
+      return true;
+    }catch(err){
+      state.rankingRegistered=false;
+      renderRankingCard();
+      setRankingConnectionError();
+      return false;
+    }finally{
+      rankingSyncInFlight=false;
+    }
+  }
+
+  function openNicknameModal(){
+    el.nicknameError.textContent='';
+    el.nicknameInput.value=state.nickname||'';
+    el.nicknameOverlay.classList.add('show');
+    el.nicknameOverlay.setAttribute('aria-hidden','false');
+    setTimeout(()=>el.nicknameInput.focus(),40);
+  }
+
+  function closeNicknameModal(dismiss=false){
+    el.nicknameOverlay.classList.remove('show');
+    el.nicknameOverlay.setAttribute('aria-hidden','true');
+    if(dismiss&&!state.nickname){
+      state.rankingPromptDismissed=true;
+      saveGame(false);
+    }
+  }
+
+  async function registerRankingNickname(){
+    const nickname=el.nicknameInput.value.trim();
+    if(!/^[가-힣A-Za-z0-9]{2,12}$/.test(nickname)){
+      el.nicknameError.textContent='닉네임은 한글·영문·숫자 2~12자로 입력해 주세요.';
+      return;
+    }
+    el.nicknameRegisterBtn.disabled=true;
+    el.nicknameError.textContent='등록 중...';
+    const playerId=state.playerId||generatePlayerId();
+    try{
+      const payload={player_id:playerId,nickname,best_stage:Math.max(1,Math.floor(Number(state.bestStage)||1)),best_floor:Math.min(5,Math.max(1,Math.floor(Number(state.bestFloor)||1)))};
+      await rankingRequest('?on_conflict=player_id',{method:'POST',headers:{'Prefer':'resolution=merge-duplicates,return=minimal'},body:JSON.stringify(payload)});
+      state.playerId=playerId;state.nickname=nickname;state.rankingRegistered=true;state.rankingPromptDismissed=false;lastRankingSyncAt=Date.now();
+      saveGame(false);renderRankingCard();closeNicknameModal(false);
+      showNotice('랭킹 등록 완료!',`${nickname} · 최고 ${state.bestStage}-${state.bestFloor}F`,1700);
+      openRankingModal();
+    }catch(err){
+      const duplicate=err.status===409||/duplicate|unique/i.test(err.message||'');
+      el.nicknameError.textContent=duplicate?'이미 사용 중인 닉네임입니다. 다른 닉네임을 입력해 주세요.':'랭킹 서버에 연결하지 못했습니다. 잠시 후 다시 시도해 주세요.';
+    }finally{
+      el.nicknameRegisterBtn.disabled=false;
+    }
+  }
+
+  function closeRankingModal(){
+    el.rankingOverlay.classList.remove('show');
+    el.rankingOverlay.setAttribute('aria-hidden','true');
+  }
+
+  function makeRankingRow(entry,rank){
+    const row=document.createElement('div');row.className='ranking-row'+(state.playerId&&entry.player_id===state.playerId?' me':'');
+    const rankEl=document.createElement('div');rankEl.className='ranking-rank';rankEl.textContent=`${rank}위`;
+    const nameEl=document.createElement('div');nameEl.className='ranking-name';nameEl.textContent=entry.nickname||'-';
+    const recordEl=document.createElement('div');recordEl.className='ranking-record';recordEl.textContent=`${entry.best_stage}-${entry.best_floor}F`;
+    row.append(rankEl,nameEl,recordEl);return row;
+  }
+
+  async function fetchRanking(){
+    el.rankingList.innerHTML='<div class="ranking-empty">랭킹을 불러오는 중입니다.</div>';
+    el.rankingRefreshBtn.disabled=true;
+    try{
+      const data=await rankingRequest('?select=player_id,nickname,best_stage,best_floor&order=best_stage.desc,best_floor.desc,nickname.asc&limit=1000',{method:'GET'});
+      const rows=Array.isArray(data)?data:[];
+      const myIndex=state.playerId?rows.findIndex(r=>r.player_id===state.playerId):-1;
+      el.rankingMySummary.textContent=state.nickname?`${state.nickname} · ${myIndex>=0?`${myIndex+1}위`:'순위 집계 중'} · 최고 ${state.bestStage}-${state.bestFloor}F`:'닉네임을 등록하면 내 순위가 표시됩니다.';
+      el.rankingList.textContent='';
+      const top=rows.slice(0,100);
+      if(!top.length){
+        el.rankingList.innerHTML='<div class="ranking-empty">아직 등록된 랭킹이 없습니다.</div>';
+      }else{
+        top.forEach((entry,index)=>el.rankingList.appendChild(makeRankingRow(entry,index+1)));
+        if(myIndex>=100){
+          const gap=document.createElement('div');gap.className='ranking-empty';gap.textContent=`내 순위: ${myIndex+1}위 · ${state.bestStage}-${state.bestFloor}F`;el.rankingList.appendChild(gap);
+        }
+      }
+      if(state.nickname&&state.playerId){state.rankingRegistered=true;renderRankingCard();}
+    }catch(err){
+      el.rankingMySummary.textContent=state.nickname?`${state.nickname} · 최고 ${state.bestStage}-${state.bestFloor}F`:'랭킹 서버 연결 실패';
+      el.rankingList.innerHTML='<div class="ranking-empty">랭킹 서버에 연결하지 못했습니다.<br>잠시 후 새로고침을 눌러 주세요.</div>';
+      setRankingConnectionError();
+    }finally{
+      el.rankingRefreshBtn.disabled=false;
+    }
+  }
+
+  async function openRankingModal(){
+    if(!state.nickname||!state.playerId){openNicknameModal();return;}
+    el.rankingOverlay.classList.add('show');el.rankingOverlay.setAttribute('aria-hidden','false');
+    await syncRankingRecord(true);
+    fetchRanking();
+  }
+
+  function initRankingSystem(){
+    renderRankingCard();
+    if(state.nickname&&state.playerId)setTimeout(()=>syncRankingRecord(true),700);
+    else if(!state.rankingPromptDismissed)setTimeout(()=>openNicknameModal(),750);
   }
 
   function updateBest(){
-    if(state.stage>state.bestStage||(state.stage===state.bestStage&&state.floor>state.bestFloor)){state.bestStage=state.stage;state.bestFloor=state.floor;}
+    if(state.stage>state.bestStage||(state.stage===state.bestStage&&state.floor>state.bestFloor)){
+      state.bestStage=state.stage;state.bestFloor=state.floor;renderRankingCard();syncRankingRecord(false);
+    }
   }
 
   function showNotice(big,small='',duration=1500){
@@ -1499,6 +1733,7 @@
         goldenKills:state.goldenKills||0,blackBossKills:state.blackBossKills||0,attributeBossKills:state.attributeBossKills||0,
         frenzyUses:state.frenzyUses||0,maxFrenzyCombo:state.maxFrenzyCombo||0,traitKills:{...state.traitKills},
         autoFrenzy:!!state.autoFrenzy,
+        nickname:state.nickname||null,playerId:state.playerId||null,rankingRegistered:!!state.rankingRegistered,rankingPromptDismissed:!!state.rankingPromptDismissed,
         rebirths:(state.rebirths||0)+1,
         bestStage:state.bestStage,bestFloor:state.bestFloor,
         totalEarned:state.totalEarned,clicks:state.clicks,kills:state.kills,maxHit:state.maxHit
@@ -1600,13 +1835,16 @@
     if(!backup){alert('복구할 자동 백업이 없습니다.');return;}
     const d=new Date(Number(backup.lastActiveAt)||Date.now());
     if(!confirm(`자동 백업을 복구하시겠습니까?\n\n백업 시각: ${d.toLocaleString()}\n스테이지: ${backup.stage}-${backup.floor}층\n검은수영의 눈물: ${backup.tears||0}개\n\n현재 진행 상황은 백업 시점으로 되돌아갑니다.`))return;
+    const currentRankingIdentity={nickname:state.nickname||null,playerId:state.playerId||null,rankingRegistered:!!state.rankingRegistered,rankingPromptDismissed:!!state.rankingPromptDismissed};
     state=backup;
+    if(!state.nickname||!state.playerId)state={...state,...currentRankingIdentity};
     hurtTargetUntil=0;if(hurtTargetTimer){clearTimeout(hurtTargetTimer);hurtTargetTimer=null;}
     frenzyEndAt=0;frenzyCombo=0;lastManualAttackAt=-Infinity;resetManualInputGuard();
     combatLocked=false;lastTimerStamp=performance.now();
     syncEnemyStats(false);
     render();
     saveGame(false,true);
+    syncRankingRecord(true);
     el.saveMsg.textContent='자동 백업을 복구했습니다.';
     showNotice('백업 복구 완료!','자동 백업 시점의 진행 상황으로 돌아왔습니다.',1900);
     setTimeout(()=>el.saveMsg.textContent='',1800);
@@ -1614,7 +1852,8 @@
 
   function resetGame(){
     if(!confirm('정말 초기화하시겠습니까? 현재 저장 데이터가 삭제됩니다.'))return;
-    state=defaultState();
+    const rankingIdentity={nickname:state.nickname||null,playerId:state.playerId||null,rankingRegistered:!!state.rankingRegistered,rankingPromptDismissed:!!state.rankingPromptDismissed};
+    state={...defaultState(),...rankingIdentity};
     hurtTargetUntil=0;if(hurtTargetTimer){clearTimeout(hurtTargetTimer);hurtTargetTimer=null;}
     frenzyEndAt=0;frenzyCombo=0;lastManualAttackAt=-Infinity;resetManualInputGuard();
     syncEnemyStats(true);
@@ -1656,6 +1895,8 @@
 
   function applyImportedSave(loaded,sourceLabel='저장 데이터'){
     createAutoBackup(true);
+    const currentRankingIdentity={nickname:state.nickname||null,playerId:state.playerId||null,rankingRegistered:!!state.rankingRegistered,rankingPromptDismissed:!!state.rankingPromptDismissed};
+    if(!loaded.nickname||!loaded.playerId)loaded={...loaded,...currentRankingIdentity};
     state=loaded;
     hurtTargetUntil=0;if(hurtTargetTimer){clearTimeout(hurtTargetTimer);hurtTargetTimer=null;}
     frenzyEndAt=0;frenzyCombo=0;lastManualAttackAt=-Infinity;resetManualInputGuard();
@@ -1664,6 +1905,7 @@
     const importedOffline=applyOfflineReward(false);
     render();
     saveGame(false);
+    syncRankingRecord(true);
     el.saveMsg.textContent=`${sourceLabel}를 불러왔습니다.`;
     showNotice(
       '불러오기 완료!',
@@ -1781,6 +2023,16 @@
   el.blessingTab.addEventListener('click',()=>switchGrowthTab('blessing'));
   el.retryBtn.addEventListener('click',retryCurrent);el.rebirthBtn.addEventListener('click',doRebirth);el.saveBtn.addEventListener('click',()=>saveGame(true));el.backupBtn.addEventListener('click',restoreAutoBackup);el.downloadSaveBtn.addEventListener('click',downloadSaveFile);el.loadSaveFileBtn.addEventListener('click',()=>el.saveFileInput.click());el.saveFileInput.addEventListener('change',()=>importSaveFile(el.saveFileInput.files?.[0]));el.resetBtn.addEventListener('click',resetGame);el.exportBtn.addEventListener('click',exportSave);
   el.importBtn.addEventListener('click',importSave);
+  el.rankingOpenBtn.addEventListener('click',openRankingModal);
+  el.rankingCloseBtn.addEventListener('click',closeRankingModal);
+  el.rankingRefreshBtn.addEventListener('click',fetchRanking);
+  el.nicknameCloseBtn.addEventListener('click',()=>closeNicknameModal(true));
+  el.nicknameLaterBtn.addEventListener('click',()=>closeNicknameModal(true));
+  el.nicknameRegisterBtn.addEventListener('click',registerRankingNickname);
+  el.nicknameInput.addEventListener('keydown',e=>{if(e.key==='Enter')registerRankingNickname();});
+  el.rankingOverlay.addEventListener('click',e=>{if(e.target===el.rankingOverlay)closeRankingModal();});
+  el.nicknameOverlay.addEventListener('click',e=>{if(e.target===el.nicknameOverlay)closeNicknameModal(true);});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeRankingModal();if(el.nicknameOverlay.classList.contains('show'))closeNicknameModal(true);}});
 
   setInterval(()=>{if(!document.hidden&&state.autoAttack>0)applyHit(state.autoAttack/2,'auto');},500);
   setInterval(()=>{if(!document.hidden)saveGame(false);},10000);
@@ -1810,6 +2062,7 @@
   if(state.mode==='challenge'&&state.floor<5) state.timeRemaining=0;
   const offlineResult=applyOfflineReward(false);
   render();
+  initRankingSystem();
   if(loadedFromBackup)showNotice('자동 백업 복구!','기본 저장본을 읽지 못해 직전 정상 백업으로 복구했습니다.',3600);
   else if(offlineResult.reward>0)showNotice('오프라인 보상!',`${formatOfflineDuration(offlineResult.elapsed)} · 자동 줘패기 기대수입 100% · +${formatNum(offlineResult.reward)}원`,3600);
   saveGame(false);maybeAutoActivateFrenzy();requestAnimationFrame(timerLoop);
