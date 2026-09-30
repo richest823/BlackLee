@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>이수영 줘패기 - beta 0.205</title>
+  <title>이수영 줘패기 - beta 0.4</title>
   <style>
     :root {
       --bg1:#121826; --bg2:#1f2a44; --panel:rgba(255,255,255,.08);
@@ -65,7 +65,7 @@
     .floor-dot.current{background:rgba(255,203,71,.18);color:var(--accent);border-color:rgba(255,203,71,.45);box-shadow:0 0 16px rgba(255,203,71,.08)}
     .floor-dot.boss-floor{border-color:rgba(255,88,88,.35)}
 
-    /* beta 0.205: compact combat HUD */
+    /* beta 0.3: compact combat HUD */
     .target-panel{padding:12px}
     .combat-hud{width:min(100%,620px);display:grid;grid-template-columns:150px minmax(260px,1fr) 118px;gap:8px;align-items:stretch;margin:0 0 7px}
     .hud-stage{display:flex;flex-direction:column;justify-content:center;gap:5px;padding:7px 8px;border-radius:13px;background:rgba(0,0,0,.16);border:1px solid rgba(255,255,255,.07)}
@@ -160,18 +160,92 @@
     .spark{position:absolute;pointer-events:none;z-index:10;font-size:24px;animation:sparkFly .55s ease-out forwards}
     @keyframes sparkFly{0%{opacity:1;transform:translate(-50%,-50%) scale(.5)}100%{opacity:0;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(1.2) rotate(120deg)}}
 
+    
+    .active-skill-btn.cast-pulse{animation:skillButtonPulse .52s ease}
+    @keyframes skillButtonPulse{0%{transform:scale(1);box-shadow:0 0 0 rgba(255,255,255,0)}35%{transform:scale(1.04);box-shadow:0 0 0 6px rgba(210,150,255,.12)}100%{transform:scale(1);box-shadow:0 0 0 rgba(255,255,255,0)}}
+    .skill-cast-flash{position:absolute;left:50%;top:50%;width:168px;height:168px;border-radius:50%;pointer-events:none;z-index:18;mix-blend-mode:screen;opacity:0;animation:skillCastFlash .7s ease-out forwards}
+    .skill-cast-flash.strike{background:radial-gradient(circle,rgba(255,233,162,.92) 0%,rgba(255,195,71,.55) 34%,rgba(255,120,70,.18) 62%,rgba(255,255,255,0) 100%)}
+    .skill-cast-flash.energy{background:radial-gradient(circle,rgba(166,243,255,.88) 0%,rgba(108,184,255,.52) 32%,rgba(84,105,255,.20) 62%,rgba(255,255,255,0) 100%)}
+    .skill-cast-flash.weakness{background:radial-gradient(circle,rgba(232,160,255,.86) 0%,rgba(180,90,255,.48) 36%,rgba(99,36,145,.24) 66%,rgba(255,255,255,0) 100%)}
+    @keyframes skillCastFlash{0%{opacity:0;transform:translate(-50%,-50%) scale(.2)}20%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(1.5)}}
+    .skill-strike-blade{position:absolute;width:170px;height:8px;border-radius:999px;background:linear-gradient(90deg,rgba(255,255,255,0),#fff7d5 18%,#ffd161 50%,#fff7d5 82%,rgba(255,255,255,0));box-shadow:0 0 18px rgba(255,209,97,.72);pointer-events:none;z-index:19;animation:skillStrikeBlade .45s ease-out forwards;transform-origin:center}
+    @keyframes skillStrikeBlade{0%{opacity:0;transform:translate(-50%,-50%) rotate(var(--r)) scaleX(.2)}28%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) rotate(var(--r)) scaleX(1.18)}}
+    .skill-energy-orb{position:absolute;width:20px;height:20px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#ffffff 0%,#d4fcff 24%,#72d3ff 58%,#396cff 100%);box-shadow:0 0 22px rgba(114,211,255,.9);pointer-events:none;z-index:19;animation:skillEnergyOrb .72s ease-out forwards}
+    @keyframes skillEnergyOrb{0%{opacity:0;transform:translate(-50%,-50%) scale(.3)}18%{opacity:1}100%{opacity:0;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(1.05)}}
+    .skill-weakness-seal{position:absolute;width:150px;height:150px;border-radius:50%;border:3px solid rgba(232,162,255,.85);box-shadow:0 0 24px rgba(183,92,255,.55), inset 0 0 26px rgba(210,140,255,.16);pointer-events:none;z-index:18;animation:skillWeaknessSeal .82s ease-out forwards}
+    .skill-weakness-seal::before,.skill-weakness-seal::after{content:'';position:absolute;left:50%;top:50%;width:72%;height:2px;background:rgba(240,200,255,.92);box-shadow:0 0 14px rgba(231,166,255,.9)}
+    .skill-weakness-seal::before{transform:translate(-50%,-50%) rotate(45deg)}
+    .skill-weakness-seal::after{transform:translate(-50%,-50%) rotate(-45deg)}
+    @keyframes skillWeaknessSeal{0%{opacity:0;transform:translate(-50%,-50%) scale(.35) rotate(-15deg)}24%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(1.16) rotate(18deg)}}
+    .skill-weakness-chain{position:absolute;width:120px;height:10px;border-radius:999px;background:linear-gradient(90deg,rgba(255,255,255,0),#f4cdff 15%,#bf68ff 50%,#f4cdff 85%,rgba(255,255,255,0));box-shadow:0 0 18px rgba(191,104,255,.72);pointer-events:none;z-index:19;animation:skillWeaknessChain .56s ease-out forwards;transform-origin:center}
+    @keyframes skillWeaknessChain{0%{opacity:0;transform:translate(-50%,-50%) rotate(var(--r)) scaleX(.22)}18%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) rotate(var(--r)) scaleX(1.22)}}
+    .energy-card.skill-energy-boost{animation:skillEnergyBoostCard .62s ease}
+    @keyframes skillEnergyBoostCard{0%{box-shadow:inset 0 0 22px rgba(145,60,190,.06)}30%{box-shadow:inset 0 0 36px rgba(114,211,255,.20),0 0 24px rgba(114,211,255,.18)}100%{box-shadow:inset 0 0 22px rgba(145,60,190,.06)}}
+    .target-panel.skill-weakness-cast{animation:skillWeaknessPanel .7s ease}
+    @keyframes skillWeaknessPanel{0%{filter:saturate(1)}30%{filter:saturate(1.3) brightness(1.1)}100%{filter:saturate(1)}}
+
+    
+    /* beta 0.4 - balance overhaul + cinematic active skill VFX */
+    .skill-screen-flash{position:absolute;inset:-5%;z-index:24;pointer-events:none;opacity:0;mix-blend-mode:screen}
+    .skill-screen-flash.strike{background:radial-gradient(circle at 50% 52%,rgba(255,255,255,.98) 0 7%,rgba(255,231,142,.92) 8% 18%,rgba(255,150,35,.58) 24%,rgba(255,75,20,.18) 45%,transparent 68%);animation:megaFlash .48s ease-out forwards}
+    .skill-screen-flash.energy{background:radial-gradient(circle at 50% 52%,rgba(245,224,255,.88) 0 5%,rgba(210,106,255,.76) 14%,rgba(112,32,196,.42) 34%,rgba(57,8,97,.14) 55%,transparent 72%);animation:energyFlash .72s ease-out forwards}
+    .skill-screen-flash.weakness{background:radial-gradient(circle at 50% 58%,rgba(255,249,203,.62),rgba(241,176,255,.35) 24%,rgba(126,52,205,.18) 48%,transparent 72%);animation:weakFlash .72s ease-out forwards}
+    @keyframes megaFlash{0%{opacity:0;transform:scale(.5)}10%{opacity:1}28%{opacity:.95}100%{opacity:0;transform:scale(1.28)}}
+    @keyframes energyFlash{0%{opacity:0;transform:scale(.4)}16%{opacity:1}100%{opacity:0;transform:scale(1.5)}}
+    @keyframes weakFlash{0%{opacity:0}18%{opacity:.9}100%{opacity:0}}
+
+    .target-btn.mega-strike-recoil{animation:megaStrikeRecoil .62s cubic-bezier(.2,.75,.2,1)!important}
+    @keyframes megaStrikeRecoil{0%{transform:translate(0,0) rotate(0) scale(1)}10%{transform:translate(-15px,8px) rotate(-4deg) scale(.93)}20%{transform:translate(18px,-9px) rotate(5deg) scale(1.035)}32%{transform:translate(-11px,5px) rotate(-3deg) scale(.97)}48%{transform:translate(8px,-3px) rotate(2deg) scale(1.015)}70%{transform:translate(-3px,1px) rotate(-1deg) scale(.995)}100%{transform:translate(0,0) rotate(0) scale(1)}}
+    .target-panel.mega-screen-shake{animation:megaScreenShake .48s linear}
+    @keyframes megaScreenShake{0%,100%{transform:translate(0)}10%{transform:translate(-5px,3px)}20%{transform:translate(6px,-4px)}30%{transform:translate(-7px,2px)}40%{transform:translate(5px,4px)}55%{transform:translate(-4px,-3px)}70%{transform:translate(3px,2px)}85%{transform:translate(-2px,1px)}}
+
+    .mega-explosion-core{position:absolute;width:86px;height:86px;border-radius:50%;z-index:20;pointer-events:none;background:radial-gradient(circle,#fff 0 16%,#fff3b6 17% 30%,#ffb52b 42%,#ff651f 62%,rgba(255,67,16,.15) 76%,transparent 78%);filter:drop-shadow(0 0 22px #ffba32) drop-shadow(0 0 42px rgba(255,85,20,.9));animation:megaExplosionCore .58s ease-out forwards}
+    @keyframes megaExplosionCore{0%{opacity:0;transform:translate(-50%,-50%) scale(.15)}12%{opacity:1;transform:translate(-50%,-50%) scale(.55)}32%{opacity:1;transform:translate(-50%,-50%) scale(1.18)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.75)}}
+    .mega-shockwave{position:absolute;border:7px solid rgba(255,232,153,.92);border-radius:50%;z-index:17;pointer-events:none;box-shadow:0 0 22px rgba(255,178,52,.85),inset 0 0 18px rgba(255,255,255,.4);animation:megaShockwave .7s cubic-bezier(.12,.7,.2,1) forwards}
+    @keyframes megaShockwave{0%{opacity:.95;transform:translate(-50%,-50%) scale(.12)}55%{opacity:.65}100%{opacity:0;transform:translate(-50%,-50%) scale(2.5)}}
+    .mega-burst-ray{position:absolute;width:220px;height:7px;border-radius:999px;z-index:18;pointer-events:none;background:linear-gradient(90deg,transparent 0%,rgba(255,244,190,.35) 13%,#fff4b8 38%,#ff9c27 72%,transparent 100%);box-shadow:0 0 18px rgba(255,153,31,.8);transform-origin:left center;animation:megaBurstRay .48s ease-out forwards}
+    @keyframes megaBurstRay{0%{opacity:0;transform:translate(0,-50%) rotate(var(--r)) scaleX(.15)}18%{opacity:1}100%{opacity:0;transform:translate(0,-50%) rotate(var(--r)) scaleX(1.15)}}
+    .mega-debris{position:absolute;width:10px;height:7px;z-index:19;pointer-events:none;background:#39251d;border-radius:40% 60% 45% 55%;box-shadow:0 0 8px rgba(255,137,32,.7);animation:megaDebris .7s ease-out forwards}
+    @keyframes megaDebris{0%{opacity:1;transform:translate(-50%,-50%) rotate(0) scale(.7)}100%{opacity:0;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) rotate(var(--rot)) scale(1.15)}}
+
+    .purple-energy-ring{position:absolute;border:4px solid rgba(220,140,255,.9);border-radius:50%;z-index:17;pointer-events:none;box-shadow:0 0 22px rgba(192,83,255,.8),inset 0 0 18px rgba(221,164,255,.55);animation:purpleEnergyRing .92s ease-out forwards}
+    @keyframes purpleEnergyRing{0%{opacity:.95;transform:translate(-50%,-50%) scale(.1)}100%{opacity:0;transform:translate(-50%,-50%) scale(2.9)}}
+    .purple-energy-core{position:absolute;width:120px;height:120px;border-radius:50%;z-index:18;pointer-events:none;background:radial-gradient(circle,#fff 0 5%,#e8baff 11%,#c25dff 30%,rgba(116,28,190,.78) 52%,rgba(63,10,111,.25) 72%,transparent 75%);filter:drop-shadow(0 0 28px rgba(204,90,255,.95));animation:purpleCore .78s ease-out forwards}
+    @keyframes purpleCore{0%{opacity:0;transform:translate(-50%,-50%) scale(.2)}22%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(1.65)}}
+    .purple-energy-stream{position:absolute;width:8px;height:180px;border-radius:999px;z-index:18;pointer-events:none;background:linear-gradient(180deg,transparent,#f3d6ff 18%,#be50ff 48%,rgba(111,20,190,.3) 82%,transparent);box-shadow:0 0 16px rgba(208,99,255,.8);transform-origin:center bottom;animation:purpleStream .78s ease-out forwards}
+    @keyframes purpleStream{0%{opacity:0;transform:translate(-50%,-15%) rotate(var(--r)) scaleY(.15)}20%{opacity:1}100%{opacity:0;transform:translate(-50%,-60%) rotate(var(--r)) scaleY(1.2)}}
+    .purple-mote{position:absolute;width:8px;height:8px;border-radius:50%;z-index:19;pointer-events:none;background:#e9c2ff;box-shadow:0 0 14px #c153ff,0 0 26px rgba(193,83,255,.65);animation:purpleMote .9s ease-out forwards}
+    @keyframes purpleMote{0%{opacity:0;transform:translate(-50%,-50%) scale(.2)}12%{opacity:1}100%{opacity:0;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(1.35)}}
+
+    .weakness-aura-field{position:absolute;left:50%;bottom:1%;width:min(88%,480px);height:min(93%,560px);transform:translateX(-50%);pointer-events:none;z-index:2;opacity:0;transition:opacity .2s ease;filter:drop-shadow(0 0 22px rgba(222,145,255,.38))}
+    .weakness-aura-field.show{opacity:1;animation:weaknessAuraPulse .72s ease-in-out infinite alternate}
+    .weakness-aura-field::before{content:"";position:absolute;inset:4% 10% 0;border-radius:48% 48% 38% 38%/62% 62% 30% 30%;background:radial-gradient(ellipse at 50% 75%,rgba(255,244,161,.62) 0 9%,rgba(255,218,82,.30) 19%,transparent 42%),radial-gradient(ellipse at 34% 60%,rgba(226,151,255,.52) 0 10%,rgba(149,60,233,.24) 28%,transparent 50%),radial-gradient(ellipse at 68% 52%,rgba(255,236,147,.50) 0 8%,rgba(184,90,255,.26) 26%,transparent 48%);filter:blur(8px) saturate(1.35);animation:weaknessAuraFlame .66s ease-in-out infinite alternate}
+    .weakness-aura-field::after{content:"";position:absolute;inset:-8% -7% -2%;border-radius:50%;background:repeating-conic-gradient(from 0deg,transparent 0 10deg,rgba(255,229,106,.34) 11deg 12deg,transparent 13deg 22deg,rgba(215,127,255,.26) 23deg 24deg);mask-image:radial-gradient(ellipse at center,transparent 0 36%,#000 48%,transparent 74%);-webkit-mask-image:radial-gradient(ellipse at center,transparent 0 36%,#000 48%,transparent 74%);animation:weaknessRays 5s linear infinite}
+    @keyframes weaknessAuraPulse{from{filter:drop-shadow(0 0 16px rgba(222,145,255,.28)) brightness(.98)}to{filter:drop-shadow(0 0 34px rgba(255,220,100,.42)) brightness(1.12)}}
+    @keyframes weaknessAuraFlame{from{transform:scale(.97) translateY(3px);opacity:.72}to{transform:scale(1.035) translateY(-7px);opacity:1}}
+    @keyframes weaknessRays{to{transform:rotate(360deg)}}
+    .weakness-pillar{position:absolute;width:12px;height:220px;border-radius:999px;z-index:5;pointer-events:none;background:linear-gradient(180deg,transparent 0%,rgba(255,251,210,.95) 20%,rgba(255,213,78,.85) 46%,rgba(192,88,255,.66) 70%,transparent 100%);box-shadow:0 0 20px rgba(255,224,104,.75),0 0 36px rgba(190,91,255,.55);animation:weakPillar .9s ease-out forwards}
+    @keyframes weakPillar{0%{opacity:0;transform:translate(-50%,20%) scaleY(.15)}18%{opacity:1}100%{opacity:0;transform:translate(-50%,-55%) scaleY(1.25)}}
+    .weakness-spark{position:absolute;z-index:7;pointer-events:none;color:#ffe981;font-size:20px;text-shadow:0 0 12px #fff2a7,0 0 22px #b75dff;animation:weakSpark .8s ease-out forwards}
+    @keyframes weakSpark{0%{opacity:0;transform:translate(-50%,-50%) scale(.2) rotate(0)}20%{opacity:1}100%{opacity:0;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(1.4) rotate(150deg)}}
+
     .notice{position:absolute;left:50%;top:48%;transform:translate(-50%,-50%);z-index:30;background:rgba(10,16,28,.93);border:1px solid rgba(255,255,255,.13);border-radius:18px;padding:18px 22px;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,.45);opacity:0;pointer-events:none;transition:opacity .18s ease;max-width:80%}.notice.show{opacity:1}.notice .big{font-size:25px;font-weight:950;margin-bottom:5px}.notice .small{font-size:13px;color:var(--muted);line-height:1.5}
 
-    .growth-tabs{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:18px;padding:5px;background:rgba(0,0,0,.18);border:1px solid rgba(255,255,255,.07);border-radius:15px}
+    .growth-tabs{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-top:18px;padding:5px;background:rgba(0,0,0,.18);border:1px solid rgba(255,255,255,.07);border-radius:15px}
     .growth-tab{border:0;border-radius:11px;padding:10px 8px;background:transparent;color:var(--muted);font-weight:900;font-size:13px;cursor:pointer;transition:.16s ease}
     .growth-tab:hover{background:rgba(255,255,255,.06);color:#fff}.growth-tab.active{background:linear-gradient(180deg,rgba(255,214,95,.98),rgba(255,182,41,.96));color:#392500;box-shadow:0 5px 15px rgba(255,182,41,.16)}
-    .growth-tab.blessing-tab.active{background:linear-gradient(180deg,#ccefff,#7ccdf7);color:#0c3550;box-shadow:0 5px 15px rgba(124,205,247,.16)}
+    .growth-tab.blessing-tab.active{background:linear-gradient(180deg,#ccefff,#7ccdf7);color:#0c3550;box-shadow:0 5px 15px rgba(124,205,247,.16)}.growth-tab.skill-tab.active{background:linear-gradient(180deg,#dfb7ff,#a56be7);color:#28133b;box-shadow:0 5px 15px rgba(165,107,231,.18)}
     .growth-pane{margin-top:11px}.growth-pane.hidden{display:none}.growth-pane-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:9px}.growth-pane-title{font-size:14px;font-weight:900;color:#fff}.growth-pane-note{font-size:11px;color:var(--muted)}
     .buy-mode-row{display:flex;align-items:center;gap:6px;margin:0 0 10px;padding:7px 8px;border-radius:13px;background:rgba(0,0,0,.14);border:1px solid rgba(255,255,255,.06)}.buy-mode-label{font-size:11px;color:var(--muted);font-weight:850;margin-right:auto}.buy-mode-btn{min-width:48px;border:1px solid rgba(255,255,255,.10);border-radius:9px;padding:6px 8px;background:rgba(255,255,255,.07);color:var(--muted);font-size:11px;font-weight:950;cursor:pointer}.buy-mode-btn.active{background:linear-gradient(180deg,#ffd65f,#ffb629);color:#392500;border-color:rgba(255,203,71,.45)}.blessing-pane .buy-mode-btn.active{background:linear-gradient(180deg,#ccefff,#7ccdf7);color:#0c3550;border-color:rgba(124,205,247,.4)}
     .upgrade-list{display:flex;flex-direction:column;gap:10px}.upgrade{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:11px}.upgrade-top{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:start;gap:8px;margin-bottom:6px}.upgrade-title-row{justify-content:space-between;min-width:0}.upgrade-title{font-size:15px;font-weight:900;min-width:0}.upgrade-title-row .info-icon{width:17px;height:17px;line-height:15px;font-size:10px}.upgrade-title-row .info-icon::after{width:210px}.lv{font-size:10px;color:var(--muted);background:rgba(255,255,255,.08);padding:4px 7px;border-radius:999px}.upgrade-desc{font-size:10.5px;color:#e4ebf6;line-height:1.35;margin-bottom:7px;min-height:0}.upgrade-desc strong{font-weight:800}.upgrade-bottom{display:flex;justify-content:space-between;align-items:center;gap:8px}.cost{font-weight:850;color:var(--accent);font-size:12px}
     .blessing-note{font-size:11px;color:var(--tear);font-weight:800}.blessing .cost{color:var(--tear)}.blessing strong{color:#d9f2ff}.blessing button.buy{background:linear-gradient(180deg,#ccefff,#7ccdf7);color:#0c3550;box-shadow:0 8px 18px rgba(124,205,247,.16)}
     .blessing-reset-box{margin-top:11px;padding:11px;border-radius:15px;background:rgba(155,220,255,.07);border:1px solid rgba(155,220,255,.16)}.blessing-reset-info{font-size:11px;color:var(--muted);line-height:1.45;margin-bottom:8px}.blessing-reset-btn{width:100%;border:1px solid rgba(155,220,255,.28);border-radius:11px;padding:9px 11px;background:rgba(155,220,255,.12);color:#dff5ff;font-weight:900;cursor:pointer}.blessing-reset-btn:hover:not(:disabled){background:rgba(155,220,255,.19)}.blessing-reset-btn:disabled{opacity:.4;cursor:not-allowed}
-    .achievement-toast-stack{position:fixed;top:64px;right:22px;z-index:10020;width:min(320px,calc(100vw - 30px));pointer-events:none}.achievement-toast{padding:12px 13px;border-radius:14px;background:linear-gradient(180deg,rgba(49,42,22,.98),rgba(22,25,35,.98));border:1px solid rgba(255,203,71,.45);box-shadow:0 14px 34px rgba(0,0,0,.44);opacity:0;transform:translateY(-10px) scale(.98);animation:achievementToastIn 3.2s ease forwards}.achievement-toast-kicker{font-size:10px;font-weight:1000;color:var(--accent);letter-spacing:.05em}.achievement-toast-name{margin-top:3px;font-size:15px;font-weight:950;color:#fff}.achievement-toast-sub{margin-top:3px;font-size:10.5px;color:var(--muted)}@keyframes achievementToastIn{0%{opacity:0;transform:translateY(-10px) scale(.98)}10%,82%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-5px) scale(.99)}}
+    
+    .skill-pane .growth-pane-note{color:#d9b6ff;font-weight:850}.skill-sp-box{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px}.skill-sp-item{padding:8px 7px;border-radius:11px;background:rgba(173,111,232,.08);border:1px solid rgba(190,135,245,.14);text-align:center}.skill-sp-k{font-size:9px;color:var(--muted)}.skill-sp-v{margin-top:2px;font-size:14px;font-weight:1000;color:#e3beff}.skill-section-label{margin:11px 1px 7px;font-size:11px;font-weight:950;color:#dcb9ff;letter-spacing:.03em}.skill-list{display:flex;flex-direction:column;gap:9px}.skill-card{padding:11px;border-radius:15px;background:linear-gradient(180deg,rgba(178,111,232,.09),rgba(255,255,255,.045));border:1px solid rgba(190,135,245,.16)}.skill-card.locked{opacity:.58;filter:saturate(.65)}.skill-card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:7px}.skill-card-title-wrap{min-width:0}.skill-card-title{font-size:14px;font-weight:950}.skill-card-badges{display:flex;gap:5px;align-items:center;margin-top:4px;flex-wrap:wrap}.skill-type-badge,.skill-unlock-badge{font-size:8.5px;font-weight:900;padding:3px 6px;border-radius:999px;background:rgba(255,255,255,.07);color:var(--muted)}.skill-type-badge.active{color:#ffd993;background:rgba(255,203,71,.10)}.skill-type-badge.passive{color:#c5f6d5;background:rgba(123,241,168,.09)}.skill-lv{white-space:nowrap;font-size:9.5px;color:#ead8fa;background:rgba(173,111,232,.13);border-radius:999px;padding:4px 7px}.skill-card-effect{margin-top:7px;font-size:10.5px;line-height:1.45;color:#e9e2f0}.skill-card-next{margin-top:4px;font-size:9.5px;line-height:1.4;color:var(--muted)}.skill-card-bottom{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px}.skill-cost{font-size:10.5px;font-weight:900;color:#ddb9ff}.skill-level-btn{border:1px solid rgba(202,151,249,.23);border-radius:9px;padding:7px 9px;background:linear-gradient(180deg,#dfb7ff,#a56be7);color:#28133b;font-size:10px;font-weight:1000;cursor:pointer}.skill-level-btn:disabled{opacity:.4;cursor:not-allowed}.skill-reset-box{margin-top:11px;padding:10px;border-radius:13px;background:rgba(173,111,232,.07);border:1px solid rgba(190,135,245,.16)}.skill-reset-info{font-size:10px;line-height:1.45;color:var(--muted);margin-bottom:7px}.skill-reset-btn{width:100%;border:1px solid rgba(202,151,249,.24);border-radius:10px;padding:8px;background:rgba(173,111,232,.12);color:#ecd9ff;font-weight:950;cursor:pointer}.skill-reset-btn:disabled{opacity:.4;cursor:not-allowed}
+    .active-skill-bar{width:min(100%,620px);display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:0 0 7px}.active-skill-btn{position:relative;min-width:0;border:1px solid rgba(194,139,244,.17);border-radius:11px;padding:7px 8px;background:linear-gradient(180deg,rgba(173,111,232,.12),rgba(255,255,255,.045));color:#fff;text-align:left;cursor:pointer;overflow:hidden}.active-skill-btn:not(:disabled):hover{background:linear-gradient(180deg,rgba(173,111,232,.20),rgba(255,255,255,.065));border-color:rgba(211,165,252,.32)}.active-skill-btn:disabled{cursor:not-allowed;opacity:.48}.active-skill-btn.ready{border-color:rgba(123,241,168,.28);box-shadow:inset 0 0 16px rgba(123,241,168,.05)}.active-skill-btn.active{border-color:rgba(255,203,71,.42);box-shadow:inset 0 0 18px rgba(255,203,71,.08)}.skill-key{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;border-radius:6px;background:rgba(255,255,255,.10);font-size:8px;font-weight:1000;color:#e8d6fa}.skill-btn-name{margin-left:4px;font-size:10px;font-weight:1000}.skill-btn-status{display:block;margin-top:3px;font-size:8.8px;font-weight:850;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.active-skill-btn.ready .skill-btn-status{color:#bff5d1}.active-skill-btn.active .skill-btn-status{color:#ffdf83}.skill-passive-status{width:min(100%,620px);min-height:17px;margin:-2px 0 6px;padding:0 3px;font-size:8.8px;line-height:1.4;color:#cabbd9;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.target-panel.weakness-exposed{box-shadow:inset 0 0 54px rgba(194,103,255,.10),0 14px 36px rgba(0,0,0,.24)}.target-panel.weakness-exposed .health-fill{filter:brightness(1.2) saturate(1.25)}
+    .skill-unlock-toast{padding:12px 13px;border-radius:14px;background:linear-gradient(180deg,rgba(51,30,68,.98),rgba(22,25,35,.98));border:1px solid rgba(205,143,255,.48);box-shadow:0 14px 34px rgba(0,0,0,.44);opacity:0;transform:translateY(-10px) scale(.98);animation:achievementToastIn 3.6s ease forwards}.skill-unlock-toast .achievement-toast-kicker{color:#dcb2ff}.skill-unlock-toast .achievement-toast-name{color:#fff}.skill-unlock-toast .achievement-toast-sub{color:#d8cbe4}
+    @media(max-width:700px){.growth-tabs{grid-template-columns:repeat(3,1fr);gap:4px}.growth-tab{font-size:11px;padding:9px 4px}.active-skill-bar{gap:4px}.active-skill-btn{padding:6px 6px}.skill-btn-name{font-size:9px}.skill-btn-status{font-size:8px}.skill-passive-status{font-size:8px}.skill-sp-box{gap:4px}}
+.achievement-toast-stack{position:fixed;top:64px;right:22px;z-index:10020;width:min(320px,calc(100vw - 30px));pointer-events:none}.achievement-toast{padding:12px 13px;border-radius:14px;background:linear-gradient(180deg,rgba(49,42,22,.98),rgba(22,25,35,.98));border:1px solid rgba(255,203,71,.45);box-shadow:0 14px 34px rgba(0,0,0,.44);opacity:0;transform:translateY(-10px) scale(.98);animation:achievementToastIn 3.2s ease forwards}.achievement-toast-kicker{font-size:10px;font-weight:1000;color:var(--accent);letter-spacing:.05em}.achievement-toast-name{margin-top:3px;font-size:15px;font-weight:950;color:#fff}.achievement-toast-sub{margin-top:3px;font-size:10.5px;color:var(--muted)}@keyframes achievementToastIn{0%{opacity:0;transform:translateY(-10px) scale(.98)}10%,82%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-5px) scale(.99)}}
     .rebirth-flash{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;pointer-events:none;opacity:0;background:radial-gradient(circle at center,rgba(255,255,255,1) 0%,rgba(225,247,255,.98) 24%,rgba(126,205,255,.58) 52%,rgba(16,29,58,.05) 78%)}.rebirth-flash.play{animation:rebirthFlash .95s ease-out forwards}.rebirth-flash-content{text-align:center;color:#102640;text-shadow:0 2px 12px rgba(255,255,255,.85);transform:scale(.7);opacity:0}.rebirth-flash.play .rebirth-flash-content{animation:rebirthText .95s ease-out forwards}.rebirth-flash-title{font-size:clamp(44px,9vw,88px);font-weight:1000;letter-spacing:-.05em}.rebirth-flash-sub{margin-top:5px;font-size:clamp(17px,3vw,28px);font-weight:950}
     @keyframes rebirthFlash{0%{opacity:0}10%{opacity:1}28%{opacity:1}100%{opacity:0}}@keyframes rebirthText{0%,12%{opacity:0;transform:scale(.65)}28%{opacity:1;transform:scale(1.12)}48%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(1.04)}}
     .rebirth-card{margin-top:18px;padding:14px;border-radius:18px;background:linear-gradient(180deg,rgba(155,220,255,.11),rgba(255,255,255,.05));border:1px solid rgba(155,220,255,.22)}.rebirth-title{font-size:19px;font-weight:900;margin-bottom:7px}.rebirth-info{font-size:12px;color:var(--muted);line-height:1.55}.rebirth-reward{margin:11px 0;font-size:15px;font-weight:900;color:var(--tear)}.rebirth-btn{width:100%;border:none;border-radius:12px;padding:11px 12px;font-weight:900;cursor:pointer;background:linear-gradient(180deg,#b9e9ff,#63bce8);color:#0b3147}.rebirth-btn:disabled{opacity:.4;cursor:not-allowed}.rebirth-count{margin-top:8px;font-size:11px;color:var(--muted);text-align:center}
@@ -214,7 +288,7 @@
   <div class="titlebar">
     <div class="brand-line">
       <h1>이수영 줘패기</h1>
-      <div class="version-tag">beta 0.205</div>
+      <div class="version-tag">beta 0.4</div>
     </div>
     <div class="top-stats">
       <div class="mini-card"><span class="k">재화</span><span class="v" id="moneyTop">0원</span></div>
@@ -230,7 +304,7 @@
       <div class="growth-sticky-head">
         <div class="section-title-line">
           <h2>재화 & 성장</h2>
-          <button class="info-icon" type="button" aria-label="성장 시스템 설명" data-tip="1~4층은 시간 제한 없이 진행됩니다. 5층만 제한시간이 있으며, 일반 5층 실패 시 성장 모드에서 재화를 모은 뒤 재도전할 수 있습니다. 일반 업그레이드는 환생 시 초기화되고 용사의 축복은 유지됩니다.">i</button>
+          <button class="info-icon" type="button" aria-label="성장 시스템 설명" data-tip="1~4층은 자동사냥 중심의 일반 구간입니다. 5층은 60초 도전 구간이며, 실패하면 같은 스테이지 4층 성장 모드에서 재화를 모은 뒤 재도전합니다. 검은수영은 5스테이지마다 등장하는 상위 도전입니다. 일반 업그레이드는 환생 시 초기화되고 용사의 축복은 유지됩니다.">i</button>
         </div>
         <div class="compact-resource">
           <div class="compact-resource-main">
@@ -250,6 +324,7 @@
       <div class="growth-tabs" role="tablist" aria-label="성장 메뉴">
         <button class="growth-tab active" id="upgradeTab" role="tab" aria-selected="true" aria-controls="upgradePane">업그레이드</button>
         <button class="growth-tab blessing-tab" id="blessingTab" role="tab" aria-selected="false" aria-controls="blessingPane">용사의 축복</button>
+        <button class="growth-tab skill-tab" id="skillTab" role="tab" aria-selected="false" aria-controls="skillPane">스킬</button>
       </div>
 
       <div class="growth-pane" id="upgradePane" role="tabpanel" aria-labelledby="upgradeTab">
@@ -275,6 +350,20 @@
         <div class="blessing-reset-box">
           <div class="blessing-reset-info" id="blessingResetInfo">투자한 검은수영의 눈물을 100% 회수하고 모든 용사의 축복을 Lv.0으로 되돌립니다.</div>
           <button class="blessing-reset-btn" id="blessingResetBtn" type="button">용사의 축복 초기화</button>
+        </div>
+      </div>
+
+      <div class="growth-pane hidden skill-pane" id="skillPane" role="tabpanel" aria-labelledby="skillTab">
+        <div class="growth-pane-head"><span class="growth-pane-title">스킬</span><span class="growth-pane-note">최고 도달 5스테이지마다 SP +1</span></div>
+        <div class="skill-sp-box">
+          <div class="skill-sp-item"><div class="skill-sp-k">보유 SP</div><div class="skill-sp-v" id="skillSpAvailable">0</div></div>
+          <div class="skill-sp-item"><div class="skill-sp-k">사용 SP</div><div class="skill-sp-v" id="skillSpUsed">0</div></div>
+          <div class="skill-sp-item"><div class="skill-sp-k">총 획득</div><div class="skill-sp-v" id="skillSpTotal">0</div></div>
+        </div>
+        <div class="skill-list" id="skills"></div>
+        <div class="skill-reset-box">
+          <div class="skill-reset-info" id="skillResetInfo">SP 초기화는 무료입니다. 해금된 스킬은 Lv.1로 돌아가며, 현재 액티브 스킬 쿨타임은 초기화되지 않습니다.</div>
+          <button class="skill-reset-btn" id="skillResetBtn" type="button">SP 무료 초기화</button>
         </div>
       </div>
     </section>
@@ -317,6 +406,13 @@
         </div>
       </div>
 
+      <div class="active-skill-bar" id="activeSkillBar" aria-label="액티브 스킬">
+        <button class="active-skill-btn" id="skillStrikeBtn" type="button"><span class="skill-key">Q</span><span class="skill-btn-name">강타</span><span class="skill-btn-status" id="skillStrikeStatus">Stage 10 해금</span></button>
+        <button class="active-skill-btn" id="skillEnergyBtn" type="button"><span class="skill-key">W</span><span class="skill-btn-name">기운폭발</span><span class="skill-btn-status" id="skillEnergyStatus">Stage 20 해금</span></button>
+        <button class="active-skill-btn" id="skillWeaknessBtn" type="button"><span class="skill-key">E</span><span class="skill-btn-name">약점노출</span><span class="skill-btn-status" id="skillWeaknessStatus">Stage 30 해금</span></button>
+      </div>
+      <div class="skill-passive-status" id="skillPassiveStatus">스킬은 최고 도달 스테이지에 따라 해금됩니다.</div>
+
       <div class="anti-auto-warning" id="antiAutoWarning">비정상적으로 일정한 입력이 감지되어 수동 공격이 잠시 차단되었습니다.</div>
 
       <div class="health-wrap">
@@ -325,6 +421,7 @@
       </div>
       <div class="hint" id="hintText">시간 제한 없이 처치하면 다음 층으로 올라갑니다.</div>
       <div class="hit-zone" id="hitZone">
+        <div class="weakness-aura-field" id="weaknessAuraField" aria-hidden="true"></div>
         <div class="speech-bubble" id="speechBubble"></div>
         <button class="target-btn" id="targetBtn" aria-label="공격하기"><img id="targetImg" src="target.png" alt="이수영 목표 이미지"></button>
         <div class="notice" id="notice"><div class="big" id="noticeBig"></div><div class="small" id="noticeSmall"></div></div>
@@ -385,12 +482,14 @@
         <div class="help-content">
           <div><b>수동 공격</b> · 사진 클릭 또는 사진 위에서 Space</div>
           <div><b>폭주</b> · 기운 100에서 Ctrl로 수동 발동</div>
-          <div><b>층 진행</b> · 1~4층은 시간 제한 없음 / 5층은 기본 60초</div>
-          <div><b>검은수영</b> · 5스테이지마다 등장</div>
+          <div><b>층 진행</b> · 1~4층은 자동사냥 중심 / 5층은 기본 60초 도전</div>
+          <div><b>검은수영</b> · 5스테이지마다 등장 / 일반 5층보다 강하며 수동 전투 권장</div>
           <div><b>황금수영</b> · 일반 적에서 5% 확률 / 체력 2배 / 보상 50배</div>
           <div><b>속성수영</b> · Stage 10부터 등장 가능 / 처치 시 눈물 2배</div>
           <div><b>업적</b> · 달성 후 직접 보상을 수령해야 적용</div>
           <div><b>온라인 랭킹</b> · 닉네임 등록 후 최고 스테이지·층 기록이 자동 갱신됩니다.</div>
+          <div><b>스킬</b> · 최고 도달 스테이지로 해금 / 5스테이지마다 SP +1 / Q·W·E로 액티브 사용</div>
+          <div><b>SP 초기화</b> · 무료 / 해금 스킬 Lv.1 복귀 / 현재 쿨타임은 유지</div>
           <div><b>오프라인 보상</b> · 자동 공격 기대수입 100% / 최대 24시간</div>
         </div>
       </details>
@@ -444,6 +543,7 @@
 
 <script>
   const SAVE_GENERATION = 'beta0.16';
+  const DEMO_MODE = false;
   const SAVE_KEY = 'blacklee_save_beta016_v1';
   const BACKUP_KEY = 'blacklee_save_beta016_backup_v1';
   const BACKUP_INTERVAL_MS = 60000;
@@ -457,16 +557,19 @@
 
   const defaultState = () => ({
     saveGeneration:SAVE_GENERATION,
-    money:0,totalEarned:0,tears:0,energy:0,autoFrenzy:false,buyMode:'1',balanceVersion:11,
+    money:0,totalEarned:0,tears:0,energy:0,autoFrenzy:false,buyMode:'1',balanceVersion:13,
     attack:1,critChance:.05,critDamage:1.5,autoAttack:0,
     clicks:0,kills:0,maxHit:0,rebirths:0,
     stage:1,floor:1,bestStage:1,bestFloor:1,
     enemyMaxHp:50,enemyHp:50,enemyReward:25,isGolden:null,
     bossTrait:null,bossCycleElapsed:0,bossCharmRemaining:0,bossWrathRemaining:0,bossWrathTriggered:false,
-    mode:'challenge',timeRemaining:0,bossRetryReady:false,lastActiveAt:Date.now(),
+    mode:'challenge',timeRemaining:0,bossRetryReady:false,retryFloor5Ready:false,lastActiveAt:Date.now(),
     upgrades:{attack:0,critChance:0,critDamage:0,autoAttack:0},
-    blessings:{damage:0,gold:0,time:0,crit:0,auto:0},
-    blessingSpent:{damage:0,gold:0,time:0,crit:0,auto:0},
+    blessings:{damage:0,gold:0,time:0,crit:0,auto:0,cooldown:0},
+    blessingSpent:{damage:0,gold:0,time:0,crit:0,auto:0,cooldown:0},
+    skills:{strike:0,luckySeven:0,energyBurst:0,overcharge:0,weakness:0,combo:0},
+    skillSystemInitialized:false,
+    skillCooldowns:{strike:0,energyBurst:0,weakness:0},weaknessActiveUntil:0,
     achievementClaims:{},achievementNotified:{},achievementNoticeVersion:0,
     nickname:null,playerId:null,rankingRegistered:false,rankingPromptDismissed:false,
     totalTearsEarned:0,goldenKills:0,blackBossKills:0,attributeBossKills:0,frenzyUses:0,maxFrenzyCombo:0,
@@ -500,6 +603,8 @@
   let hurtTargetTimer = null;
   let rankingSyncInFlight = false;
   let lastRankingSyncAt = 0;
+  let chainStacks = 0;
+  let lastChainManualAt = 0;
 
   const el = {
     money:document.getElementById('money'), moneyTop:document.getElementById('moneyTop'), totalEarned:document.getElementById('totalEarned'),
@@ -509,9 +614,10 @@
     timerValue:document.getElementById('timerValue'), modeBadge:document.getElementById('modeBadge'),
     energyCard:document.getElementById('energyCard'), energyValue:document.getElementById('energyValue'), energyFill:document.getElementById('energyFill'), energyInfo:document.getElementById('energyInfo'), energyInfoIcon:document.getElementById('energyInfoIcon'), frenzyBtn:document.getElementById('frenzyBtn'), frenzyStatus:document.getElementById('frenzyStatus'), frenzyMeta:document.getElementById('frenzyMeta'), autoFrenzyToggle:document.getElementById('autoFrenzyToggle'), combatInfoIcon:document.getElementById('combatInfoIcon'),
     antiAutoWarning:document.getElementById('antiAutoWarning'),
+    activeSkillBar:document.getElementById('activeSkillBar'), skillStrikeBtn:document.getElementById('skillStrikeBtn'), skillEnergyBtn:document.getElementById('skillEnergyBtn'), skillWeaknessBtn:document.getElementById('skillWeaknessBtn'), skillStrikeStatus:document.getElementById('skillStrikeStatus'), skillEnergyStatus:document.getElementById('skillEnergyStatus'), skillWeaknessStatus:document.getElementById('skillWeaknessStatus'), skillPassiveStatus:document.getElementById('skillPassiveStatus'),
     hpLabel:document.getElementById('hpLabel'), hpFill:document.getElementById('hpFill'), killBonus:document.getElementById('killBonus'), hintText:document.getElementById('hintText'), retryBtn:document.getElementById('retryBtn'),
-    hitZone:document.getElementById('hitZone'), targetBtn:document.getElementById('targetBtn'), targetImg:document.getElementById('targetImg'), speechBubble:document.getElementById('speechBubble'), notice:document.getElementById('notice'), noticeBig:document.getElementById('noticeBig'), noticeSmall:document.getElementById('noticeSmall'),
-    upgrades:document.getElementById('upgrades'), blessings:document.getElementById('blessings'), upgradeTab:document.getElementById('upgradeTab'), blessingTab:document.getElementById('blessingTab'), upgradePane:document.getElementById('upgradePane'), blessingPane:document.getElementById('blessingPane'), statAtk:document.getElementById('statAtk'), statCritChance:document.getElementById('statCritChance'), statCritDamage:document.getElementById('statCritDamage'), statAuto:document.getElementById('statAuto'), statGps:document.getElementById('statGps'), statClicks:document.getElementById('statClicks'), statKills:document.getElementById('statKills'), statMaxHit:document.getElementById('statMaxHit'), statBest:document.getElementById('statBest'),
+    hitZone:document.getElementById('hitZone'), targetBtn:document.getElementById('targetBtn'), targetImg:document.getElementById('targetImg'), weaknessAuraField:document.getElementById('weaknessAuraField'), speechBubble:document.getElementById('speechBubble'), notice:document.getElementById('notice'), noticeBig:document.getElementById('noticeBig'), noticeSmall:document.getElementById('noticeSmall'),
+    upgrades:document.getElementById('upgrades'), blessings:document.getElementById('blessings'), skills:document.getElementById('skills'), upgradeTab:document.getElementById('upgradeTab'), blessingTab:document.getElementById('blessingTab'), skillTab:document.getElementById('skillTab'), upgradePane:document.getElementById('upgradePane'), blessingPane:document.getElementById('blessingPane'), skillPane:document.getElementById('skillPane'), skillSpAvailable:document.getElementById('skillSpAvailable'), skillSpUsed:document.getElementById('skillSpUsed'), skillSpTotal:document.getElementById('skillSpTotal'), skillResetInfo:document.getElementById('skillResetInfo'), skillResetBtn:document.getElementById('skillResetBtn'), statAtk:document.getElementById('statAtk'), statCritChance:document.getElementById('statCritChance'), statCritDamage:document.getElementById('statCritDamage'), statAuto:document.getElementById('statAuto'), statGps:document.getElementById('statGps'), statClicks:document.getElementById('statClicks'), statKills:document.getElementById('statKills'), statMaxHit:document.getElementById('statMaxHit'), statBest:document.getElementById('statBest'),
     rebirthReward:document.getElementById('rebirthReward'), rebirthBtn:document.getElementById('rebirthBtn'), rebirthCount:document.getElementById('rebirthCount'),
     achievementReady:document.getElementById('achievementReady'), achievementSummary:document.getElementById('achievementSummary'), achievementMultiplierSummary:document.getElementById('achievementMultiplierSummary'), achievementInfoIcon:document.getElementById('achievementInfoIcon'),
     achievementNormalTab:document.getElementById('achievementNormalTab'), achievementChallengeTab:document.getElementById('achievementChallengeTab'), achievementNormalBadge:document.getElementById('achievementNormalBadge'), achievementChallengeBadge:document.getElementById('achievementChallengeBadge'),
@@ -553,20 +659,25 @@
   }
 
   const upgradeDefs = [
-    {key:'attack',title:'공격력 강화',desc:'레벨 구간에 따라 공격력 증가폭이 커집니다. Lv.1~10 +2, Lv.11~20 +5, 이후 10레벨마다 증가폭이 2배가 됩니다.',baseCost:10,growth:1.25,effectText:()=>`현재 기본 공격력: ${formatNum(state.attack)} · 다음 +${formatNum(normalUpgradeGain(state.upgrades.attack))}`,buy(){state.attack+=normalUpgradeGain(state.upgrades.attack);state.upgrades.attack+=1;}},
+    {key:'attack',title:'공격력 강화',desc:'레벨 구간에 따라 공격력 증가폭이 커집니다. Lv.1~10 +2, Lv.11~20 +5, 이후 10레벨마다 증가폭이 2배가 됩니다.',baseCost:10,growth:1.15,effectText:()=>`현재 기본 공격력: ${formatNum(state.attack)} · 다음 +${formatNum(normalUpgradeGain(state.upgrades.attack))}`,buy(){state.attack+=normalUpgradeGain(state.upgrades.attack);state.upgrades.attack+=1;}},
     {key:'critChance',title:'치명타 확률 강화',desc:'기본 치명타 확률이 2%p 증가합니다. 치명타 확률은 강력한 만큼 천천히 성장합니다. (일반 강화 최대 75%)',baseCost:60,growth:1.55,maxLevel:35,effectText:()=>`현재 기본 확률: ${(state.critChance*100).toFixed(1)}%`,buy(){state.critChance=Math.min(.75,state.critChance+.02);state.upgrades.critChance+=1;}},
     {key:'critDamage',title:'치명타 피해 강화',desc:'기본 치명타 피해 배율이 25%p 증가합니다.',baseCost:100,growth:1.60,effectText:()=>`현재 기본 배율: ${(state.critDamage*100).toFixed(0)}%`,buy(){state.critDamage+=.25;state.upgrades.critDamage+=1;}},
-    {key:'autoAttack',title:'자동 줘패기',desc:'레벨 구간에 따라 자동 공격 증가폭이 커집니다. Lv.1~10 +2/초, Lv.11~20 +5/초, 이후 10레벨마다 증가폭이 2배가 됩니다. 실제 타격은 0.5초마다 적용됩니다.',baseCost:75,growth:1.30,effectText:()=>`현재 기본 자동 공격: ${formatNum(state.autoAttack)} /초 · 다음 +${formatNum(normalUpgradeGain(state.upgrades.autoAttack))}/초`,buy(){state.autoAttack+=normalUpgradeGain(state.upgrades.autoAttack);state.upgrades.autoAttack+=1;}}
+    {key:'autoAttack',title:'자동 줘패기',desc:'레벨 구간에 따라 자동 공격 증가폭이 커집니다. Lv.1~10 +2/초, Lv.11~20 +5/초, 이후 10레벨마다 증가폭이 2배가 됩니다. 실제 타격은 0.5초마다 적용됩니다.',baseCost:75,growth:1.085,effectText:()=>`현재 기본 자동 공격: ${formatNum(state.autoAttack)} /초 · 다음 +${formatNum(normalUpgradeGain(state.upgrades.autoAttack))}/초`,buy(){state.autoAttack+=normalUpgradeGain(state.upgrades.autoAttack);state.upgrades.autoAttack+=1;}}
   ];
 
   function switchGrowthTab(tab){
+    const showUpgrade=tab==='upgrade';
     const showBlessing=tab==='blessing';
-    el.upgradeTab.classList.toggle('active',!showBlessing);
+    const showSkill=tab==='skill';
+    el.upgradeTab.classList.toggle('active',showUpgrade);
     el.blessingTab.classList.toggle('active',showBlessing);
-    el.upgradeTab.setAttribute('aria-selected',String(!showBlessing));
+    el.skillTab.classList.toggle('active',showSkill);
+    el.upgradeTab.setAttribute('aria-selected',String(showUpgrade));
     el.blessingTab.setAttribute('aria-selected',String(showBlessing));
-    el.upgradePane.classList.toggle('hidden',showBlessing);
+    el.skillTab.setAttribute('aria-selected',String(showSkill));
+    el.upgradePane.classList.toggle('hidden',!showUpgrade);
     el.blessingPane.classList.toggle('hidden',!showBlessing);
+    el.skillPane.classList.toggle('hidden',!showSkill);
   }
 
   function tieredBlessingBonus(level, basePerLevel){
@@ -597,8 +708,225 @@
     {key:'gold',title:'은아의 해변 김치축제',desc:'획득하는 일반 재화 증가. 10레벨마다 레벨당 증가폭이 +5%p씩 커지며, 50레벨 이후에는 증가폭이 고정됩니다.',baseCost:1,growth:1.45,effectText:()=>{const lv=state.blessings.gold||0;return `재화 획득 +${tieredBlessingBonus(lv,10)}% · 다음 강화 +${tieredNextGain(lv,10)}% · ${tieredNextMilestone(lv)}`;}},
     {key:'time',title:'상원의 멍멍 짖기',desc:'수동 공격 시 검은수영의 기운이 총 +2 충전될 확률이 레벨당 5%p 증가합니다. (최대 Lv.10)',baseCost:3,growth:1.8,maxLevel:10,effectText:()=>`수동 공격 시 기운 +2 확률 ${Math.min(50,(state.blessings.time||0)*5)}%`},
     {key:'crit',title:'한이의 혈뇨 방출',desc:'레벨당 치명타 확률 +1%p, 치명타 피해 +10%p가 영구 적용됩니다.',baseCost:2,growth:1.8,effectText:()=>`치명타 확률 +${state.blessings.crit}%p / 피해 +${state.blessings.crit*10}%p`},
-    {key:'auto',title:'준서의 쌀먹머신 지원',desc:'자동 공격 피해량이 레벨당 50% 증가합니다.',baseCost:1,growth:1.5,effectText:()=>`자동 공격 피해 +${state.blessings.auto*50}%`}
+    {key:'auto',title:'준서의 쌀먹머신 지원',desc:'자동 공격 피해량이 레벨당 50% 증가합니다.',baseCost:1,growth:1.5,effectText:()=>`자동 공격 피해 +${state.blessings.auto*50}%`},
+    {key:'cooldown',title:'시간 가속의 축복',desc:'액티브 스킬의 쿨타임 회복 속도가 레벨당 3% 증가합니다. 실제 쿨타임 = 기본 쿨타임 ÷ (1 + 가속). 지속시간은 줄어들지 않습니다.',baseCost:2,growth:1.8,effectText:()=>`스킬 쿨타임 가속 +${(state.blessings.cooldown||0)*3}%`}
   ];
+
+
+  const skillDefs = [
+    {key:'strike',name:'강타',type:'active',unlock:10,maxLevel:10,shortcut:'Q',baseCooldown:15,
+      effectText:lv=>`수동공격 ${lv*30}회분의 피해를 즉시 가합니다. 폭주·연격·약점노출이 적용됩니다.`,
+      nextText:lv=>lv<10?`다음 Lv.${lv+1}: 수동공격 ${(lv+1)*30}회분 피해`:'최대 레벨'},
+    {key:'luckySeven',name:'럭키세븐',type:'passive',unlock:15,maxLevel:10,
+      effectText:lv=>`수동공격 시 ${lv*5}% 확률로 추가 1타를 가하고 기운 +1을 추가 획득합니다.`,
+      nextText:lv=>lv<10?`다음 Lv.${lv+1}: 발동 확률 ${(lv+1)*5}%`:'최대 레벨'},
+    {key:'energyBurst',name:'기운폭발',type:'active',unlock:20,maxLevel:5,shortcut:'W',baseCooldown:60,
+      effectText:lv=>`검은수영의 기운을 즉시 +${40+lv*10} 충전합니다. 폭주 중에는 사용할 수 없습니다.`,
+      nextText:lv=>lv<5?`다음 Lv.${lv+1}: 기운 +${40+(lv+1)*10}`:'최대 레벨'},
+    {key:'overcharge',name:'과잉충전',type:'passive',unlock:25,maxLevel:10,
+      effectText:lv=>`수동 계열 치명타 발생 시 ${lv*5}% 확률로 기운 +1을 추가 획득합니다.`,
+      nextText:lv=>lv<10?`다음 Lv.${lv+1}: 발동 확률 ${(lv+1)*5}%`:'최대 레벨'},
+    {key:'weakness',name:'약점노출',type:'active',unlock:30,maxLevel:10,shortcut:'E',baseCooldown:30,duration:10,
+      effectText:lv=>`10초 동안 적이 받는 모든 피해 +${lv*30}%입니다. 효과 종료 후 쿨타임이 시작됩니다.`,
+      nextText:lv=>lv<10?`다음 Lv.${lv+1}: 받는 피해 +${(lv+1)*30}%`:'최대 레벨'},
+    {key:'combo',name:'연격',type:'passive',unlock:40,maxLevel:5,
+      effectText:lv=>`1.5초 안에 수동공격을 이어가면 최대 ${lv*10}스택. 1스택당 수동공격 피해 +2%.`,
+      nextText:lv=>lv<5?`다음 Lv.${lv+1}: 최대 ${(lv+1)*10}스택`:'최대 레벨'}
+  ];
+  const skillDefMap=Object.fromEntries(skillDefs.map(def=>[def.key,def]));
+  function skillLevel(key){return Math.max(0,Math.floor(Number(state.skills?.[key])||0));}
+  function totalSkillPoints(stage=state.bestStage){return Math.max(0,Math.floor((Number(stage)||1)/5));}
+  function usedSkillPoints(){return skillDefs.reduce((sum,def)=>sum+Math.max(0,skillLevel(def.key)-1),0);}
+  function availableSkillPoints(){return Math.max(0,totalSkillPoints()-usedSkillPoints());}
+  function isSkillUnlocked(key){const def=skillDefMap[key];return !!def&&(Number(state.bestStage)||1)>=def.unlock&&skillLevel(key)>=1;}
+  function cooldownAcceleration(){return Math.max(0,Number(state.blessings?.cooldown)||0)*.03;}
+  function effectiveSkillCooldown(baseSeconds){return baseSeconds/(1+cooldownAcceleration());}
+  function weaknessDamageMultiplier(now=Date.now()){return isSkillUnlocked('weakness')&&Number(state.weaknessActiveUntil||0)>now?1+skillLevel('weakness')*.30:1;}
+  function isWeaknessActive(now=Date.now()){return weaknessDamageMultiplier(now)>1;}
+  function comboMaxStacks(){return isSkillUnlocked('combo')?skillLevel('combo')*10:0;}
+  function comboDamageMultiplier(){return 1+Math.max(0,chainStacks)*.02;}
+  function updateChainOnManual(now=performance.now()){
+    if(!isSkillUnlocked('combo')){chainStacks=0;lastChainManualAt=now;return 0;}
+    if(!lastChainManualAt||now-lastChainManualAt>1500)chainStacks=0;
+    chainStacks=Math.min(comboMaxStacks(),chainStacks+1);
+    lastChainManualAt=now;
+    return chainStacks;
+  }
+  function addEnergy(amount){
+    if(isFrenzyActive()||amount<=0)return 0;
+    const before=Math.max(0,Number(state.energy)||0);
+    state.energy=Math.min(100,before+amount);
+    return state.energy-before;
+  }
+  function maybeOvercharge(isCrit){
+    if(!isCrit||isFrenzyActive()||!isSkillUnlocked('overcharge'))return 0;
+    if(Math.random()>=skillLevel('overcharge')*.05)return 0;
+    return addEnergy(1);
+  }
+  function normalizeSkillState(){
+    state.skills={strike:0,luckySeven:0,energyBurst:0,overcharge:0,weakness:0,combo:0,...(state.skills||{})};
+    state.skillCooldowns={strike:0,energyBurst:0,weakness:0,...(state.skillCooldowns||{})};
+    skillDefs.forEach(def=>{
+      let lv=Math.min(def.maxLevel,Math.max(0,Math.floor(Number(state.skills[def.key])||0)));
+      if((Number(state.bestStage)||1)>=def.unlock){if(lv<1)lv=1;}else lv=0;
+      state.skills[def.key]=lv;
+    });
+    // 비정상 세이브 등으로 SP를 초과 사용한 경우 후반 스킬부터 자동 조정.
+    let guard=200;
+    while(usedSkillPoints()>totalSkillPoints()&&guard-->0){
+      let changed=false;
+      for(const def of [...skillDefs].reverse()){
+        if(state.skills[def.key]>1){state.skills[def.key]--;changed=true;break;}
+      }
+      if(!changed)break;
+    }
+    state.weaknessActiveUntil=Math.max(0,Number(state.weaknessActiveUntil)||0);
+    for(const key of ['strike','energyBurst','weakness'])state.skillCooldowns[key]=Math.max(0,Number(state.skillCooldowns[key])||0);
+  }
+  function showSkillToast(title,sub=''){
+    const toast=document.createElement('div');toast.className='skill-unlock-toast';
+    toast.innerHTML=`<div class="achievement-toast-kicker">SKILL</div><div class="achievement-toast-name"></div><div class="achievement-toast-sub"></div>`;
+    toast.querySelector('.achievement-toast-name').textContent=title;
+    toast.querySelector('.achievement-toast-sub').textContent=sub;
+    el.achievementToastStack.appendChild(toast);setTimeout(()=>toast.remove(),3800);
+  }
+  function ensureUnlockedSkills(){
+    const newly=[];
+    skillDefs.forEach(def=>{
+      if((Number(state.bestStage)||1)>=def.unlock&&skillLevel(def.key)<1){state.skills[def.key]=1;newly.push(def);}
+    });
+    return newly;
+  }
+  function initializeSkillSystem(showInitialNotice=true){
+    normalizeSkillState();
+    const newly=ensureUnlockedSkills();
+    if(!state.skillSystemInitialized){
+      state.skillSystemInitialized=true;
+      const unlocked=skillDefs.filter(def=>(Number(state.bestStage)||1)>=def.unlock);
+      if(showInitialNotice&&unlocked.length){
+        showSkillToast(`새로운 스킬 ${unlocked.length}개가 해금되었습니다!`,`${unlocked.map(d=>d.name).join(' · ')} · 보유 SP ${availableSkillPoints()}`);
+      }
+      saveGame(false);
+    }else if(showInitialNotice&&newly.length){
+      if(newly.length===1)showSkillToast('새로운 스킬이 해금되었습니다!',`${newly[0].name} Lv.1`);
+      else showSkillToast(`새로운 스킬 ${newly.length}개가 해금되었습니다!`,newly.map(d=>d.name).join(' · '));
+    }
+  }
+  function processSkillProgress(oldBestStage){
+    const oldSP=totalSkillPoints(oldBestStage);
+    const newly=ensureUnlockedSkills();
+    const gained=Math.max(0,totalSkillPoints()-oldSP);
+    if(newly.length===1)showSkillToast('새로운 스킬이 해금되었습니다!',`${newly[0].name} Lv.1${gained?` · SP +${gained}`:''}`);
+    else if(newly.length>1)showSkillToast(`새로운 스킬 ${newly.length}개가 해금되었습니다!`,`${newly.map(d=>d.name).join(' · ')}${gained?` · SP +${gained}`:''}`);
+    else if(gained>0)showSkillToast('스킬 포인트 획득!',`최고 도달 ${state.bestStage}스테이지 · SP +${gained}`);
+  }
+  function levelUpSkill(key){
+    const def=skillDefMap[key];if(!def||!isSkillUnlocked(key))return;
+    const lv=skillLevel(key);if(lv>=def.maxLevel||availableSkillPoints()<1)return;
+    state.skills[key]=lv+1;renderSkills();updateSkillCombatUI();saveGame(false);
+    showNotice(`${def.name} Lv.${lv+1}!`,'SP 1을 사용했습니다.',900);
+  }
+  function resetSkillPoints(){
+    const used=usedSkillPoints();if(used<=0)return;
+    if(!confirm(`사용한 SP ${used}를 모두 무료로 초기화합니다.\n\n해금된 스킬은 Lv.1로 돌아갑니다.\n현재 액티브 스킬의 쿨타임은 초기화되지 않으며, 활성 중인 약점노출 효과는 종료됩니다.\n\n초기화하시겠습니까?`))return;
+    skillDefs.forEach(def=>{state.skills[def.key]=(Number(state.bestStage)||1)>=def.unlock?1:0;});
+    state.weaknessActiveUntil=0;chainStacks=0;lastChainManualAt=0;
+    render();saveGame(false);showNotice('SP 초기화 완료',`SP ${used}를 회수했습니다.`,1200);
+  }
+  function skillCooldownRemaining(key,now=Date.now()){return Math.max(0,(Number(state.skillCooldowns?.[key])||0)-now)/1000;}
+  function setSkillCooldown(key,baseSeconds,delaySeconds=0,now=Date.now()){
+    state.skillCooldowns[key]=now+(delaySeconds+effectiveSkillCooldown(baseSeconds))*1000;
+  }
+  function canUseActiveSkill(key,now=Date.now()){
+    if(!isSkillUnlocked(key)||combatLocked||state.enemyHp<=0)return false;
+    if(skillCooldownRemaining(key,now)>0)return false;
+    if(key==='energyBurst'&&(isFrenzyActive()||Math.max(0,Number(state.energy)||0)>=100))return false;
+    if(key==='weakness'&&isWeaknessActive(now))return false;
+    return true;
+  }
+  function applyDamageResult(result){
+    state.enemyHp=Math.max(0,state.enemyHp-result.damage);triggerWrathIfNeeded();state.money+=result.goldGain;state.totalEarned+=result.goldGain;state.maxHit=Math.max(state.maxHit,result.damage);
+  }
+  function calculateDamageInstance(baseDamage,{manualLike=false,auto=false,frenzy=false,comboMult=1}={}){
+    let modifiedBase=baseDamage*damageMultiplier();
+    if(auto)modifiedBase*=autoMultiplier();
+    if(manualLike)modifiedBase*=achievementMultiplier('manualDamage')*comboMult;
+    if(isBlackBoss())modifiedBase*=achievementMultiplier('bossDamage');
+    if(frenzy)modifiedBase*=frenzyDamageMultiplier(frenzyCombo);
+    const critChance=Math.min(1,effectiveCritChance()+(frenzy?.30:0));
+    const isCrit=Math.random()<critChance;
+    const critMult=effectiveCritDamage()*(frenzy?1.5:1);
+    let damage=modifiedBase*(isCrit?critMult:1);
+    damage*=weaknessDamageMultiplier();damage*=playerTraitDamageMultiplier();damage*=bossIncomingDamageMultiplier();damage=Math.max(1,Math.round(damage));
+    const manualGoldMult=frenzy&&manualLike?5:1;
+    const goldGain=Math.max(1,Math.round(damage*goldMultiplier()*manualGoldMult));
+    return {damage,isCrit,goldGain};
+  }
+  function activateStrike(){
+    const now=Date.now();if(!canUseActiveSkill('strike',now))return false;
+    const lv=skillLevel('strike'),hits=lv*30,frenzy=isFrenzyActive();
+    const result=calculateDamageInstance(state.attack*hits,{manualLike:true,frenzy,comboMult:comboDamageMultiplier()});
+    applyDamageResult(result);setSkillCooldown('strike',15,0,now);triggerHurtTargetSprite();showHitDialogue();
+    const rect=el.hitZone.getBoundingClientRect(),x=rect.width/2,y=rect.height/2;
+    createHitEffect(x,y,result.isCrit,frenzy);triggerStrikeSkillEffect(hits,result.isCrit,frenzy);showFloatingText(`강타! ${hits}회분 · ${result.isCrit?'치명타! ':''}-${formatNum(result.damage)}`,x,y,'#dfb7ff',25);
+    if(state.enemyHp<=0){render();setTimeout(defeatEnemy,130);}else render();
+    saveGame(false);return true;
+  }
+  function activateEnergyBurst(){
+    const now=Date.now();if(!canUseActiveSkill('energyBurst',now))return false;
+    const amount=40+skillLevel('energyBurst')*10;const gained=addEnergy(amount);setSkillCooldown('energyBurst',60,0,now);
+    triggerEnergyBurstSkillEffect(gained);
+    showNotice('기운폭발!',`검은수영의 기운 +${Math.floor(gained)}${gained<amount?' · 최대 100':''}`,1100);updateFrenzyUI();render();saveGame(false);maybeAutoActivateFrenzy();return true;
+  }
+  function activateWeakness(){
+    const now=Date.now();if(!canUseActiveSkill('weakness',now))return false;
+    const bonus=skillLevel('weakness')*30;
+    state.weaknessActiveUntil=now+10000;setSkillCooldown('weakness',30,10,now);
+    triggerWeaknessSkillEffect(bonus);
+    showNotice('약점노출!',`10초 동안 적이 받는 모든 피해 +${bonus}%`,1200);render();saveGame(false);return true;
+  }
+  function activateSkillByKey(key){if(key==='strike')return activateStrike();if(key==='energyBurst')return activateEnergyBurst();if(key==='weakness')return activateWeakness();return false;}
+  function renderSkills(){
+    normalizeSkillState();
+    el.skillSpAvailable.textContent=availableSkillPoints();el.skillSpUsed.textContent=usedSkillPoints();el.skillSpTotal.textContent=totalSkillPoints();
+    el.skills.innerHTML='';
+    for(const type of ['active','passive']){
+      const label=document.createElement('div');label.className='skill-section-label';label.textContent=type==='active'?'액티브 스킬':'패시브 스킬';el.skills.appendChild(label);
+      skillDefs.filter(d=>d.type===type).forEach(def=>{
+        const unlocked=isSkillUnlocked(def.key),lv=skillLevel(def.key),maxed=unlocked&&lv>=def.maxLevel;
+        const card=document.createElement('div');card.className='skill-card'+(unlocked?'':' locked');
+        const effectiveCd=def.baseCooldown?effectiveSkillCooldown(def.baseCooldown):0;
+        let effect=unlocked?def.effectText(lv):`최고 도달 Stage ${def.unlock}에서 Lv.1 자동 해금`;
+        if(unlocked&&def.baseCooldown)effect+=` · 현재 쿨타임 ${effectiveCd.toFixed(1)}초${def.duration?' (효과 종료 후 시작)':''}`;
+        const next=unlocked?def.nextText(lv):'해금 즉시 Lv.1로 사용할 수 있습니다.';
+        card.innerHTML=`<div class="skill-card-top"><div class="skill-card-title-wrap"><div class="skill-card-title">${def.name}</div><div class="skill-card-badges"><span class="skill-type-badge ${def.type}">${def.type==='active'?'액티브':'패시브'}</span><span class="skill-unlock-badge">Stage ${def.unlock}</span>${def.shortcut?`<span class="skill-unlock-badge">${def.shortcut}</span>`:''}</div></div><div class="skill-lv">${unlocked?`LV ${lv}${maxed?' · MAX':''}`:'LOCKED'}</div></div><div class="skill-card-effect">${effect}</div><div class="skill-card-next">${next}</div><div class="skill-card-bottom"><div class="skill-cost">${unlocked?(maxed?'최대 레벨':'레벨업 비용 SP 1'):`Stage ${def.unlock} 필요`}</div><button class="skill-level-btn" ${( !unlocked||maxed||availableSkillPoints()<1)?'disabled':''}>${!unlocked?'잠김':maxed?'MAX':'1 SP 강화'}</button></div>`;
+        card.querySelector('.skill-level-btn').addEventListener('click',()=>levelUpSkill(def.key));el.skills.appendChild(card);
+      });
+    }
+    const used=usedSkillPoints();el.skillResetBtn.disabled=used<=0;el.skillResetBtn.textContent=used>0?`SP 무료 초기화 · ${used} 회수`:'SP 무료 초기화';
+    el.skillResetInfo.textContent=`최고 도달 ${state.bestStage}스테이지 · 총 SP ${totalSkillPoints()} · 사용 ${used} · 보유 ${availableSkillPoints()}. 초기화 시 해금 스킬은 Lv.1로 돌아가며 현재 쿨타임은 유지됩니다.`;
+  }
+  function updateSkillCombatUI(now=Date.now()){
+    if(chainStacks>0&&(!isSkillUnlocked('combo')||performance.now()-lastChainManualAt>1500))chainStacks=0;
+    const configs=[['strike',el.skillStrikeBtn,el.skillStrikeStatus,10],['energyBurst',el.skillEnergyBtn,el.skillEnergyStatus,20],['weakness',el.skillWeaknessBtn,el.skillWeaknessStatus,30]];
+    for(const [key,btn,status,unlock] of configs){
+      const unlocked=isSkillUnlocked(key),cd=skillCooldownRemaining(key,now),active=key==='weakness'&&isWeaknessActive(now);
+      btn.classList.toggle('ready',unlocked&&cd<=0&&!active&&canUseActiveSkill(key,now));btn.classList.toggle('active',active);
+      if(!unlocked){btn.disabled=true;status.textContent=`Stage ${unlock} 해금`;continue;}
+      if(active){btn.disabled=true;status.textContent=`ACTIVE ${Math.max(0,(state.weaknessActiveUntil-now)/1000).toFixed(1)}초`;continue;}
+      if(cd>0){btn.disabled=true;status.textContent=`쿨타임 ${cd.toFixed(1)}초`;continue;}
+      if(key==='energyBurst'&&isFrenzyActive()){btn.disabled=true;status.textContent='폭주 중 사용 불가';continue;}
+      if(key==='energyBurst'&&Math.max(0,Number(state.energy)||0)>=100){btn.disabled=true;status.textContent='기운 100 · 사용 불필요';continue;}
+      if(combatLocked||state.enemyHp<=0){btn.disabled=true;status.textContent='전투 대기';continue;}
+      btn.disabled=false;status.textContent=`사용 가능 · ${key==='strike'?'Q':key==='energyBurst'?'W':'E'}`;
+    }
+    const passive=[];
+    if(isSkillUnlocked('luckySeven'))passive.push(`럭키세븐 ${skillLevel('luckySeven')*5}%`);
+    if(isSkillUnlocked('overcharge'))passive.push(`과잉충전 ${skillLevel('overcharge')*5}%`);
+    if(isSkillUnlocked('combo'))passive.push(`연격 ${chainStacks}/${comboMaxStacks()} · +${chainStacks*2}%`);
+    el.skillPassiveStatus.textContent=passive.length?passive.join(' · '):'패시브 스킬은 Stage 15부터 해금됩니다.';
+    el.targetPanel.classList.toggle('weakness-exposed',isWeaknessActive(now));syncWeaknessAuraField(now);
+  }
 
   const bossTraitDefs = {
     pride:{label:'오만',en:'PRIDE',desc:'체력 70% 이상일 때 받는 피해 -35%'},
@@ -817,8 +1145,7 @@
     if(isFrenzyActive())return 0;
     const doubled=Math.random()<dogEnergyChance();
     const gain=doubled?2:1;
-    state.energy=Math.min(100,Math.max(0,Number(state.energy)||0)+gain);
-    return gain;
+    return addEnergy(gain);
   }
   function activateFrenzy(){
     if(isFrenzyActive()||Math.max(0,Number(state.energy)||0)<100)return false;
@@ -856,7 +1183,7 @@
     const duration=frenzyDurationSeconds();
     el.energyInfo.textContent=chance>0?`수동 공격 시 +1 · ${chance}% 확률로 총 +2 · 자동 공격은 충전 불가`:'수동 공격 시 +1 · 자동 공격으로는 충전되지 않습니다.';
     el.frenzyMeta.textContent=`폭주 지속시간 ${duration}초 · 용사의 축복 합계 Lv.${totalBlessings}${durationBonus>0?` (+${durationBonus}초)`:''}`;
-    if(el.energyInfoIcon)el.energyInfoIcon.dataset.tip=`수동 공격 시 기운 +1${chance>0?` · ${chance}% 확률로 총 +2`:''}. 자동 공격은 기운을 충전하지 않습니다. 기운 100에서 Ctrl로 수동 폭주 발동. 폭주 지속시간 ${duration}초${durationBonus>0?` (축복으로 +${durationBonus}초)`:''}. 자동 폭주 ON이면 기운 100 도달 시 자동 발동합니다.`;
+    if(el.energyInfoIcon)el.energyInfoIcon.dataset.tip=`수동 공격 시 기운 +1${chance>0?` · ${chance}% 확률로 총 +2`:''}. 럭키세븐·과잉충전·기운폭발로 추가 충전할 수 있습니다. 자동 공격은 기운을 충전하지 않습니다. 기운 100에서 Ctrl로 수동 폭주 발동. 폭주 지속시간 ${duration}초${durationBonus>0?` (축복으로 +${durationBonus}초)`:''}. 자동 폭주 ON이면 기운 100 도달 시 자동 발동합니다.`;
     el.autoFrenzyToggle.classList.toggle('on',!!state.autoFrenzy);
     el.autoFrenzyToggle.textContent=state.autoFrenzy?'ON':'OFF';
     el.autoFrenzyToggle.setAttribute('aria-pressed',state.autoFrenzy?'true':'false');
@@ -885,12 +1212,26 @@
     const k=Math.max(0,Math.floor(stage/5)-2);
     return 1 + (k*(k+1))/2;
   }
+  function stageBaseHp(stage){
+    stage=Math.max(1,Math.floor(Number(stage)||1));
+    let hp=50;
+    const early=Math.min(Math.max(stage-1,0),19);     // Stage 1~20: +25% / stage
+    const mid=Math.min(Math.max(stage-20,0),30);      // Stage 21~50: +20% / stage
+    const late=Math.min(Math.max(stage-50,0),50);     // Stage 51~100: +10% / stage
+    const end=Math.max(stage-100,0);                  // Stage 101+: +15% / stage
+    hp*=Math.pow(1.25,early);
+    hp*=Math.pow(1.20,mid);
+    hp*=Math.pow(1.10,late);
+    hp*=Math.pow(1.15,end);
+    return hp;
+  }
+
   function calcEnemyStats(stage=state.stage,floor=state.floor){
-    const idx=floorIndex(stage,floor);
-    let hp=Math.floor(50*Math.pow(1.205,idx));
-    if(floor===5)hp=Math.floor(hp*1.8);
+    stage=Math.max(1,Math.floor(Number(stage)||1));
+    floor=Math.min(5,Math.max(1,Math.floor(Number(floor)||1)));
     const black=isBlackBoss(stage,floor);
-    if(black)hp=Math.floor(hp*4.5);
+    const floorMult=black?12:[0,1.00,1.05,1.10,1.15,6.00][floor];
+    let hp=Math.max(1,Math.floor(stageBaseHp(stage)*floorMult));
 
     const baseBossReward=Math.max(25,Math.floor(hp*.42));
     let reward=baseBossReward;
@@ -1070,8 +1411,8 @@
     if(currentLevels<=0&&refund<=0)return;
     if(!confirm(`모든 용사의 축복을 Lv.0으로 초기화합니다.\n\n지금까지 투자한 검은수영의 눈물 ${formatNum(refund)}개를 100% 반환받습니다.\n\n초기화하시겠습니까?`))return;
     state.tears+=refund;
-    state.blessings={damage:0,gold:0,time:0,crit:0,auto:0};
-    state.blessingSpent={damage:0,gold:0,time:0,crit:0,auto:0};
+    state.blessings={damage:0,gold:0,time:0,crit:0,auto:0,cooldown:0};
+    state.blessingSpent={damage:0,gold:0,time:0,crit:0,auto:0,cooldown:0};
     render();
     saveGame(false);
     showNotice('용사의 축복 초기화',`검은수영의 눈물 ${formatNum(refund)}개를 회수했습니다.`,1500);
@@ -1206,7 +1547,7 @@
     }else{
       el.timerValue.textContent='∞';el.timerValue.classList.remove('danger');el.modeBadge.textContent='성장 모드';el.modeBadge.classList.add('farm');
       const pendingTrait=state.bossRetryReady&&BOSS_TRAIT_KEYS.includes(state.bossTrait)?bossTraitDefs[state.bossTrait]:null;
-      el.hintText.textContent=state.bossRetryReady?`${pendingTrait?pendingTrait.label+'의 ':''}검은수영 도전에 실패했습니다. 4층에서 재화를 모은 뒤 같은 보스에게 다시 도전하세요.`:'5층 도전에 실패했습니다. 시간 제한 없이 반복 처치해 재화를 모은 뒤 다시 도전하세요.';
+      el.hintText.textContent=state.bossRetryReady?`${pendingTrait?pendingTrait.label+'의 ':''}검은수영 도전에 실패했습니다. 4층에서 재화를 모은 뒤 같은 보스에게 다시 도전하세요.`:'5층 도전에 실패했습니다. 4층에서 편하게 성장한 뒤 다시 도전하세요.';
       el.retryBtn.textContent=state.bossRetryReady?`${pendingTrait?pendingTrait.label+'의 ':''}검은수영 재도전`:'5층 재도전';el.retryBtn.classList.add('show');el.retryBtn.classList.toggle('boss-retry',state.bossRetryReady);
     }
     if(el.combatInfoIcon)el.combatInfoIcon.dataset.tip=el.hintText.textContent;
@@ -1220,7 +1561,7 @@
     el.rebirthBtn.disabled=state.stage<10;
     el.rebirthBtn.textContent=state.stage>=10?`환생하고 눈물 ${formatNum(rr)}개 받기`:'10스테이지부터 환생 가능';
     el.rebirthCount.textContent=`누적 환생 ${formatNum(state.rebirths)}회`;
-    renderFloorProgress();renderUpgrades();renderBlessings();renderBuyModeControls();updateFrenzyUI();updateBossTraitUI();checkAchievementUnlocks();renderAchievements();updateBackupStatus();refreshTargetSprite();renderRankingCard();
+    renderFloorProgress();renderUpgrades();renderBlessings();renderSkills();renderBuyModeControls();updateFrenzyUI();updateSkillCombatUI();updateBossTraitUI();checkAchievementUnlocks();renderAchievements();updateBackupStatus();refreshTargetSprite();renderRankingCard();
   }
 
   function generatePlayerId(){
@@ -1255,6 +1596,7 @@
 
   function renderRankingCard(){
     if(!el.rankingStatus||!el.rankingProfile)return;
+    if(DEMO_MODE){el.rankingStatus.textContent='DEMO';el.rankingStatus.classList.remove('online','error');el.rankingProfile.textContent='이 데모는 랭킹 서버에 기록을 전송하지 않습니다.';el.rankingOpenBtn.textContent='데모 모드';return;}
     if(state.nickname&&state.playerId){
       el.rankingStatus.textContent=state.rankingRegistered?'등록됨':'동기화 대기';
       el.rankingStatus.classList.toggle('online',!!state.rankingRegistered);
@@ -1277,6 +1619,7 @@
   }
 
   async function syncRankingRecord(force=false){
+    if(DEMO_MODE)return false;
     if(!state.nickname||!state.playerId||rankingSyncInFlight)return false;
     const now=Date.now();
     if(!force&&now-lastRankingSyncAt<3000)return false;
@@ -1382,6 +1725,7 @@
   }
 
   async function openRankingModal(){
+    if(DEMO_MODE){showNotice('데모 모드','랭킹 서버에는 기록을 전송하지 않습니다.',1400);return;}
     if(!state.nickname||!state.playerId){openNicknameModal();return;}
     el.rankingOverlay.classList.add('show');el.rankingOverlay.setAttribute('aria-hidden','false');
     await syncRankingRecord(true);
@@ -1390,14 +1734,58 @@
 
   function initRankingSystem(){
     renderRankingCard();
+    if(DEMO_MODE){state.rankingPromptDismissed=true;return;}
     if(state.nickname&&state.playerId)setTimeout(()=>syncRankingRecord(true),700);
     else if(!state.rankingPromptDismissed)setTimeout(()=>openNicknameModal(),750);
   }
 
   function updateBest(){
     if(state.stage>state.bestStage||(state.stage===state.bestStage&&state.floor>state.bestFloor)){
-      state.bestStage=state.stage;state.bestFloor=state.floor;renderRankingCard();syncRankingRecord(false);
+      const oldBest=state.bestStage;
+      state.bestStage=state.stage;state.bestFloor=state.floor;
+      processSkillProgress(oldBest);renderRankingCard();syncRankingRecord(false);
     }
+  }
+
+
+  function pulseActiveSkillButton(btn){
+    if(!btn)return;
+    btn.classList.remove('cast-pulse');void btn.offsetWidth;btn.classList.add('cast-pulse');setTimeout(()=>btn.classList.remove('cast-pulse'),540);
+  }
+  function getHitZoneCenter(){const rect=el.hitZone.getBoundingClientRect();return{x:rect.width/2,y:rect.height/2};}
+  function appendTempHitNode(node,life=800){el.hitZone.appendChild(node);setTimeout(()=>node.remove(),life);return node;}
+  function spawnScreenFlash(kind,life=800){const d=document.createElement('div');d.className=`skill-screen-flash ${kind}`;appendTempHitNode(d,life);}
+  function syncWeaknessAuraField(now=Date.now()){
+    if(!el.weaknessAuraField)return;
+    el.weaknessAuraField.classList.toggle('show',isWeaknessActive(now));
+  }
+  function triggerStrikeSkillEffect(hits,isCrit=false,frenzy=false){
+    const{x,y}=getHitZoneCenter();pulseActiveSkillButton(el.skillStrikeBtn);spawnScreenFlash('strike',520);
+    if(el.targetPanel){el.targetPanel.classList.remove('mega-screen-shake');void el.targetPanel.offsetWidth;el.targetPanel.classList.add('mega-screen-shake');setTimeout(()=>el.targetPanel.classList.remove('mega-screen-shake'),520);}
+    if(el.targetBtn){el.targetBtn.classList.remove('mega-strike-recoil');void el.targetBtn.offsetWidth;el.targetBtn.classList.add('mega-strike-recoil');setTimeout(()=>el.targetBtn.classList.remove('mega-strike-recoil'),650);}
+    const core=document.createElement('div');core.className='mega-explosion-core';core.style.left=`${x}px`;core.style.top=`${y}px`;appendTempHitNode(core,620);
+    [120,190,270].forEach((size,i)=>{const ring=document.createElement('div');ring.className='mega-shockwave';ring.style.left=`${x}px`;ring.style.top=`${y}px`;ring.style.width=`${size}px`;ring.style.height=`${size}px`;ring.style.animationDelay=`${i*.045}s`;appendTempHitNode(ring,820);});
+    for(let i=0;i<14;i++){const ray=document.createElement('div');ray.className='mega-burst-ray';ray.style.left=`${x}px`;ray.style.top=`${y}px`;ray.style.setProperty('--r',`${i*(360/14)+Math.random()*8-4}deg`);ray.style.width=`${150+Math.random()*120}px`;appendTempHitNode(ray,560);}
+    for(let i=0;i<22;i++){const d=document.createElement('div');d.className='mega-debris';d.style.left=`${x}px`;d.style.top=`${y}px`;const a=Math.random()*Math.PI*2,dist=80+Math.random()*160;d.style.setProperty('--dx',`${Math.cos(a)*dist}px`);d.style.setProperty('--dy',`${Math.sin(a)*dist}px`);d.style.setProperty('--rot',`${(Math.random()*500-250)}deg`);d.style.width=`${6+Math.random()*9}px`;d.style.height=`${4+Math.random()*8}px`;appendTempHitNode(d,760);}
+    showFloatingText(`💥 강타 ${hits}회분!`,x,y-92,isCrit?'#fff2a7':'#ffd276',30);
+  }
+  function triggerEnergyBurstSkillEffect(gained){
+    const{x,y}=getHitZoneCenter();pulseActiveSkillButton(el.skillEnergyBtn);spawnScreenFlash('energy',760);
+    const core=document.createElement('div');core.className='purple-energy-core';core.style.left=`${x}px`;core.style.top=`${y}px`;appendTempHitNode(core,820);
+    [130,210,300].forEach((size,i)=>{const ring=document.createElement('div');ring.className='purple-energy-ring';ring.style.left=`${x}px`;ring.style.top=`${y}px`;ring.style.width=`${size}px`;ring.style.height=`${size}px`;ring.style.animationDelay=`${i*.08}s`;appendTempHitNode(ring,1050);});
+    for(let i=0;i<14;i++){const st=document.createElement('div');st.className='purple-energy-stream';st.style.left=`${x}px`;st.style.top=`${y+45}px`;st.style.setProperty('--r',`${i*(360/14)}deg`);st.style.height=`${120+Math.random()*110}px`;appendTempHitNode(st,880);}
+    for(let i=0;i<26;i++){const m=document.createElement('div');m.className='purple-mote';m.style.left=`${x}px`;m.style.top=`${y}px`;const a=Math.random()*Math.PI*2,dist=70+Math.random()*180;m.style.setProperty('--dx',`${Math.cos(a)*dist}px`);m.style.setProperty('--dy',`${Math.sin(a)*dist}px`);m.style.width=m.style.height=`${5+Math.random()*7}px`;appendTempHitNode(m,980);}
+    if(el.energyCard){el.energyCard.classList.remove('skill-energy-boost');void el.energyCard.offsetWidth;el.energyCard.classList.add('skill-energy-boost');setTimeout(()=>el.energyCard.classList.remove('skill-energy-boost'),680);}
+    showFloatingText(`기운폭발 +${Math.floor(gained)}`,x,y-84,'#e7b3ff',28);
+  }
+  function triggerWeaknessSkillEffect(percent){
+    const{x,y}=getHitZoneCenter();pulseActiveSkillButton(el.skillWeaknessBtn);spawnScreenFlash('weakness',760);syncWeaknessAuraField();
+    if(el.targetPanel){el.targetPanel.classList.remove('skill-weakness-cast');void el.targetPanel.offsetWidth;el.targetPanel.classList.add('skill-weakness-cast');setTimeout(()=>el.targetPanel.classList.remove('skill-weakness-cast'),760);}
+    for(let i=0;i<11;i++){const p=document.createElement('div');p.className='weakness-pillar';p.style.left=`${x-170+i*34+(Math.random()*14-7)}px`;p.style.top=`${y+115+Math.random()*50}px`;p.style.height=`${150+Math.random()*150}px`;p.style.animationDelay=`${Math.random()*.15}s`;appendTempHitNode(p,1100);}
+    for(let i=0;i<22;i++){const sp=document.createElement('div');sp.className='weakness-spark';sp.textContent=i%3===0?'✦':'◆';sp.style.left=`${x}px`;sp.style.top=`${y+40}px`;const a=Math.random()*Math.PI*2,dist=70+Math.random()*150;sp.style.setProperty('--dx',`${Math.cos(a)*dist}px`);sp.style.setProperty('--dy',`${-40-Math.random()*180}px`);appendTempHitNode(sp,900);}
+    const seal=document.createElement('div');seal.className='skill-weakness-seal';seal.style.left=`${x}px`;seal.style.top=`${y}px`;appendTempHitNode(seal,900);
+    [0,45,-45,90].forEach(rot=>{const chain=document.createElement('div');chain.className='skill-weakness-chain';chain.style.left=`${x}px`;chain.style.top=`${y}px`;chain.style.setProperty('--r',`${rot}deg`);appendTempHitNode(chain,620);});
+    showFloatingText(`약점노출 +${percent}%`,x,y-88,'#ffe789',28);
   }
 
   function showNotice(big,small='',duration=1500){
@@ -1475,7 +1863,7 @@
 
   function enterFloor(stage,floor,mode='challenge',preserveBossTrait=false){
     const pendingTrait=state.bossTrait;
-    state.stage=stage;state.floor=floor;state.mode=mode;state.bossRetryReady=false;state.timeRemaining=floorLimit(floor);
+    state.stage=stage;state.floor=floor;state.mode=mode;state.bossRetryReady=false;state.retryFloor5Ready=false;state.timeRemaining=floorLimit(floor);
 
     if(isBlackBoss(stage,floor)){
       state.isGolden=false;
@@ -1499,12 +1887,20 @@
   function handleTimeout(){
     if(state.mode!=='challenge'||combatLocked||state.floor!==5)return;
     combatLocked=true;state.timeRemaining=0;
-    if(isBlackBoss()){
+    const black=isBlackBoss();
+    if(black){
       const def=currentBossTraitDef();
       showNotice(`${def?def.label+'의 ':''}검은수영 도전 실패`,'보스 속성은 유지됩니다. 4층에서 성장한 뒤 같은 보스에게 재도전할 수 있습니다.',2100);
-      setTimeout(()=>{state.floor=4;state.mode='farm';state.bossRetryReady=true;state.timeRemaining=0;state.isGolden=rollGoldenEnemy(state.stage,4);resetBossTraitBattleState();syncEnemyStats(true);combatLocked=false;render();announceGolden();maybeAutoActivateFrenzy();},2150);
+      setTimeout(()=>{
+        state.floor=4;state.mode='farm';state.bossRetryReady=true;state.retryFloor5Ready=true;state.timeRemaining=0;
+        state.isGolden=rollGoldenEnemy(state.stage,4);resetBossTraitBattleState();syncEnemyStats(true);combatLocked=false;render();announceGolden();maybeAutoActivateFrenzy();
+      },2150);
     }else{
-      state.mode='farm';state.timeRemaining=0;combatLocked=false;showNotice('5층 시간 초과!','이 층이 성장 모드로 전환되었습니다.',1450);render();
+      showNotice('5층 도전 실패','4층 성장 모드에서 재화를 모은 뒤 다시 도전하세요.',1750);
+      setTimeout(()=>{
+        state.floor=4;state.mode='farm';state.bossRetryReady=false;state.retryFloor5Ready=true;state.timeRemaining=0;state.bossTrait=null;
+        state.isGolden=rollGoldenEnemy(state.stage,4);resetBossTraitBattleState();syncEnemyStats(true);combatLocked=false;render();announceGolden();maybeAutoActivateFrenzy();
+      },1800);
     }
   }
 
@@ -1656,56 +2052,49 @@
 
     const manual=source==='click';
     const frenzy=manual&&isFrenzyActive();
-    let energyGain=0;
+    let energyGain=0,overchargeGain=0,luckyTriggered=false;
 
     if(manual){
-      state.clicks+=1;
-      triggerHurtTargetSprite();
-      if(frenzy){
-        frenzyCombo+=1;
-        state.maxFrenzyCombo=Math.max(state.maxFrenzyCombo||0,frenzyCombo);
-      }else energyGain=chargeManualEnergy();
+      state.clicks+=1;triggerHurtTargetSprite();updateChainOnManual();
+      if(frenzy){frenzyCombo+=1;state.maxFrenzyCombo=Math.max(state.maxFrenzyCombo||0,frenzyCombo);}else energyGain=chargeManualEnergy();
     }
 
-    let modifiedBase=baseDamage*damageMultiplier();
-    if(source==='auto') modifiedBase*=autoMultiplier();
-    if(manual) modifiedBase*=achievementMultiplier('manualDamage');
-    if(isBlackBoss()) modifiedBase*=achievementMultiplier('bossDamage');
-    if(frenzy) modifiedBase*=frenzyDamageMultiplier(frenzyCombo);
-
-    const critChance=Math.min(1,effectiveCritChance()+(frenzy?.30:0));
-    const isCrit=Math.random()<critChance;
-    const critMult=effectiveCritDamage()*(frenzy?1.5:1);
-    let damage=modifiedBase*(isCrit?critMult:1);
-    damage*=playerTraitDamageMultiplier();
-    damage*=bossIncomingDamageMultiplier();
-    damage=Math.max(1,Math.round(damage));
-
-    const manualGoldMult=frenzy?5:1;
-    const goldGain=Math.max(1,Math.round(damage*goldMultiplier()*manualGoldMult));
-    state.enemyHp=Math.max(0,state.enemyHp-damage);
-    triggerWrathIfNeeded();
-    state.money+=goldGain;
-    state.totalEarned+=goldGain;
-    state.maxHit=Math.max(state.maxHit,damage);
+    const result=calculateDamageInstance(baseDamage,{manualLike:manual,auto:source==='auto',frenzy,comboMult:manual?comboDamageMultiplier():1});
+    applyDamageResult(result);
+    if(manual)overchargeGain+=maybeOvercharge(result.isCrit);
 
     const rect=el.hitZone.getBoundingClientRect();
     const x=clientX!=null?clientX-rect.left:rect.width/2+(Math.random()*110-55);
     const y=clientY!=null?clientY-rect.top:rect.height/2+(Math.random()*90-45);
 
-    createHitEffect(x,y,isCrit,frenzy);
-    showFloatingText(`${isCrit?'치명타! ':''}-${formatNum(damage)} / +${formatNum(goldGain)}원`,x,y,isCrit?'#ffd34e':'#fff',isCrit?26:21);
-    if(energyGain===2) showFloatingText('멍멍 짖기! 기운 +2',x,y+38,'#e7a3ff',16);
+    createHitEffect(x,y,result.isCrit,frenzy);
+    showFloatingText(`${result.isCrit?'치명타! ':''}-${formatNum(result.damage)} / +${formatNum(result.goldGain)}원`,x,y,result.isCrit?'#ffd34e':'#fff',result.isCrit?26:21);
 
-    updateFrenzyUI();
+    if(manual&&state.enemyHp>0&&isSkillUnlocked('luckySeven')&&Math.random()<skillLevel('luckySeven')*.05){
+      luckyTriggered=true;
+      const luckyEnergy=addEnergy(1);energyGain+=luckyEnergy;
+      const lucky=calculateDamageInstance(baseDamage,{manualLike:true,frenzy,comboMult:comboDamageMultiplier()});
+      applyDamageResult(lucky);overchargeGain+=maybeOvercharge(lucky.isCrit);
+      showFloatingText(`럭키세븐! ${lucky.isCrit?'치명타! ':''}-${formatNum(lucky.damage)} / +${formatNum(lucky.goldGain)}원`,x+22,y+34,'#9ff6c1',19);
+    }
+
+    if(manual&&!frenzy){
+      const dogOnly=energyGain-(luckyTriggered?1:0);
+      if(dogOnly>=2)showFloatingText('멍멍 짖기! 기운 +2',x,y+55,'#e7a3ff',15);
+      if(luckyTriggered)showFloatingText('럭키세븐! 추가타 · 기운 +1',x,y+74,'#9ff6c1',14);
+      if(overchargeGain>0)showFloatingText(`과잉충전! 기운 +${overchargeGain}`,x,y+93,'#9bdcff',14);
+    }
+
+    updateFrenzyUI();updateSkillCombatUI();
     if(state.enemyHp<=0){render();setTimeout(defeatEnemy,130);}else{
       render();
-      if(manual&&!frenzy&&state.autoFrenzy&&state.energy>=100) maybeAutoActivateFrenzy();
+      if(manual&&!frenzy&&state.autoFrenzy&&state.energy>=100)maybeAutoActivateFrenzy();
     }
   }
 
   function retryCurrent(){
     if(state.bossRetryReady){enterFloor(state.stage,5,'challenge',true);return;}
+    if(state.retryFloor5Ready){enterFloor(state.stage,5,'challenge');showNotice('5층 재도전!','60초 도전을 다시 시작합니다.',900);return;}
     enterFloor(state.stage,state.floor,'challenge');showNotice('재도전!','제한시간이 다시 시작됩니다.',900);
   }
 
@@ -1733,14 +2122,15 @@
         goldenKills:state.goldenKills||0,blackBossKills:state.blackBossKills||0,attributeBossKills:state.attributeBossKills||0,
         frenzyUses:state.frenzyUses||0,maxFrenzyCombo:state.maxFrenzyCombo||0,traitKills:{...state.traitKills},
         autoFrenzy:!!state.autoFrenzy,
+        skills:{...state.skills},skillSystemInitialized:!!state.skillSystemInitialized,skillCooldowns:{...state.skillCooldowns},
         nickname:state.nickname||null,playerId:state.playerId||null,rankingRegistered:!!state.rankingRegistered,rankingPromptDismissed:!!state.rankingPromptDismissed,
         rebirths:(state.rebirths||0)+1,
         bestStage:state.bestStage,bestFloor:state.bestFloor,
         totalEarned:state.totalEarned,clicks:state.clicks,kills:state.kills,maxHit:state.maxHit
       };
       const fresh=defaultState();
-      state={...fresh,...keep,blessings:keep.blessings,blessingSpent:keep.blessingSpent,achievementClaims:keep.achievementClaims,traitKills:keep.traitKills};
-      frenzyEndAt=0;frenzyCombo=0;lastManualAttackAt=-Infinity;resetManualInputGuard();
+      state={...fresh,...keep,blessings:keep.blessings,blessingSpent:keep.blessingSpent,skills:keep.skills,skillCooldowns:keep.skillCooldowns,achievementClaims:keep.achievementClaims,traitKills:keep.traitKills};
+      state.weaknessActiveUntil=0;chainStacks=0;lastChainManualAt=0;frenzyEndAt=0;frenzyCombo=0;lastManualAttackAt=-Infinity;resetManualInputGuard();
       syncEnemyStats(true);combatLocked=false;lastTimerStamp=performance.now();
       render();saveGame(false);
     });
@@ -1752,7 +2142,9 @@
     return {
       ...d,...p,
       saveGeneration:SAVE_GENERATION,
-      balanceVersion:11,
+      balanceVersion:13,
+      floor:(p.mode==='farm'&&Number(p.floor)===5&&!p.bossRetryReady)?4:Math.min(5,Math.max(1,Math.floor(Number(p.floor)||1))),
+      retryFloor5Ready:!!p.retryFloor5Ready||p.mode==='farm'||!!p.bossRetryReady,
       buyMode:['1','10','max'].includes(String(p.buyMode))?String(p.buyMode):'1',
       isGolden:typeof p.isGolden==='boolean'?p.isGolden:null,
       bossTrait:(p.bossTrait==='normal'||BOSS_TRAIT_KEYS.includes(p.bossTrait))?p.bossTrait:null,
@@ -1772,7 +2164,11 @@
       traitKills:{...d.traitKills,...(p.traitKills||{})},
       upgrades:{...d.upgrades,...(p.upgrades||{})},
       blessings:{...d.blessings,...(p.blessings||{})},
-      blessingSpent:{...d.blessingSpent,...(p.blessingSpent||{})}
+      blessingSpent:{...d.blessingSpent,...(p.blessingSpent||{})},
+      skills:{...d.skills,...(p.skills||{})},
+      skillSystemInitialized:!!p.skillSystemInitialized,
+      skillCooldowns:{...d.skillCooldowns,...(p.skillCooldowns||{})},
+      weaknessActiveUntil:Math.max(0,Number(p.weaknessActiveUntil)||0)
     };
   }
 
@@ -1814,7 +2210,7 @@
 
   function saveGame(showMsg=false,skipBackup=false){
     state.saveGeneration=SAVE_GENERATION;
-    state.balanceVersion=11;
+    state.balanceVersion=13;
     state.lastActiveAt=Date.now();
     if(!skipBackup)createAutoBackup(showMsg);
     localStorage.setItem(SAVE_KEY,JSON.stringify(state));
@@ -1839,9 +2235,10 @@
     state=backup;
     if(!state.nickname||!state.playerId)state={...state,...currentRankingIdentity};
     hurtTargetUntil=0;if(hurtTargetTimer){clearTimeout(hurtTargetTimer);hurtTargetTimer=null;}
-    frenzyEndAt=0;frenzyCombo=0;lastManualAttackAt=-Infinity;resetManualInputGuard();
+    chainStacks=0;lastChainManualAt=0;frenzyEndAt=0;frenzyCombo=0;lastManualAttackAt=-Infinity;resetManualInputGuard();
     combatLocked=false;lastTimerStamp=performance.now();
     syncEnemyStats(false);
+    initializeSkillSystem(true);
     render();
     saveGame(false,true);
     syncRankingRecord(true);
@@ -1855,7 +2252,7 @@
     const rankingIdentity={nickname:state.nickname||null,playerId:state.playerId||null,rankingRegistered:!!state.rankingRegistered,rankingPromptDismissed:!!state.rankingPromptDismissed};
     state={...defaultState(),...rankingIdentity};
     hurtTargetUntil=0;if(hurtTargetTimer){clearTimeout(hurtTargetTimer);hurtTargetTimer=null;}
-    frenzyEndAt=0;frenzyCombo=0;lastManualAttackAt=-Infinity;resetManualInputGuard();
+    chainStacks=0;lastChainManualAt=0;frenzyEndAt=0;frenzyCombo=0;lastManualAttackAt=-Infinity;resetManualInputGuard();
     syncEnemyStats(true);
     localStorage.removeItem(SAVE_KEY);
     localStorage.removeItem(BACKUP_KEY);
@@ -1875,7 +2272,7 @@
     const payload={
       ...state,
       saveGeneration:SAVE_GENERATION,
-      balanceVersion:11,
+      balanceVersion:13,
       lastActiveAt:Date.now(),
       saveFileFormat:'BlackLee',
       exportedAt:Date.now()
@@ -1899,10 +2296,11 @@
     if(!loaded.nickname||!loaded.playerId)loaded={...loaded,...currentRankingIdentity};
     state=loaded;
     hurtTargetUntil=0;if(hurtTargetTimer){clearTimeout(hurtTargetTimer);hurtTargetTimer=null;}
-    frenzyEndAt=0;frenzyCombo=0;lastManualAttackAt=-Infinity;resetManualInputGuard();
+    chainStacks=0;lastChainManualAt=0;frenzyEndAt=0;frenzyCombo=0;lastManualAttackAt=-Infinity;resetManualInputGuard();
     combatLocked=false;
     lastTimerStamp=performance.now();
     const importedOffline=applyOfflineReward(false);
+    initializeSkillSystem(true);
     render();
     saveGame(false);
     syncRankingRecord(true);
@@ -1949,7 +2347,7 @@
 
   function exportSave(){
     state.saveGeneration=SAVE_GENERATION;
-    state.balanceVersion=11;
+    state.balanceVersion=13;
     state.lastActiveAt=Date.now();
     const text=btoa(unescape(encodeURIComponent(JSON.stringify(state))));
     navigator.clipboard.writeText(text).then(()=>{
@@ -2019,10 +2417,15 @@
   el.frenzyBtn.addEventListener('click',activateFrenzy);
   el.autoFrenzyToggle.addEventListener('click',toggleAutoFrenzy);
   el.blessingResetBtn.addEventListener('click',resetBlessings);
+  el.skillResetBtn.addEventListener('click',resetSkillPoints);
   el.upgradeTab.addEventListener('click',()=>switchGrowthTab('upgrade'));
   el.blessingTab.addEventListener('click',()=>switchGrowthTab('blessing'));
+  el.skillTab.addEventListener('click',()=>switchGrowthTab('skill'));
   el.retryBtn.addEventListener('click',retryCurrent);el.rebirthBtn.addEventListener('click',doRebirth);el.saveBtn.addEventListener('click',()=>saveGame(true));el.backupBtn.addEventListener('click',restoreAutoBackup);el.downloadSaveBtn.addEventListener('click',downloadSaveFile);el.loadSaveFileBtn.addEventListener('click',()=>el.saveFileInput.click());el.saveFileInput.addEventListener('change',()=>importSaveFile(el.saveFileInput.files?.[0]));el.resetBtn.addEventListener('click',resetGame);el.exportBtn.addEventListener('click',exportSave);
   el.importBtn.addEventListener('click',importSave);
+  el.skillStrikeBtn.addEventListener('click',activateStrike);
+  el.skillEnergyBtn.addEventListener('click',activateEnergyBurst);
+  el.skillWeaknessBtn.addEventListener('click',activateWeakness);
   el.rankingOpenBtn.addEventListener('click',openRankingModal);
   el.rankingCloseBtn.addEventListener('click',closeRankingModal);
   el.rankingRefreshBtn.addEventListener('click',fetchRanking);
@@ -2033,6 +2436,18 @@
   el.rankingOverlay.addEventListener('click',e=>{if(e.target===el.rankingOverlay)closeRankingModal();});
   el.nicknameOverlay.addEventListener('click',e=>{if(e.target===el.nicknameOverlay)closeNicknameModal(true);});
   document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeRankingModal();if(el.nicknameOverlay.classList.contains('show'))closeNicknameModal(true);}});
+
+  document.addEventListener('keydown',e=>{
+    if(e.repeat||e.ctrlKey||e.altKey||e.metaKey)return;
+    const active=document.activeElement;
+    const editing=active&&(active.tagName==='INPUT'||active.tagName==='TEXTAREA'||active.tagName==='SELECT'||active.isContentEditable);
+    if(editing||el.rankingOverlay.classList.contains('show')||el.nicknameOverlay.classList.contains('show'))return;
+    const key=e.key.toLowerCase();
+    if(key==='q'||key==='w'||key==='e'){
+      e.preventDefault();
+      activateSkillByKey(key==='q'?'strike':key==='w'?'energyBurst':'weakness');
+    }
+  });
 
   setInterval(()=>{if(!document.hidden&&state.autoAttack>0)applyHit(state.autoAttack/2,'auto');},500);
   setInterval(()=>{if(!document.hidden)saveGame(false);},10000);
@@ -2053,6 +2468,7 @@
     if(state.mode==='challenge'&&state.floor===5&&!combatLocked){state.timeRemaining-=dt;if(state.timeRemaining<=0){state.timeRemaining=0;handleTimeout();}else{const txt=`${state.timeRemaining.toFixed(1)}초`;if(el.timerValue.textContent!==txt)el.timerValue.textContent=txt;el.timerValue.classList.toggle('danger',state.timeRemaining<=10);}}
     updateBossTraitEffects(dt);
     updateFrenzyUI(now);
+    updateSkillCombatUI(Date.now());
     requestAnimationFrame(timerLoop);
   }
 
@@ -2061,6 +2477,7 @@
   if(state.mode==='challenge'&&state.floor===5&&(!Number.isFinite(state.timeRemaining)||state.timeRemaining<=0)) state.timeRemaining=floorLimit();
   if(state.mode==='challenge'&&state.floor<5) state.timeRemaining=0;
   const offlineResult=applyOfflineReward(false);
+  initializeSkillSystem(true);
   render();
   initRankingSystem();
   if(loadedFromBackup)showNotice('자동 백업 복구!','기본 저장본을 읽지 못해 직전 정상 백업으로 복구했습니다.',3600);
