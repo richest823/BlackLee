@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>이수영 줘패기 - beta 0.4</title>
+  <title>이수영 줘패기 - Alpha 0.1</title>
   <style>
     :root {
       --bg1:#121826; --bg2:#1f2a44; --panel:rgba(255,255,255,.08);
@@ -253,6 +253,14 @@
     button.buy,.utility-btn{border:none;border-radius:12px;padding:9px 11px;font-weight:850;cursor:pointer;background:linear-gradient(180deg,#ffd65f,#ffb629);color:#392500;box-shadow:0 8px 18px rgba(255,182,41,.18);transition:.15s ease}button.buy:hover,.utility-btn:hover{transform:translateY(-1px)}button.buy:disabled{cursor:not-allowed;opacity:.45;transform:none;box-shadow:none}
     .stat-table{display:grid;gap:9px}.stat-row{display:flex;justify-content:space-between;gap:10px;font-size:13px;padding:11px 13px;border-radius:13px;background:rgba(255,255,255,.06)}.stat-row .l{color:var(--muted)}.stat-row .r{font-weight:850}
     .tools{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.utility-btn:disabled{opacity:.4;cursor:not-allowed;transform:none}.utility-btn.secondary{background:rgba(255,255,255,.12);color:white;box-shadow:none;border:1px solid rgba(255,255,255,.08)}.save-msg{margin-top:10px;min-height:18px;font-size:12px;color:var(--good)}.footer-note{margin-top:10px;color:var(--muted);font-size:12px;line-height:1.55}
+
+    .cloud-card{margin-top:12px;padding:12px;border-radius:16px;background:linear-gradient(180deg,rgba(112,178,255,.10),rgba(255,255,255,.045));border:1px solid rgba(112,178,255,.22)}
+    .cloud-card-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
+    .cloud-card-title{font-size:16px;font-weight:950}.cloud-status{font-size:9.5px;font-weight:900;color:var(--muted);padding:4px 7px;border-radius:999px;background:rgba(255,255,255,.075)}
+    .cloud-status.online{color:#cce8ff;background:rgba(112,178,255,.12)}.cloud-status.error{color:#ffd2d2;background:rgba(255,100,100,.10)}
+    .cloud-profile{margin-top:7px;font-size:11px;line-height:1.45;color:#e8eef7}.cloud-open-btn{width:100%;margin-top:9px;border:1px solid rgba(112,178,255,.26);border-radius:10px;padding:8px 10px;background:rgba(112,178,255,.11);color:#e6f4ff;font-weight:950;cursor:pointer}
+    .cloud-code-box{margin-top:10px;padding:10px;border-radius:11px;background:rgba(0,0,0,.22);border:1px solid rgba(255,255,255,.09);font-family:ui-monospace,Consolas,monospace;font-size:12px;word-break:break-all;user-select:all}
+    .cloud-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:9px}.cloud-actions .nickname-btn{width:100%}
     .ranking-card{margin-top:12px;padding:12px;border-radius:16px;background:linear-gradient(180deg,rgba(123,241,168,.095),rgba(255,255,255,.045));border:1px solid rgba(123,241,168,.20)}
     .ranking-card-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
     .ranking-card-title{font-size:16px;font-weight:950}.ranking-status{font-size:9.5px;font-weight:900;color:var(--muted);padding:4px 7px;border-radius:999px;background:rgba(255,255,255,.075)}
@@ -288,7 +296,7 @@
   <div class="titlebar">
     <div class="brand-line">
       <h1>이수영 줘패기</h1>
-      <div class="version-tag">beta 0.4</div>
+      <div class="version-tag">Alpha 0.1</div>
     </div>
     <div class="top-stats">
       <div class="mini-card"><span class="k">재화</span><span class="v" id="moneyTop">0원</span></div>
@@ -304,7 +312,7 @@
       <div class="growth-sticky-head">
         <div class="section-title-line">
           <h2>재화 & 성장</h2>
-          <button class="info-icon" type="button" aria-label="성장 시스템 설명" data-tip="1~4층은 자동사냥 중심의 일반 구간입니다. 5층은 60초 도전 구간이며, 실패하면 같은 스테이지 4층 성장 모드에서 재화를 모은 뒤 재도전합니다. 검은수영은 5스테이지마다 등장하는 상위 도전입니다. 일반 업그레이드는 환생 시 초기화되고 용사의 축복은 유지됩니다.">i</button>
+          <button class="info-icon" type="button" aria-label="성장 시스템 설명" data-tip="1~4층은 자동사냥 중심의 일반 구간입니다. 일반 5층은 30초 도전이며, 실패하면 같은 스테이지 4층 성장 모드에서 재화를 모아 업그레이드한 뒤 재도전합니다. 검은수영은 60초 상위 도전이며 자동공격 피해가 40%만 적용되어 수동 공격·폭주·스킬 활용이 중요합니다. 일반 업그레이드는 환생 시 초기화되고 용사의 축복은 유지됩니다.">i</button>
         </div>
         <div class="compact-resource">
           <div class="compact-resource-main">
@@ -408,8 +416,8 @@
 
       <div class="active-skill-bar" id="activeSkillBar" aria-label="액티브 스킬">
         <button class="active-skill-btn" id="skillStrikeBtn" type="button"><span class="skill-key">Q</span><span class="skill-btn-name">강타</span><span class="skill-btn-status" id="skillStrikeStatus">Stage 10 해금</span></button>
-        <button class="active-skill-btn" id="skillEnergyBtn" type="button"><span class="skill-key">W</span><span class="skill-btn-name">기운폭발</span><span class="skill-btn-status" id="skillEnergyStatus">Stage 20 해금</span></button>
-        <button class="active-skill-btn" id="skillWeaknessBtn" type="button"><span class="skill-key">E</span><span class="skill-btn-name">약점노출</span><span class="skill-btn-status" id="skillWeaknessStatus">Stage 30 해금</span></button>
+        <button class="active-skill-btn" id="skillEnergyBtn" type="button"><span class="skill-key">W</span><span class="skill-btn-name">기운폭발</span><span class="skill-btn-status" id="skillEnergyStatus">Stage 35 해금</span></button>
+        <button class="active-skill-btn" id="skillWeaknessBtn" type="button"><span class="skill-key">E</span><span class="skill-btn-name">약점노출</span><span class="skill-btn-status" id="skillWeaknessStatus">Stage 80 해금</span></button>
       </div>
       <div class="skill-passive-status" id="skillPassiveStatus">스킬은 최고 도달 스테이지에 따라 해금됩니다.</div>
 
@@ -441,13 +449,18 @@
         <div class="stat-row"><span class="l">최대 한 방</span><span class="r" id="statMaxHit">0</span></div>
         <div class="stat-row"><span class="l">최고 도달</span><span class="r" id="statBest">1-1F</span></div>
       </div>
+      <div class="cloud-card">
+        <div class="cloud-card-head"><div class="cloud-card-title">클라우드 동기화</div><span class="cloud-status" id="cloudStatus">준비 중</span></div>
+        <div class="cloud-profile" id="cloudProfile">Alpha 클라우드 계정을 준비하고 있습니다.</div>
+        <button class="cloud-open-btn" id="cloudOpenBtn" type="button">동기화 관리</button>
+      </div>
       <div class="ranking-card">
         <div class="ranking-card-head"><div class="ranking-card-title">온라인 랭킹</div><span class="ranking-status" id="rankingStatus">미등록</span></div>
         <div class="ranking-profile" id="rankingProfile">닉네임을 등록하면 최고 스테이지·층 기록이 랭킹에 등록됩니다.</div>
         <button class="ranking-open-btn" id="rankingOpenBtn" type="button">랭킹 보기</button>
       </div>
       <div class="rebirth-card">
-        <div class="title-with-info"><div class="rebirth-title">환생</div><button class="info-icon" type="button" aria-label="환생 설명" data-tip="10스테이지부터 환생할 수 있습니다. 환생하면 일반 재화·일반 능력치·일반 업그레이드·스테이지 진행도가 초기화됩니다. 검은수영의 눈물, 용사의 축복, 업적 보상은 유지됩니다.">i</button></div>
+        <div class="title-with-info"><div class="rebirth-title">환생</div><button class="info-icon" type="button" aria-label="환생 설명" data-tip="10스테이지부터 환생할 수 있습니다. 환생하면 일반 재화·일반 능력치·일반 업그레이드는 초기화되며, 현재 스테이지의 1/10을 버림한 스테이지의 1층부터 다시 시작합니다. 검은수영의 눈물, 용사의 축복, 스킬, 업적 보상과 최고 기록은 유지됩니다.">i</button></div>
         <div class="rebirth-reward" id="rebirthReward">현재 환생 보상: 0개</div>
         <button class="rebirth-btn" id="rebirthBtn" disabled>10스테이지부터 환생 가능</button>
         <div class="rebirth-count" id="rebirthCount">누적 환생 0회</div>
@@ -480,17 +493,18 @@
       <details class="help-toggle">
         <summary><span>도움말</span><span class="help-chevron">▼</span></summary>
         <div class="help-content">
-          <div><b>수동 공격</b> · 사진 클릭 또는 사진 위에서 Space</div>
+          <div><b>수동 공격</b> · 사진 클릭 또는 커서 위치와 관계없이 Space / ↑ / ↓ / ← / → · 키 반복 입력은 공격으로 인정되지 않음</div>
           <div><b>폭주</b> · 기운 100에서 Ctrl로 수동 발동</div>
-          <div><b>층 진행</b> · 1~4층은 자동사냥 중심 / 5층은 기본 60초 도전</div>
+          <div><b>층 진행</b> · 1~4층은 자동사냥 중심 / 일반 5층은 30초 도전 / 검은수영은 60초 도전</div>
           <div><b>검은수영</b> · 5스테이지마다 등장 / 일반 5층보다 강하며 수동 전투 권장</div>
-          <div><b>황금수영</b> · 일반 적에서 5% 확률 / 체력 2배 / 보상 50배</div>
+          <div><b>황금수영</b> · 일반 적에서 5% 확률 / 체력 2배 / 보상 20배</div>
           <div><b>속성수영</b> · Stage 10부터 등장 가능 / 처치 시 눈물 2배</div>
           <div><b>업적</b> · 달성 후 직접 보상을 수령해야 적용</div>
-          <div><b>온라인 랭킹</b> · 닉네임 등록 후 최고 스테이지·층 기록이 자동 갱신됩니다.</div>
-          <div><b>스킬</b> · 최고 도달 스테이지로 해금 / 5스테이지마다 SP +1 / Q·W·E로 액티브 사용</div>
+          <div><b>클라우드 동기화</b> · Alpha부터 자동 사용 / 다른 기기에서는 동기화 코드를 입력하면 같은 진행을 불러옵니다. 코드는 비밀번호처럼 보관하세요.</div>
+          <div><b>온라인 랭킹</b> · Alpha 랭킹은 새로 시작하며 닉네임 등록 후 최고 기록이 자동 갱신됩니다.</div>
+          <div><b>스킬</b> · 최고 도달 스테이지로 해금 / 강타 10 · 럭키세븐 20 · 기운폭발 35 · 과잉충전 45 · 연격 60 · 약점노출 80 / 5스테이지마다 SP +1</div>
           <div><b>SP 초기화</b> · 무료 / 해금 스킬 Lv.1 복귀 / 현재 쿨타임은 유지</div>
-          <div><b>오프라인 보상</b> · 자동 공격 기대수입 100% / 최대 24시간</div>
+          <div><b>오프라인 등반</b> · 최대 12시간 / 일반 재화 효율 50% / 자동공격만 사용 / 기존 최고 기록까지만 등반 / 5층 실패 시 같은 스테이지 4층 파밍 / 눈물 획득 없음</div>
         </div>
       </details>
       <div class="backup-row">
@@ -511,15 +525,40 @@
 </div>
 
 
+
+<div class="ranking-overlay" id="cloudOverlay" aria-hidden="true">
+  <div class="ranking-modal nickname" role="dialog" aria-modal="true" aria-labelledby="cloudModalTitle">
+    <div class="ranking-modal-head">
+      <div class="ranking-modal-title" id="cloudModalTitle">☁ BlackLee 클라우드 동기화</div>
+      <button class="ranking-close-btn" id="cloudCloseBtn" type="button" aria-label="클라우드 동기화 닫기">×</button>
+    </div>
+    <div class="ranking-modal-body">
+      <div class="nickname-copy" id="cloudModalStatus">클라우드 상태를 확인하는 중입니다.</div>
+      <div class="cloud-code-box" id="cloudCodeText">연결 준비 중</div>
+      <div class="cloud-actions">
+        <button class="nickname-btn primary" id="cloudCopyBtn" type="button">동기화 코드 복사</button>
+        <button class="nickname-btn secondary" id="cloudRestoreBtn" type="button">직전 클라우드 백업 복구</button>
+      </div>
+      <div class="nickname-rule" style="margin-top:12px">다른 PC·휴대폰에서 이어하려면 아래에 같은 동기화 코드를 입력하세요. 동기화 코드는 비밀번호처럼 보관해 주세요.</div>
+      <input class="nickname-input" id="cloudCodeInput" type="text" autocomplete="off" spellcheck="false" placeholder="동기화 코드 붙여넣기">
+      <div class="nickname-error" id="cloudError"></div>
+      <div class="nickname-actions">
+        <button class="nickname-btn secondary" id="cloudCancelConnectBtn" type="button">입력 지우기</button>
+        <button class="nickname-btn primary" id="cloudConnectBtn" type="button">이 코드로 연결</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="ranking-overlay" id="rankingOverlay" aria-hidden="true">
   <div class="ranking-modal" role="dialog" aria-modal="true" aria-labelledby="rankingModalTitle">
     <div class="ranking-modal-head">
-      <div class="ranking-modal-title" id="rankingModalTitle">🏆 BlackLee 랭킹</div>
+      <div class="ranking-modal-title" id="rankingModalTitle">🏆 BlackLee Alpha 랭킹</div>
       <button class="ranking-close-btn" id="rankingCloseBtn" type="button" aria-label="랭킹 닫기">×</button>
     </div>
     <div class="ranking-modal-body">
       <div class="ranking-my-summary" id="rankingMySummary">내 기록을 불러오는 중입니다.</div>
-      <div class="ranking-toolbar"><span class="ranking-caption">최고 스테이지 · 최고 층 TOP 100</span><button class="ranking-refresh-btn" id="rankingRefreshBtn" type="button">새로고침</button></div>
+      <div class="ranking-toolbar"><span class="ranking-caption">Alpha 최고 스테이지 · 최고 층 TOP 100</span><button class="ranking-refresh-btn" id="rankingRefreshBtn" type="button">새로고침</button></div>
       <div class="ranking-list" id="rankingList"><div class="ranking-empty">랭킹을 불러오는 중입니다.</div></div>
     </div>
   </div>
@@ -528,11 +567,11 @@
 <div class="ranking-overlay" id="nicknameOverlay" aria-hidden="true">
   <div class="ranking-modal nickname" role="dialog" aria-modal="true" aria-labelledby="nicknameModalTitle">
     <div class="ranking-modal-head">
-      <div class="ranking-modal-title" id="nicknameModalTitle">랭킹 닉네임 등록</div>
+      <div class="ranking-modal-title" id="nicknameModalTitle">Alpha 랭킹 닉네임 등록</div>
       <button class="ranking-close-btn" id="nicknameCloseBtn" type="button" aria-label="닉네임 등록 닫기">×</button>
     </div>
     <div class="ranking-modal-body">
-      <div class="nickname-copy">현재까지의 <b>최고 스테이지·층 기록</b>을 그대로 랭킹에 등록합니다. 기존 게임 진행 상황은 초기화되지 않습니다.</div>
+      <div class="nickname-copy">Alpha에서 달성한 <b>최고 스테이지·층 기록</b>을 새 랭킹에 등록합니다. Beta 랭킹 기록은 이어지지 않습니다.</div>
       <input class="nickname-input" id="nicknameInput" type="text" maxlength="12" autocomplete="off" placeholder="닉네임 2~12자">
       <div class="nickname-rule">한글 · 영문 · 숫자만 사용할 수 있습니다. 같은 닉네임은 중복 등록할 수 없습니다.</div>
       <div class="nickname-error" id="nicknameError"></div>
@@ -542,14 +581,18 @@
 </div>
 
 <script>
-  const SAVE_GENERATION = 'beta0.16';
+  const SAVE_GENERATION = 'alpha0.1';
   const DEMO_MODE = false;
-  const SAVE_KEY = 'blacklee_save_beta016_v1';
-  const BACKUP_KEY = 'blacklee_save_beta016_backup_v1';
+  const SAVE_KEY = 'blacklee_save_alpha01_v1';
+  const BACKUP_KEY = 'blacklee_save_alpha01_backup_v1';
   const BACKUP_INTERVAL_MS = 60000;
   const SUPABASE_URL = 'https://ljhmoalojpaapykgmwgb.supabase.co';
   const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_LZ4B3UpN5Dqh-SVOHqVU8Q_iMWlzCdD';
-  const RANKING_TABLE = 'blacklee_rankings';
+  const CLOUD_CODE_KEY = 'blacklee_alpha01_sync_code_v1';
+  const CLOUD_REV_KEY = 'blacklee_alpha01_cloud_revision_v1';
+  const CLOUD_DIRTY_KEY = 'blacklee_alpha01_cloud_dirty_v1';
+  const CLOUD_CONFLICT_KEY = 'blacklee_alpha01_cloud_conflict_v1';
+  const CLOUD_PUSH_INTERVAL_MS = 15000;
   const TARGET_NORMAL_SRC = 'target.png';
   const TARGET_HURT_SRC = 'target_hurt.png';
   const TARGET_HURT_DURATION_MS = 1000;
@@ -557,7 +600,7 @@
 
   const defaultState = () => ({
     saveGeneration:SAVE_GENERATION,
-    money:0,totalEarned:0,tears:0,energy:0,autoFrenzy:false,buyMode:'1',balanceVersion:13,
+    money:0,totalEarned:0,tears:0,energy:0,autoFrenzy:false,buyMode:'1',balanceVersion:21,
     attack:1,critChance:.05,critDamage:1.5,autoAttack:0,
     clicks:0,kills:0,maxHit:0,rebirths:0,
     stage:1,floor:1,bestStage:1,bestFloor:1,
@@ -579,6 +622,11 @@
   let loadedFromBackup = false;
   let lastBackupWriteAt = 0;
   let state = loadGame() || defaultState();
+  // beta 0.417 치명타 확률 성장식 변경 마이그레이션:
+  // 저장된 과거 확률값 대신 강화 레벨을 기준으로 5% + Lv당 1%p로 재계산합니다.
+  state.upgrades=state.upgrades||{attack:0,critChance:0,critDamage:0,autoAttack:0};
+  state.blessings=state.blessings||{damage:0,gold:0,time:0,crit:0,auto:0,cooldown:0};
+  state.critChance=Math.min(.70,.05+Math.max(0,Math.floor(Number(state.upgrades.critChance)||0))*.01);
   let combatLocked = false;
   let lastTimerStamp = performance.now();
   let frenzyEndAt = 0;
@@ -603,6 +651,14 @@
   let hurtTargetTimer = null;
   let rankingSyncInFlight = false;
   let lastRankingSyncAt = 0;
+  let cloudSyncCode = localStorage.getItem(CLOUD_CODE_KEY)||'';
+  let cloudRevision = Math.max(0,Number(localStorage.getItem(CLOUD_REV_KEY))||0);
+  let cloudDirty = localStorage.getItem(CLOUD_DIRTY_KEY)==='1';
+  let cloudSyncInFlight = false;
+  let cloudLastSyncAt = 0;
+  let cloudPushTimer = null;
+  let cloudBootstrapped = false;
+  let suppressCloudDirty = false;
   let chainStacks = 0;
   let lastChainManualAt = 0;
 
@@ -626,6 +682,8 @@
     blessingResetInfo:document.getElementById('blessingResetInfo'), blessingResetBtn:document.getElementById('blessingResetBtn'),
     rebirthFlash:document.getElementById('rebirthFlash'), rebirthFlashSub:document.getElementById('rebirthFlashSub'), achievementToastStack:document.getElementById('achievementToastStack'),
     saveBtn:document.getElementById('saveBtn'), backupBtn:document.getElementById('backupBtn'), downloadSaveBtn:document.getElementById('downloadSaveBtn'), loadSaveFileBtn:document.getElementById('loadSaveFileBtn'), saveFileInput:document.getElementById('saveFileInput'), resetBtn:document.getElementById('resetBtn'), exportBtn:document.getElementById('exportBtn'), importBtn:document.getElementById('importBtn'), saveMsg:document.getElementById('saveMsg'), backupStatus:document.getElementById('backupStatus'),
+    cloudStatus:document.getElementById('cloudStatus'), cloudProfile:document.getElementById('cloudProfile'), cloudOpenBtn:document.getElementById('cloudOpenBtn'),
+    cloudOverlay:document.getElementById('cloudOverlay'), cloudCloseBtn:document.getElementById('cloudCloseBtn'), cloudModalStatus:document.getElementById('cloudModalStatus'), cloudCodeText:document.getElementById('cloudCodeText'), cloudCopyBtn:document.getElementById('cloudCopyBtn'), cloudRestoreBtn:document.getElementById('cloudRestoreBtn'), cloudCodeInput:document.getElementById('cloudCodeInput'), cloudError:document.getElementById('cloudError'), cloudConnectBtn:document.getElementById('cloudConnectBtn'), cloudCancelConnectBtn:document.getElementById('cloudCancelConnectBtn'),
     rankingStatus:document.getElementById('rankingStatus'), rankingProfile:document.getElementById('rankingProfile'), rankingOpenBtn:document.getElementById('rankingOpenBtn'),
     rankingOverlay:document.getElementById('rankingOverlay'), rankingCloseBtn:document.getElementById('rankingCloseBtn'), rankingRefreshBtn:document.getElementById('rankingRefreshBtn'), rankingMySummary:document.getElementById('rankingMySummary'), rankingList:document.getElementById('rankingList'),
     nicknameOverlay:document.getElementById('nicknameOverlay'), nicknameCloseBtn:document.getElementById('nicknameCloseBtn'), nicknameInput:document.getElementById('nicknameInput'), nicknameError:document.getElementById('nicknameError'), nicknameLaterBtn:document.getElementById('nicknameLaterBtn'), nicknameRegisterBtn:document.getElementById('nicknameRegisterBtn')
@@ -641,6 +699,20 @@
     '암 온더 넥수트 레베루 업!!!!!!!',
     '응~ 니보다 큼~',
     '으아~ 뿌딕~ 으아~ 뿌딕~'
+  ];
+  const blackHitDialogues = [
+    '흥. 가소롭구나.',
+    '너무 강한말은 쓰지 말게. 약해 보인다네.',
+    '언성을. 그렇게 언성을 높이지 마라.',
+    '그대들을 파멸 시킬 거대한 멸절의 촉수 앞에 무릎 꿇어라.',
+    '느려.',
+    '크큭.. 내 안의 흑염룡이 날뛰게 하는군..',
+    '고작 그 정도인가.',
+    '끝인가? 실망스럽군.',
+    '그 공격… 제법 간지럽군.',
+    '나를 여기까지 몰아붙이다니… 제법이군.',
+    '후후… 이제부터가 진짜다.',
+    '감히 나에게 손을 대다니.'
   ];
   let lastDialogueIndex = -1;
   let dialogueLocked = false;
@@ -660,9 +732,9 @@
 
   const upgradeDefs = [
     {key:'attack',title:'공격력 강화',desc:'레벨 구간에 따라 공격력 증가폭이 커집니다. Lv.1~10 +2, Lv.11~20 +5, 이후 10레벨마다 증가폭이 2배가 됩니다.',baseCost:10,growth:1.15,effectText:()=>`현재 기본 공격력: ${formatNum(state.attack)} · 다음 +${formatNum(normalUpgradeGain(state.upgrades.attack))}`,buy(){state.attack+=normalUpgradeGain(state.upgrades.attack);state.upgrades.attack+=1;}},
-    {key:'critChance',title:'치명타 확률 강화',desc:'기본 치명타 확률이 2%p 증가합니다. 치명타 확률은 강력한 만큼 천천히 성장합니다. (일반 강화 최대 75%)',baseCost:60,growth:1.55,maxLevel:35,effectText:()=>`현재 기본 확률: ${(state.critChance*100).toFixed(1)}%`,buy(){state.critChance=Math.min(.75,state.critChance+.02);state.upgrades.critChance+=1;}},
-    {key:'critDamage',title:'치명타 피해 강화',desc:'기본 치명타 피해 배율이 25%p 증가합니다.',baseCost:100,growth:1.60,effectText:()=>`현재 기본 배율: ${(state.critDamage*100).toFixed(0)}%`,buy(){state.critDamage+=.25;state.upgrades.critDamage+=1;}},
-    {key:'autoAttack',title:'자동 줘패기',desc:'레벨 구간에 따라 자동 공격 증가폭이 커집니다. Lv.1~10 +2/초, Lv.11~20 +5/초, 이후 10레벨마다 증가폭이 2배가 됩니다. 실제 타격은 0.5초마다 적용됩니다.',baseCost:75,growth:1.085,effectText:()=>`현재 기본 자동 공격: ${formatNum(state.autoAttack)} /초 · 다음 +${formatNum(normalUpgradeGain(state.upgrades.autoAttack))}/초`,buy(){state.autoAttack+=normalUpgradeGain(state.upgrades.autoAttack);state.upgrades.autoAttack+=1;}}
+    {key:'autoAttack',title:'자동 줘패기',desc:'레벨 구간에 따라 자동 공격 증가폭이 커집니다. Lv.1~10 +2/초, Lv.11~20 +5/초, 이후 10레벨마다 증가폭이 2배가 됩니다. 실제 타격은 0.5초마다 적용됩니다.',baseCost:75,growth:1.15,effectText:()=>`현재 기본 자동 공격: ${formatNum(state.autoAttack)} /초 · 다음 +${formatNum(normalUpgradeGain(state.upgrades.autoAttack))}/초`,buy(){state.autoAttack+=normalUpgradeGain(state.upgrades.autoAttack);state.upgrades.autoAttack+=1;}},
+    {key:'critChance',title:'치명타 확률 강화',desc:'기본 치명타 확률이 레벨당 1%p 증가합니다. 최대 Lv.65에서 기본 치명타 확률 70%에 도달합니다. 폭주 중에는 +30%p가 추가되어 최대 100%가 됩니다.',baseCost:60,growth:1.55,maxLevel:65,effectText:()=>`현재 기본 확률: ${(state.critChance*100).toFixed(1)}% · 폭주 시 ${Math.min(100,(state.critChance*100)+30).toFixed(1)}%`,buy(){state.critChance=Math.min(.70,state.critChance+.01);state.upgrades.critChance+=1;}},
+    {key:'critDamage',title:'치명타 피해 강화',desc:'기본 치명타 피해 배율이 25%p 증가합니다.',baseCost:100,growth:1.60,effectText:()=>`현재 기본 배율: ${(state.critDamage*100).toFixed(0)}%`,buy(){state.critDamage+=.25;state.upgrades.critDamage+=1;}}
   ];
 
   function switchGrowthTab(tab){
@@ -707,7 +779,7 @@
     {key:'damage',title:'현진의 엔젤링버스터',desc:'모든 피해량 증가. 10레벨마다 레벨당 증가폭이 +5%p씩 커지며, 50레벨 이후에는 증가폭이 고정됩니다.',baseCost:1,growth:1.45,effectText:()=>{const lv=state.blessings.damage||0;return `모든 피해 +${tieredBlessingBonus(lv,15)}% · 다음 강화 +${tieredNextGain(lv,15)}% · ${tieredNextMilestone(lv)}`;}},
     {key:'gold',title:'은아의 해변 김치축제',desc:'획득하는 일반 재화 증가. 10레벨마다 레벨당 증가폭이 +5%p씩 커지며, 50레벨 이후에는 증가폭이 고정됩니다.',baseCost:1,growth:1.45,effectText:()=>{const lv=state.blessings.gold||0;return `재화 획득 +${tieredBlessingBonus(lv,10)}% · 다음 강화 +${tieredNextGain(lv,10)}% · ${tieredNextMilestone(lv)}`;}},
     {key:'time',title:'상원의 멍멍 짖기',desc:'수동 공격 시 검은수영의 기운이 총 +2 충전될 확률이 레벨당 5%p 증가합니다. (최대 Lv.10)',baseCost:3,growth:1.8,maxLevel:10,effectText:()=>`수동 공격 시 기운 +2 확률 ${Math.min(50,(state.blessings.time||0)*5)}%`},
-    {key:'crit',title:'한이의 혈뇨 방출',desc:'레벨당 치명타 확률 +1%p, 치명타 피해 +10%p가 영구 적용됩니다.',baseCost:2,growth:1.8,effectText:()=>`치명타 확률 +${state.blessings.crit}%p / 피해 +${state.blessings.crit*10}%p`},
+    {key:'crit',title:'한이의 혈뇨 방출',desc:'치명타가 발생했을 때 슈퍼 치명타로 강화될 확률이 레벨당 2%p 증가합니다. 슈퍼 치명타는 해당 치명타 피해의 2배이며 최대 Lv.10입니다.',baseCost:2,growth:1.8,maxLevel:10,effectText:()=>`치명타 발생 시 슈퍼 치명타 확률 ${Math.min(20,(state.blessings.crit||0)*2)}% · 슈퍼 치명타 피해 ×2`},
     {key:'auto',title:'준서의 쌀먹머신 지원',desc:'자동 공격 피해량이 레벨당 50% 증가합니다.',baseCost:1,growth:1.5,effectText:()=>`자동 공격 피해 +${state.blessings.auto*50}%`},
     {key:'cooldown',title:'시간 가속의 축복',desc:'액티브 스킬의 쿨타임 회복 속도가 레벨당 3% 증가합니다. 실제 쿨타임 = 기본 쿨타임 ÷ (1 + 가속). 지속시간은 줄어들지 않습니다.',baseCost:2,growth:1.8,effectText:()=>`스킬 쿨타임 가속 +${(state.blessings.cooldown||0)*3}%`}
   ];
@@ -715,21 +787,21 @@
 
   const skillDefs = [
     {key:'strike',name:'강타',type:'active',unlock:10,maxLevel:10,shortcut:'Q',baseCooldown:15,
-      effectText:lv=>`수동공격 ${lv*30}회분의 피해를 즉시 가합니다. 폭주·연격·약점노출이 적용됩니다.`,
-      nextText:lv=>lv<10?`다음 Lv.${lv+1}: 수동공격 ${(lv+1)*30}회분 피해`:'최대 레벨'},
-    {key:'luckySeven',name:'럭키세븐',type:'passive',unlock:15,maxLevel:10,
+      effectText:lv=>`수동공격 ${lv*20}회분의 피해를 즉시 가합니다. 치명타·약점노출은 적용되며 폭주·연격 효과는 적용되지 않습니다.`,
+      nextText:lv=>lv<10?`다음 Lv.${lv+1}: 수동공격 ${(lv+1)*20}회분 피해`:'최대 레벨'},
+    {key:'luckySeven',name:'럭키세븐',type:'passive',unlock:20,maxLevel:10,
       effectText:lv=>`수동공격 시 ${lv*5}% 확률로 추가 1타를 가하고 기운 +1을 추가 획득합니다.`,
       nextText:lv=>lv<10?`다음 Lv.${lv+1}: 발동 확률 ${(lv+1)*5}%`:'최대 레벨'},
-    {key:'energyBurst',name:'기운폭발',type:'active',unlock:20,maxLevel:5,shortcut:'W',baseCooldown:60,
+    {key:'energyBurst',name:'기운폭발',type:'active',unlock:35,maxLevel:5,shortcut:'W',baseCooldown:60,
       effectText:lv=>`검은수영의 기운을 즉시 +${40+lv*10} 충전합니다. 폭주 중에는 사용할 수 없습니다.`,
       nextText:lv=>lv<5?`다음 Lv.${lv+1}: 기운 +${40+(lv+1)*10}`:'최대 레벨'},
-    {key:'overcharge',name:'과잉충전',type:'passive',unlock:25,maxLevel:10,
+    {key:'overcharge',name:'과잉충전',type:'passive',unlock:45,maxLevel:10,
       effectText:lv=>`수동 계열 치명타 발생 시 ${lv*5}% 확률로 기운 +1을 추가 획득합니다.`,
       nextText:lv=>lv<10?`다음 Lv.${lv+1}: 발동 확률 ${(lv+1)*5}%`:'최대 레벨'},
-    {key:'weakness',name:'약점노출',type:'active',unlock:30,maxLevel:10,shortcut:'E',baseCooldown:30,duration:10,
+    {key:'weakness',name:'약점노출',type:'active',unlock:80,maxLevel:10,shortcut:'E',baseCooldown:30,duration:10,
       effectText:lv=>`10초 동안 적이 받는 모든 피해 +${lv*30}%입니다. 효과 종료 후 쿨타임이 시작됩니다.`,
       nextText:lv=>lv<10?`다음 Lv.${lv+1}: 받는 피해 +${(lv+1)*30}%`:'최대 레벨'},
-    {key:'combo',name:'연격',type:'passive',unlock:40,maxLevel:5,
+    {key:'combo',name:'연격',type:'passive',unlock:60,maxLevel:5,
       effectText:lv=>`1.5초 안에 수동공격을 이어가면 최대 ${lv*10}스택. 1스택당 수동공격 피해 +2%.`,
       nextText:lv=>lv<5?`다음 Lv.${lv+1}: 최대 ${(lv+1)*10}스택`:'최대 레벨'}
   ];
@@ -849,26 +921,28 @@
   }
   function calculateDamageInstance(baseDamage,{manualLike=false,auto=false,frenzy=false,comboMult=1}={}){
     let modifiedBase=baseDamage*damageMultiplier();
-    if(auto)modifiedBase*=autoMultiplier();
+    if(auto)modifiedBase*=autoMultiplier()*(isBlackBoss()?0.40:1);
     if(manualLike)modifiedBase*=achievementMultiplier('manualDamage')*comboMult;
     if(isBlackBoss())modifiedBase*=achievementMultiplier('bossDamage');
     if(frenzy)modifiedBase*=frenzyDamageMultiplier(frenzyCombo);
     const critChance=Math.min(1,effectiveCritChance()+(frenzy?.30:0));
     const isCrit=Math.random()<critChance;
+    const isSuperCrit=isCrit&&Math.random()<superCritChance();
     const critMult=effectiveCritDamage()*(frenzy?1.5:1);
-    let damage=modifiedBase*(isCrit?critMult:1);
+    let damage=modifiedBase*(isCrit?critMult:1)*(isSuperCrit?2:1);
     damage*=weaknessDamageMultiplier();damage*=playerTraitDamageMultiplier();damage*=bossIncomingDamageMultiplier();damage=Math.max(1,Math.round(damage));
     const manualGoldMult=frenzy&&manualLike?5:1;
     const goldGain=Math.max(1,Math.round(damage*goldMultiplier()*manualGoldMult));
-    return {damage,isCrit,goldGain};
+    return {damage,isCrit,isSuperCrit,goldGain};
   }
   function activateStrike(){
     const now=Date.now();if(!canUseActiveSkill('strike',now))return false;
-    const lv=skillLevel('strike'),hits=lv*30,frenzy=isFrenzyActive();
-    const result=calculateDamageInstance(state.attack*hits,{manualLike:true,frenzy,comboMult:comboDamageMultiplier()});
+    const lv=skillLevel('strike'),hits=lv*20,frenzy=isFrenzyActive();
+    // 강타는 별도 액티브 한 방으로 취급: 폭주/연격 배율 및 폭주 치명 보너스는 받지 않음.
+    const result=calculateDamageInstance(state.attack*hits,{manualLike:true,frenzy:false,comboMult:1});
     applyDamageResult(result);setSkillCooldown('strike',15,0,now);triggerHurtTargetSprite();showHitDialogue();
     const rect=el.hitZone.getBoundingClientRect(),x=rect.width/2,y=rect.height/2;
-    createHitEffect(x,y,result.isCrit,frenzy);triggerStrikeSkillEffect(hits,result.isCrit,frenzy);showFloatingText(`강타! ${hits}회분 · ${result.isCrit?'치명타! ':''}-${formatNum(result.damage)}`,x,y,'#dfb7ff',25);
+    createHitEffect(x,y,result.isCrit,frenzy);triggerStrikeSkillEffect(hits,result.isCrit,frenzy);showFloatingText(`강타! ${hits}회분 · ${result.isSuperCrit?'슈퍼 치명타! ':result.isCrit?'치명타! ':''}-${formatNum(result.damage)}`,x,y,'#dfb7ff',25);
     if(state.enemyHp<=0){render();setTimeout(defeatEnemy,130);}else render();
     saveGame(false);return true;
   }
@@ -899,7 +973,7 @@
         let effect=unlocked?def.effectText(lv):`최고 도달 Stage ${def.unlock}에서 Lv.1 자동 해금`;
         if(unlocked&&def.baseCooldown)effect+=` · 현재 쿨타임 ${effectiveCd.toFixed(1)}초${def.duration?' (효과 종료 후 시작)':''}`;
         const next=unlocked?def.nextText(lv):'해금 즉시 Lv.1로 사용할 수 있습니다.';
-        card.innerHTML=`<div class="skill-card-top"><div class="skill-card-title-wrap"><div class="skill-card-title">${def.name}</div><div class="skill-card-badges"><span class="skill-type-badge ${def.type}">${def.type==='active'?'액티브':'패시브'}</span><span class="skill-unlock-badge">Stage ${def.unlock}</span>${def.shortcut?`<span class="skill-unlock-badge">${def.shortcut}</span>`:''}</div></div><div class="skill-lv">${unlocked?`LV ${lv}${maxed?' · MAX':''}`:'LOCKED'}</div></div><div class="skill-card-effect">${effect}</div><div class="skill-card-next">${next}</div><div class="skill-card-bottom"><div class="skill-cost">${unlocked?(maxed?'최대 레벨':'레벨업 비용 SP 1'):`Stage ${def.unlock} 필요`}</div><button class="skill-level-btn" ${( !unlocked||maxed||availableSkillPoints()<1)?'disabled':''}>${!unlocked?'잠김':maxed?'MAX':'1 SP 강화'}</button></div>`;
+        card.innerHTML=`<div class="skill-card-top"><div class="skill-card-title-wrap"><div class="skill-card-title">${def.name}</div><div class="skill-card-badges"><span class="skill-type-badge ${def.type}">${def.type==='active'?'액티브':'패시브'}</span><span class="skill-unlock-badge">Stage ${def.unlock}</span><span class="skill-unlock-badge">MAX Lv.${def.maxLevel}</span>${def.shortcut?`<span class="skill-unlock-badge">${def.shortcut}</span>`:''}</div></div><div class="skill-lv">${unlocked?`LV ${lv} / ${def.maxLevel}${maxed?' · MAX':''}`:`LOCKED`}</div></div><div class="skill-card-effect">${effect}</div><div class="skill-card-next">${next}</div><div class="skill-card-bottom"><div class="skill-cost">${unlocked?(maxed?'최대 레벨':'레벨업 비용 SP 1'):`Stage ${def.unlock} 필요`}</div><button class="skill-level-btn" ${( !unlocked||maxed||availableSkillPoints()<1)?'disabled':''}>${!unlocked?'잠김':maxed?'MAX':'1 SP 강화'}</button></div>`;
         card.querySelector('.skill-level-btn').addEventListener('click',()=>levelUpSkill(def.key));el.skills.appendChild(card);
       });
     }
@@ -966,8 +1040,8 @@
     {id:'blessing_10',name:'축복받은 자 I',conditionText:'용사의 축복 총합 Lv.10 달성',reward:{type:'mult',stat:'allDamage',value:1.03},done:()=>totalBlessingLevels()>=10,progress:()=>`${Math.min(totalBlessingLevels(),10)} / 10`},
     {id:'blessing_25',name:'축복받은 자 II',conditionText:'용사의 축복 총합 Lv.25 달성',reward:{type:'mult',stat:'allDamage',value:1.05},done:()=>totalBlessingLevels()>=25,progress:()=>`${Math.min(totalBlessingLevels(),25)} / 25`},
     {id:'blessing_50',name:'축복받은 자 III',conditionText:'용사의 축복 총합 Lv.50 달성',reward:{type:'mult',stat:'allDamage',value:1.08},done:()=>totalBlessingLevels()>=50,progress:()=>`${Math.min(totalBlessingLevels(),50)} / 50`},
-    {id:'money_1b',name:'자본주의의 승리',conditionText:'누적 일반 재화 1B 획득',reward:{type:'mult',stat:'gold',value:1.05},done:()=>state.totalEarned>=1e9,progress:()=>`${formatNum(Math.min(state.totalEarned,1e9))} / 1B`},
-    {id:'money_1t',name:'재벌 수영',conditionText:'누적 일반 재화 1T 획득',reward:{type:'mult',stat:'gold',value:1.08},done:()=>state.totalEarned>=1e12,progress:()=>`${formatNum(Math.min(state.totalEarned,1e12))} / 1T`},
+    {id:'money_1b',name:'자본주의의 승리',conditionText:'누적 일반 재화 1C 획득',reward:{type:'mult',stat:'gold',value:1.05},done:()=>state.totalEarned>=1e9,progress:()=>`${formatNum(Math.min(state.totalEarned,1e9))} / 1B`},
+    {id:'money_1t',name:'재벌 수영',conditionText:'누적 일반 재화 1D 획득',reward:{type:'mult',stat:'gold',value:1.08},done:()=>state.totalEarned>=1e12,progress:()=>`${formatNum(Math.min(state.totalEarned,1e12))} / 1T`},
     {id:'auto_50',name:'쌀먹 전문가',conditionText:'자동 줘패기 Lv.50 달성',reward:{type:'mult',stat:'autoDamage',value:1.10},done:()=>state.upgrades.autoAttack>=50,progress:()=>`${Math.min(state.upgrades.autoAttack,50)} / 50`},
     {id:'click_100k',name:'손가락 파괴자',conditionText:'수동 공격 100,000회',reward:{type:'mult',stat:'manualDamage',value:1.10},done:()=>state.clicks>=100000,progress:()=>`${formatNum(Math.min(state.clicks,100000))} / 100K`},
     {id:'sins_all',name:'칠죄종 정복자',conditionText:'7대 죄악 속성수영을 각각 1회 이상 처치',reward:{type:'mult',stat:'allDamage',value:1.10},done:()=>BOSS_TRAIT_KEYS.every(k=>(state.traitKills[k]||0)>=1),progress:()=>`${BOSS_TRAIT_KEYS.filter(k=>(state.traitKills[k]||0)>=1).length} / 7`},
@@ -1126,8 +1200,9 @@
   function damageMultiplier(){ return (1 + tieredBlessingBonus(state.blessings.damage,15)/100)*achievementMultiplier('allDamage'); }
   function goldMultiplier(){ return (1 + tieredBlessingBonus(state.blessings.gold,10)/100)*achievementMultiplier('gold'); }
   function autoMultiplier(){ return (1 + state.blessings.auto*.50)*achievementMultiplier('autoDamage'); }
-  function effectiveCritChance(){ return Math.min(.95,state.critChance + state.blessings.crit*.01); }
-  function effectiveCritDamage(){ return state.critDamage + state.blessings.crit*.10; }
+  function effectiveCritChance(){ return Math.min(.70,state.critChance); }
+  function effectiveCritDamage(){ return state.critDamage; }
+  function superCritChance(){ return Math.min(.20,Math.max(0,(state.blessings?.crit||0)*.02)); }
   function dogEnergyChance(){ return Math.min(.50,(state.blessings.time||0)*.05); }
   function totalBlessingLevels(){
     return Object.values(state.blessings||{}).reduce((sum,v)=>sum+Math.max(0,Math.floor(Number(v)||0)),0);
@@ -1202,7 +1277,10 @@
       el.frenzyStatus.textContent=energy>=100?(state.autoFrenzy?'기운이 가득 찼습니다. 자동 폭주를 준비합니다.':'기운이 가득 찼습니다. 원하는 순간에 발동하세요.'):(state.autoFrenzy?'자동 폭주 ON':'');
     }
   }
-  function floorLimit(floor=state.floor){ return floor===5 ? 60 : 0; }
+  function floorLimit(floor=state.floor,stage=state.stage){
+    if(floor!==5)return 0;
+    return isBlackBoss(stage,floor)?60:30;
+  }
   function floorIndex(stage=state.stage,floor=state.floor){ return (stage-1)*5+(floor-1); }
   function blackBossTearReward(stage=state.stage){
     return stage>=5 && stage%5===0 ? Math.floor(stage/5) : 0;
@@ -1212,26 +1290,59 @@
     const k=Math.max(0,Math.floor(stage/5)-2);
     return 1 + (k*(k+1))/2;
   }
-  function stageBaseHp(stage){
+  function rebirthReturnStage(stage=state.stage){
+    return Math.max(1,Math.floor((Number(stage)||1)/10));
+  }
+  // beta 0.41 성장 목표곡선
+  // 실제 플레이어 능력치에 실시간 연동되는 값이 아니라, 스테이지별 권장 성장치를 미리 정한 곡선입니다.
+  function recommendedAutoHit(stage){
     stage=Math.max(1,Math.floor(Number(stage)||1));
-    let hp=50;
-    const early=Math.min(Math.max(stage-1,0),19);     // Stage 1~20: +25% / stage
-    const mid=Math.min(Math.max(stage-20,0),30);      // Stage 21~50: +20% / stage
-    const late=Math.min(Math.max(stage-50,0),50);     // Stage 51~100: +10% / stage
-    const end=Math.max(stage-100,0);                  // Stage 101+: +15% / stage
-    hp*=Math.pow(1.25,early);
-    hp*=Math.pow(1.20,mid);
-    hp*=Math.pow(1.10,late);
-    hp*=Math.pow(1.15,end);
-    return hp;
+    if(stage<=19)return 2.2*Math.pow(1.33,stage-1);
+    if(stage<=40)return 2.2*Math.pow(1.33,18)*Math.pow(1.21,stage-19);
+    if(stage<=60)return 2.2*Math.pow(1.33,18)*Math.pow(1.21,21)*Math.pow(1.17,stage-40);
+    if(stage<=80)return 2.2*Math.pow(1.33,18)*Math.pow(1.21,21)*Math.pow(1.17,20)*Math.pow(1.145,stage-60);
+    return 2.2*Math.pow(1.33,18)*Math.pow(1.21,21)*Math.pow(1.17,20)*Math.pow(1.145,20)*Math.pow(1.13,stage-80);
+  }
+
+  function normalFloorTargetHits(stage,floor){
+    return [0,8.0,8.7,9.3,10.0][Math.min(4,Math.max(1,floor))];
+  }
+
+  function floor5TargetHits(stage){
+    stage=Math.max(1,Math.floor(Number(stage)||1));
+    if(stage<10)return 42;
+    if(stage<20)return 50+(stage-10)*0.8;
+    if(stage<=40)return 70+(stage-20)*0.45;
+    if(stage<=60)return 79+(stage-40)*0.55;
+    if(stage<=80)return 90+(stage-60)*0.65;
+    return 103+(stage-80)*0.85;
+  }
+
+  function blackBossTargetHits(stage){
+    stage=Math.max(5,Math.floor(Number(stage)||5));
+    if(stage<=20)return 150+(stage-5)*3.0;
+    if(stage<=40)return 195+(stage-20)*4.0;
+    if(stage<=60)return 275+(stage-40)*5.0;
+    if(stage<=80)return 375+(stage-60)*6.0;
+    return 495+(stage-80)*8.0;
   }
 
   function calcEnemyStats(stage=state.stage,floor=state.floor){
     stage=Math.max(1,Math.floor(Number(stage)||1));
     floor=Math.min(5,Math.max(1,Math.floor(Number(floor)||1)));
     const black=isBlackBoss(stage,floor);
-    const floorMult=black?12:[0,1.00,1.05,1.10,1.15,6.00][floor];
-    let hp=Math.max(1,Math.floor(stageBaseHp(stage)*floorMult));
+    const recHit=recommendedAutoHit(stage);
+    const targetHits=black?blackBossTargetHits(stage):(floor===5?floor5TargetHits(stage):normalFloorTargetHits(stage,floor));
+    let hp=Math.max(1,Math.floor(recHit*targetHits));
+    if(black){
+      let blackHpMult=1;
+      if(stage>=80)blackHpMult=2.0;
+      else if(stage>=40)blackHpMult=1.75;
+      else if(stage>=20)blackHpMult=1.5;
+      hp=Math.floor(hp*blackHpMult);
+    }else if(floor===5){
+      hp=Math.floor(hp*1.5);
+    }
 
     const baseBossReward=Math.max(25,Math.floor(hp*.42));
     let reward=baseBossReward;
@@ -1244,7 +1355,7 @@
     const golden=!black&&state.isGolden===true;
     if(golden){
       hp=Math.floor(hp*2);
-      reward=Math.floor(reward*50);
+      reward=Math.floor(reward*20);
     }
     return {hp,reward};
   }
@@ -1270,7 +1381,7 @@
   }
 
   function announceGolden(){
-    if(state.isGolden===true&&!isBlackBoss())showNotice('황금수영 등장!','체력 2배 · 처치 보상 50배',1350);
+    if(state.isGolden===true&&!isBlackBoss())showNotice('황금수영 등장!','체력 2배 · 처치 보상 20배',1350);
   }
 
   function announceBossTrait(){
@@ -1342,14 +1453,41 @@
     updateBossTraitUI();
   }
 
+  function numberUnitSuffix(index){
+    // 0=A, 1=B ... 25=Z, 26=AA, 27=AB ...
+    index=Math.max(0,Math.floor(index));
+    let out='';
+    do{
+      out=String.fromCharCode(65+(index%26))+out;
+      index=Math.floor(index/26)-1;
+    }while(index>=0);
+    return out;
+  }
+  function trimNumberText(v){
+    return Number(v.toFixed(2)).toLocaleString('en-US',{maximumFractionDigits:2,useGrouping:false});
+  }
   function formatNum(n){
-    if(!Number.isFinite(n)) return '0';
-    if(n>=1e15)return(n/1e15).toFixed(2).replace(/\.00$/,'')+'Q';
-    if(n>=1e12)return(n/1e12).toFixed(2).replace(/\.00$/,'')+'T';
-    if(n>=1e9)return(n/1e9).toFixed(2).replace(/\.00$/,'')+'B';
-    if(n>=1e6)return(n/1e6).toFixed(2).replace(/\.00$/,'')+'M';
-    if(n>=1e3)return(n/1e3).toFixed(2).replace(/\.00$/,'')+'K';
-    return Number(n.toFixed?n.toFixed(2):n).toLocaleString('ko-KR',{maximumFractionDigits:2});
+    n=Number(n);
+    if(Number.isNaN(n))return '0';
+    if(!Number.isFinite(n))return n>0?'∞':n<0?'-∞':'0';
+
+    const sign=n<0?'-':'';
+    let value=Math.abs(n);
+    if(value<1000){
+      return sign+Number(value.toFixed(2)).toLocaleString('ko-KR',{maximumFractionDigits:2});
+    }
+
+    let group=Math.floor(Math.log(value)/Math.log(1000));
+    // JS Number 범위 안에서는 약 102단계까지 표현 가능
+    let scaled=value/Math.pow(1000,group);
+
+    // 999.995A처럼 반올림 결과가 1000이 되면 다음 단위로 올림
+    if(Number(scaled.toFixed(2))>=1000){
+      group+=1;
+      scaled/=1000;
+    }
+
+    return sign+trimNumberText(scaled)+numberUnitSuffix(group-1);
   }
   function getCostAtLevel(def,level){ return Math.floor(def.baseCost*Math.pow(def.growth,level)); }
   function getBlessingCostAtLevel(def,level){ return Math.ceil(def.baseCost*Math.pow(def.growth,level)); }
@@ -1417,10 +1555,22 @@
     saveGame(false);
     showNotice('용사의 축복 초기화',`검은수영의 눈물 ${formatNum(refund)}개를 회수했습니다.`,1500);
   }
+  const OFFLINE_EFFICIENCY=.50;
+  const OFFLINE_MAX_SECONDS=12*3600;
+
+  function expectedCritMultiplier(){
+    const p=effectiveCritChance();
+    const superP=superCritChance();
+    return (1-p)+p*effectiveCritDamage()*(1+superP);
+  }
+  function expectedAutoDps(stage=state.stage,floor=state.floor){
+    if(state.autoAttack<=0)return 0;
+    let dps=state.autoAttack*autoMultiplier()*damageMultiplier()*expectedCritMultiplier();
+    if(isBlackBoss(stage,floor))dps*=.40*achievementMultiplier('bossDamage');
+    return Math.max(0,dps);
+  }
   function expectedGps(){
-    const base=state.autoAttack*autoMultiplier()*damageMultiplier();
-    const expectedDamage=base*(1+effectiveCritChance()*(effectiveCritDamage()-1));
-    return expectedDamage*goldMultiplier();
+    return expectedAutoDps(1,1)*goldMultiplier();
   }
 
   function formatOfflineDuration(seconds){
@@ -1432,19 +1582,237 @@
     if(m>0)return `${m}분 ${sec}초`;
     return `${sec}초`;
   }
+
+  function offlineBaseEnemyStats(stage,floor){
+    stage=Math.max(1,Math.floor(Number(stage)||1));
+    floor=Math.min(5,Math.max(1,Math.floor(Number(floor)||1)));
+    const black=isBlackBoss(stage,floor);
+    const recHit=recommendedAutoHit(stage);
+    const targetHits=black?blackBossTargetHits(stage):(floor===5?floor5TargetHits(stage):normalFloorTargetHits(stage,floor));
+    let hp=Math.max(1,Math.floor(recHit*targetHits));
+    if(black){
+      let blackHpMult=1;
+      if(stage>=80)blackHpMult=2.0;
+      else if(stage>=40)blackHpMult=1.75;
+      else if(stage>=20)blackHpMult=1.5;
+      hp=Math.floor(hp*blackHpMult);
+    }else if(floor===5){
+      hp=Math.floor(hp*1.5);
+    }
+    const reward=Math.max(25,Math.floor(hp*.42));
+    return {hp,reward,black};
+  }
+
+  function offlineDamageCurrency(damage){
+    return Math.max(0,damage)*goldMultiplier()*OFFLINE_EFFICIENCY;
+  }
+
+  function offlineClearCurrency(stats,damageDealt=stats.hp){
+    const gold=goldMultiplier();
+    // 일반 적은 황금수영을 직접 추첨하지 않고 5% 확률의 평균 기대 보상을 반영합니다.
+    // 평균 추가분: 황금 HP +100%와 처치보상 ×20을 확률 5%로 기대값 처리.
+    let gross=Math.max(0,damageDealt)*gold+stats.reward*gold;
+    if(!stats.black)gross+=(stats.hp+stats.reward*19)*gold*.05;
+    return Math.max(0,gross*OFFLINE_EFFICIENCY);
+  }
+
+  function offlineSetPosition(stage,floor,mode='challenge',hpRemaining=null,timeRemaining=null,{bossRetry=false,retryReady=false}={}){
+    state.stage=Math.max(1,Math.floor(stage));
+    state.floor=Math.min(5,Math.max(1,Math.floor(floor)));
+    state.mode=mode;
+    state.isGolden=false;
+    state.bossTrait=bossRetry?'normal':(isBlackBoss(state.stage,state.floor)?'normal':null);
+    state.bossRetryReady=!!bossRetry;
+    state.retryFloor5Ready=!!retryReady;
+    resetBossTraitBattleState();
+
+    const stats=offlineBaseEnemyStats(state.stage,state.floor);
+    state.enemyMaxHp=stats.hp;
+    state.enemyReward=stats.reward;
+    state.enemyHp=hpRemaining==null?stats.hp:Math.min(stats.hp,Math.max(1,hpRemaining));
+    state.timeRemaining=state.floor===5&&mode==='challenge'
+      ?Math.max(0,Math.min(floorLimit(state.floor,state.stage),Number(timeRemaining)||floorLimit(state.floor,state.stage)))
+      :0;
+  }
+
+  function offlineFarmStage4(stage,seconds,bossRetry=false){
+    seconds=Math.max(0,seconds);
+    const stats=offlineBaseEnemyStats(stage,4);
+    const dps=expectedAutoDps(stage,4);
+    if(seconds<=0||dps<=0){
+      offlineSetPosition(stage,4,'farm',stats.hp,0,{bossRetry,retryReady:true});
+      return {reward:0,secondsUsed:0,kills:0};
+    }
+    const killTime=stats.hp/dps;
+    if(!Number.isFinite(killTime)||killTime<=0){
+      offlineSetPosition(stage,4,'farm',stats.hp,0,{bossRetry,retryReady:true});
+      return {reward:0,secondsUsed:0,kills:0};
+    }
+
+    const kills=Math.max(0,Math.floor(seconds/killTime));
+    let reward=kills*offlineClearCurrency(stats,stats.hp);
+    const remainder=Math.max(0,seconds-kills*killTime);
+    const partialDamage=Math.min(stats.hp,dps*remainder);
+    reward+=offlineDamageCurrency(partialDamage);
+    const hpRemaining=Math.max(1,stats.hp-partialDamage);
+    offlineSetPosition(stage,4,'farm',hpRemaining,0,{bossRetry,retryReady:true});
+    return {reward,secondsUsed:seconds,kills};
+  }
+
+  function offlineSummaryText(result){
+    if(!result)return '';
+    const money=`+${formatNum(result.reward||0)}원`;
+    if(result.blocked){
+      return `${formatOfflineDuration(result.elapsed)} · ${result.blocked} → 4층 파밍 · ${money}`;
+    }
+    if(result.climbedFloors>0){
+      return `${formatOfflineDuration(result.elapsed)} · ${result.startStage}-${result.startFloor}F → ${result.endStage}-${result.endFloor}F · ${money}`;
+    }
+    return `${formatOfflineDuration(result.elapsed)} · ${result.endStage}-${result.endFloor}F 유지 · ${money}`;
+  }
+
   function applyOfflineReward(show=true){
     const now=Date.now();
     const last=Number(state.lastActiveAt)||now;
-    const elapsed=Math.min(24*3600,Math.max(0,(now-last)/1000));
+    const elapsed=Math.min(OFFLINE_MAX_SECONDS,Math.max(0,(now-last)/1000));
     state.lastActiveAt=now;
-    if(elapsed<1||state.autoAttack<=0)return {elapsed,reward:0};
-    const reward=Math.max(0,Math.floor(expectedGps()*elapsed));
+
+    const startStage=state.stage,startFloor=state.floor;
+    const baseResult={
+      elapsed,reward:0,startStage,startFloor,endStage:state.stage,endFloor:state.floor,
+      climbedFloors:0,blocked:''
+    };
+    if(elapsed<1||state.autoAttack<=0)return baseResult;
+
+    let remaining=elapsed;
+    let reward=0;
+    let stage=Math.max(1,Math.floor(Number(state.stage)||1));
+    let floor=Math.min(5,Math.max(1,Math.floor(Number(state.floor)||1)));
+    const bestIndex=floorIndex(Math.max(1,state.bestStage),Math.min(5,Math.max(1,state.bestFloor)));
+    let currentIndex=floorIndex(stage,floor);
+    let firstFloor=true;
+    let climbedFloors=0;
+    let blocked='';
+
+    // 이미 5층 실패 후 4층 성장 모드라면 자동 업그레이드는 하지 않으므로
+    // 같은 스펙으로 재도전하지 않고 남은 오프라인 시간을 4층 파밍에 사용합니다.
+    if(state.mode==='farm'&&floor===4&&state.retryFloor5Ready){
+      const farm=offlineFarmStage4(stage,remaining,!!state.bossRetryReady);
+      reward+=farm.reward;remaining=0;
+    }else{
+      let guard=100000;
+      while(remaining>0.0001&&guard-->0){
+        currentIndex=floorIndex(stage,floor);
+
+        // 오프라인에서는 기존 최고 기록을 절대 넘어가지 않습니다.
+        if(currentIndex>=bestIndex){
+          reward+=expectedGps()*remaining*OFFLINE_EFFICIENCY;
+          remaining=0;
+          offlineSetPosition(stage,floor,'challenge',null,floor===5?floorLimit(floor,stage):0);
+          break;
+        }
+
+        const stats=offlineBaseEnemyStats(stage,floor);
+        const dps=expectedAutoDps(stage,floor);
+        if(dps<=0){
+          offlineSetPosition(stage,floor,'challenge',stats.hp,floor===5?floorLimit(floor,stage):0);
+          break;
+        }
+
+        let hpRemaining=stats.hp;
+        if(firstFloor&&Number(state.enemyMaxHp)>0&&Number(state.enemyHp)>0){
+          const ratio=Math.min(1,Math.max(0,Number(state.enemyHp)/Number(state.enemyMaxHp)));
+          hpRemaining=Math.max(1,stats.hp*ratio);
+        }
+
+        if(floor===5){
+          const fullLimit=floorLimit(floor,stage);
+          let challengeRemaining=fullLimit;
+          if(firstFloor&&state.mode==='challenge'&&Number(state.timeRemaining)>0){
+            challengeRemaining=Math.min(fullLimit,Number(state.timeRemaining));
+          }
+          const killTime=hpRemaining/dps;
+
+          if(killTime<=challengeRemaining){
+            if(remaining>=killTime){
+              reward+=offlineClearCurrency(stats,hpRemaining);
+              remaining-=killTime;
+              climbedFloors++;
+              if(floor<5)floor++;
+              else{stage++;floor=1;}
+              firstFloor=false;
+              continue;
+            }
+
+            const damage=Math.min(hpRemaining,dps*remaining);
+            reward+=offlineDamageCurrency(damage);
+            hpRemaining=Math.max(1,hpRemaining-damage);
+            challengeRemaining=Math.max(0,challengeRemaining-remaining);
+            offlineSetPosition(stage,floor,'challenge',hpRemaining,challengeRemaining);
+            remaining=0;
+            break;
+          }
+
+          // 제한시간 내 자동공격만으로 잡을 수 없는 5층.
+          if(remaining<challengeRemaining){
+            const damage=Math.min(hpRemaining,dps*remaining);
+            reward+=offlineDamageCurrency(damage);
+            hpRemaining=Math.max(1,hpRemaining-damage);
+            challengeRemaining=Math.max(0,challengeRemaining-remaining);
+            offlineSetPosition(stage,floor,'challenge',hpRemaining,challengeRemaining);
+            remaining=0;
+            break;
+          }
+
+          const damage=Math.min(hpRemaining,dps*challengeRemaining);
+          reward+=offlineDamageCurrency(damage);
+          remaining-=challengeRemaining;
+          const black=stats.black;
+          blocked=`${stage}스테이지 ${black?'검은수영':'5층'} 자동전투 실패`;
+          const farm=offlineFarmStage4(stage,remaining,black);
+          reward+=farm.reward;
+          remaining=0;
+          break;
+        }
+
+        const killTime=hpRemaining/dps;
+        if(remaining>=killTime){
+          reward+=offlineClearCurrency(stats,hpRemaining);
+          remaining-=killTime;
+          climbedFloors++;
+          floor++;
+          firstFloor=false;
+          continue;
+        }
+
+        const damage=Math.min(hpRemaining,dps*remaining);
+        reward+=offlineDamageCurrency(damage);
+        hpRemaining=Math.max(1,hpRemaining-damage);
+        offlineSetPosition(stage,floor,'challenge',hpRemaining,0);
+        remaining=0;
+        break;
+      }
+
+      // 루프가 새 위치 변수에서 종료된 경우 상태에 반영
+      if(remaining<=0.0001&&state.stage===startStage&&state.floor===startFloor&&climbedFloors>0&&!blocked){
+        offlineSetPosition(stage,floor,'challenge',null,floor===5?floorLimit(floor,stage):0);
+      }
+    }
+
+    reward=Math.max(0,Math.floor(reward));
     if(reward>0){
       state.money+=reward;
       state.totalEarned+=reward;
-      if(show)showNotice('오프라인 보상!',`${formatOfflineDuration(elapsed)} · 자동 줘패기 기대수입 100% · +${formatNum(reward)}원`,3600);
     }
-    return {elapsed,reward};
+
+    const result={
+      elapsed,reward,startStage,startFloor,endStage:state.stage,endFloor:state.floor,
+      climbedFloors,blocked
+    };
+    if(show&&(reward>0||climbedFloors>0||blocked)){
+      showNotice(climbedFloors>0?'오프라인 등반!':'오프라인 보상!',offlineSummaryText(result),4200);
+    }
+    return result;
   }
 
   function renderFloorProgress(){
@@ -1538,10 +1906,10 @@
       if(timedFloor){
         el.timerValue.textContent=`${Math.max(0,state.timeRemaining).toFixed(1)}초`;el.timerValue.classList.toggle('danger',state.timeRemaining<=10);
         el.modeBadge.textContent=black?(attribute?`${traitDef.label} 보스`:'검은수영 도전'):(golden?'황금수영 도전':'5층 도전');
-        el.hintText.textContent=black?(attribute?'속성 검은수영을 처치하면 해당 스테이지의 검은수영의 눈물을 2배 획득합니다.':'제한시간 안에 검은수영을 처치하면 검은수영의 눈물을 얻습니다.'):(golden?'황금수영: 체력 2배 · 처치 보상 50배':'제한시간 안에 처치하면 다음 스테이지로 넘어갑니다.');
+        el.hintText.textContent=black?(attribute?'속성 검은수영을 처치하면 해당 스테이지의 검은수영의 눈물을 2배 획득합니다.':'제한시간 안에 검은수영을 처치하면 검은수영의 눈물을 얻습니다.'):(golden?'황금수영: 체력 2배 · 처치 보상 20배':'제한시간 안에 처치하면 다음 스테이지로 넘어갑니다.');
       }else{
         el.timerValue.textContent='∞';el.timerValue.classList.remove('danger');el.modeBadge.textContent=golden?'황금수영 출현':'진행 중';
-        el.hintText.textContent=golden?'황금수영: 체력 2배 · 처치 보상 50배':'시간 제한 없이 처치하면 다음 층으로 올라갑니다.';
+        el.hintText.textContent=golden?'황금수영: 체력 2배 · 처치 보상 20배':'시간 제한 없이 처치하면 다음 층으로 올라갑니다.';
       }
       el.modeBadge.classList.remove('farm');el.retryBtn.classList.remove('show','boss-retry');
     }else{
@@ -1557,137 +1925,273 @@
     el.statCritChance.textContent=`${(effCrit*100).toFixed(1)}%`;el.statCritDamage.textContent=`${(effCritDmg*100).toFixed(0)}%`;el.statAuto.textContent=`${formatNum(effAuto)} /초`;el.statGps.textContent=`${formatNum(expectedGps())}원`;el.statClicks.textContent=formatNum(state.clicks);el.statKills.textContent=formatNum(state.kills);el.statMaxHit.textContent=formatNum(state.maxHit);el.statBest.textContent=`${state.bestStage}-${state.bestFloor}F`;
 
     const rr=rebirthReward();
-    el.rebirthReward.textContent=state.stage>=10?`현재 환생 보상: 검은수영의 눈물 ${formatNum(rr)}개`:`현재 환생 보상: 0개 · ${10-state.stage}스테이지 남음`;
+    const rebirthStage=rebirthReturnStage();
+    el.rebirthReward.textContent=state.stage>=10?`현재 환생 보상: 검은수영의 눈물 ${formatNum(rr)}개 · 환생 후 Stage ${rebirthStage}`:`현재 환생 보상: 0개 · ${10-state.stage}스테이지 남음`;
     el.rebirthBtn.disabled=state.stage<10;
-    el.rebirthBtn.textContent=state.stage>=10?`환생하고 눈물 ${formatNum(rr)}개 받기`:'10스테이지부터 환생 가능';
+    el.rebirthBtn.textContent=state.stage>=10?`Stage ${rebirthStage}로 환생 · 눈물 ${formatNum(rr)}개`:'10스테이지부터 환생 가능';
     el.rebirthCount.textContent=`누적 환생 ${formatNum(state.rebirths)}회`;
     renderFloorProgress();renderUpgrades();renderBlessings();renderSkills();renderBuyModeControls();updateFrenzyUI();updateSkillCombatUI();updateBossTraitUI();checkAchievementUnlocks();renderAchievements();updateBackupStatus();refreshTargetSprite();renderRankingCard();
   }
 
+
   function generatePlayerId(){
     if(window.crypto&&typeof window.crypto.randomUUID==='function')return window.crypto.randomUUID();
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{
-      const r=Math.random()*16|0,v=c==='x'?r:(r&3|8);
-      return v.toString(16);
+      const r=Math.random()*16|0,v=c==='x'?r:(r&3|8);return v.toString(16);
     });
   }
 
-  function rankingHeaders(extra={}){
+  function apiHeaders(extra={}){
     return {'apikey':SUPABASE_PUBLISHABLE_KEY,'Content-Type':'application/json',...extra};
   }
 
-  async function rankingRequest(path='',options={}){
-    const response=await fetch(`${SUPABASE_URL}/rest/v1/${RANKING_TABLE}${path}`,{
-      cache:'no-store',
-      ...options,
-      headers:rankingHeaders(options.headers||{})
+  async function rpcRequest(name,payload={}){
+    const response=await fetch(`${SUPABASE_URL}/rest/v1/rpc/${name}`,{
+      method:'POST',cache:'no-store',headers:apiHeaders(),body:JSON.stringify(payload)
     });
+    let data=null;
+    try{const text=await response.text();data=text?JSON.parse(text):null;}catch(_){}
     if(!response.ok){
-      let message='';
-      try{const body=await response.json();message=body?.message||body?.details||body?.hint||'';}catch(_){}
-      const err=new Error(message||`HTTP ${response.status}`);
-      err.status=response.status;
-      throw err;
+      const err=new Error(data?.message||data?.details||`HTTP ${response.status}`);
+      err.status=response.status;err.data=data;throw err;
     }
-    if(response.status===204)return null;
-    const text=await response.text();
-    return text?JSON.parse(text):null;
+    return data;
+  }
+
+  function normalizeSyncCode(value){return String(value||'').toUpperCase().replace(/[^0-9A-F]/g,'');}
+  function formatSyncCode(value){const raw=normalizeSyncCode(value);return raw.match(/.{1,5}/g)?.join('-')||'';}
+  function generateSyncCode(){
+    const bytes=new Uint8Array(20);
+    if(window.crypto?.getRandomValues)window.crypto.getRandomValues(bytes);
+    else for(let i=0;i<bytes.length;i++)bytes[i]=Math.floor(Math.random()*256);
+    return Array.from(bytes,b=>b.toString(16).padStart(2,'0')).join('').toUpperCase();
+  }
+
+  function persistCloudIdentity(){
+    if(cloudSyncCode)localStorage.setItem(CLOUD_CODE_KEY,normalizeSyncCode(cloudSyncCode));else localStorage.removeItem(CLOUD_CODE_KEY);
+    localStorage.setItem(CLOUD_REV_KEY,String(Math.max(0,cloudRevision||0)));
+    localStorage.setItem(CLOUD_DIRTY_KEY,cloudDirty?'1':'0');
+  }
+
+  function cloudSavePayload(){return JSON.parse(JSON.stringify({...state,saveGeneration:SAVE_GENERATION,balanceVersion:21}));}
+
+  function markCloudDirty(){
+    if(suppressCloudDirty||!cloudBootstrapped)return;
+    cloudDirty=true;persistCloudIdentity();scheduleCloudPush();
+  }
+
+  function scheduleCloudPush(delay=1800){
+    if(!cloudBootstrapped||!cloudSyncCode)return;
+    clearTimeout(cloudPushTimer);
+    const wait=Math.max(delay,Math.max(0,5000-(Date.now()-cloudLastSyncAt)));
+    cloudPushTimer=setTimeout(()=>pushCloudSave(false),wait);
+  }
+
+  function renderCloudCard(){
+    if(!el.cloudStatus||!el.cloudProfile)return;
+    if(!cloudBootstrapped){
+      el.cloudStatus.textContent='준비 중';el.cloudStatus.classList.remove('online','error');
+      el.cloudProfile.textContent='Alpha 클라우드 계정을 확인하고 있습니다.';return;
+    }
+    if(cloudSyncCode&&state.playerId){
+      el.cloudStatus.textContent=cloudDirty?'동기화 대기':'연결됨';
+      el.cloudStatus.classList.toggle('online',!cloudDirty);el.cloudStatus.classList.remove('error');
+      el.cloudProfile.textContent=`자동 동기화 · revision ${cloudRevision}${cloudDirty?' · 저장 대기':''}`;
+    }else{
+      el.cloudStatus.textContent='연결 실패';el.cloudStatus.classList.remove('online');el.cloudStatus.classList.add('error');
+      el.cloudProfile.textContent='클라우드 연결에 실패했습니다. 로컬 저장으로 계속 플레이할 수 있습니다.';
+    }
+  }
+
+  function setCloudError(message='클라우드 연결 실패'){
+    if(el.cloudStatus){el.cloudStatus.textContent='연결 실패';el.cloudStatus.classList.remove('online');el.cloudStatus.classList.add('error');}
+    if(el.cloudProfile)el.cloudProfile.textContent=message;
+  }
+
+  function openCloudModal(){
+    el.cloudError.textContent='';el.cloudCodeInput.value='';
+    el.cloudCodeText.textContent=cloudSyncCode?formatSyncCode(cloudSyncCode):'연결되지 않음';
+    el.cloudModalStatus.textContent=cloudSyncCode&&state.playerId?`현재 기기는 클라우드에 연결되어 있습니다. revision ${cloudRevision}`:'클라우드 연결이 준비되지 않았습니다.';
+    el.cloudRestoreBtn.disabled=!cloudSyncCode;el.cloudCopyBtn.disabled=!cloudSyncCode;
+    el.cloudOverlay.classList.add('show');el.cloudOverlay.setAttribute('aria-hidden','false');
+  }
+  function closeCloudModal(){el.cloudOverlay.classList.remove('show');el.cloudOverlay.setAttribute('aria-hidden','true');}
+
+  async function copyCloudCode(){
+    if(!cloudSyncCode)return;
+    const formatted=formatSyncCode(cloudSyncCode);
+    try{await navigator.clipboard.writeText(formatted);el.cloudError.textContent='동기화 코드를 복사했습니다. 비밀번호처럼 보관해 주세요.';}
+    catch(_){prompt('이 동기화 코드를 복사해 보관하세요.',formatted);}
+  }
+
+  function applyCloudState(saveData,playerId,revision,{notice=false}={}){
+    const loaded=hydrateSaveObject(saveData);if(!loaded)throw new Error('invalid cloud save');
+    const currentRaw=localStorage.getItem(SAVE_KEY);if(currentRaw)localStorage.setItem(CLOUD_CONFLICT_KEY,currentRaw);
+    state=loaded;state.playerId=playerId||state.playerId||null;state.rankingRegistered=!!state.nickname;
+    cloudRevision=Math.max(1,Number(revision)||1);cloudDirty=false;persistCloudIdentity();
+    hurtTargetUntil=0;if(hurtTargetTimer){clearTimeout(hurtTargetTimer);hurtTargetTimer=null;}
+    chainStacks=0;lastChainManualAt=0;frenzyEndAt=0;frenzyCombo=0;lastManualAttackAt=-Infinity;resetManualInputGuard();
+    combatLocked=false;lastTimerStamp=performance.now();
+    syncEnemyStats(false);initializeSkillSystem(true);
+    // 클라우드에서 받은 lastActiveAt을 유지해야 오프라인 진행이 중복 없이 정확히 계산됩니다.
+    suppressCloudDirty=true;
+    localStorage.setItem(SAVE_KEY,JSON.stringify(state));
+    updateBackupStatus();
+    suppressCloudDirty=false;render();
+    if(notice)showNotice('클라우드 최신 데이터 적용!','다른 기기의 최신 진행 상황을 불러왔습니다.',2600);
+  }
+
+  async function createAlphaCloudAccount(){
+    const code=generateSyncCode();
+    const result=await rpcRequest('blacklee_alpha_create_account',{p_sync_code:code,p_save_data:cloudSavePayload()});
+    if(!result?.ok)throw new Error('cloud create failed');
+    cloudSyncCode=code;cloudRevision=Number(result.revision)||1;cloudDirty=false;
+    state.playerId=result.player_id||state.playerId||generatePlayerId();state.rankingRegistered=!!state.nickname;
+    persistCloudIdentity();
+    suppressCloudDirty=true;saveGame(false,true,true);suppressCloudDirty=false;
+    cloudDirty=true;persistCloudIdentity();
+    await pushCloudSave(true);return true;
+  }
+
+  async function bootstrapCloud(){
+    cloudBootstrapped=false;renderCloudCard();
+    try{
+      const stored=normalizeSyncCode(localStorage.getItem(CLOUD_CODE_KEY)||'');
+      if(!stored){
+        await createAlphaCloudAccount();cloudBootstrapped=true;cloudDirty=false;persistCloudIdentity();renderCloudCard();
+        return {created:true};
+      }
+      cloudSyncCode=stored;
+      const remote=await rpcRequest('blacklee_alpha_fetch_account',{p_sync_code:stored});
+      if(!remote?.ok){
+        localStorage.removeItem(CLOUD_CODE_KEY);cloudSyncCode='';cloudRevision=0;cloudDirty=false;
+        await createAlphaCloudAccount();cloudBootstrapped=true;renderCloudCard();return {created:true};
+      }
+      const remoteRev=Math.max(1,Number(remote.revision)||1);
+      const localRev=Math.max(0,Number(localStorage.getItem(CLOUD_REV_KEY))||0);
+      const localDirty=localStorage.getItem(CLOUD_DIRTY_KEY)==='1';
+      cloudRevision=remoteRev;if(remote.player_id)state.playerId=remote.player_id;
+      if(remoteRev>localRev||(remoteRev===localRev&&!localDirty))applyCloudState(remote.save_data,remote.player_id,remoteRev);
+      else{cloudDirty=true;persistCloudIdentity();}
+      cloudBootstrapped=true;renderCloudCard();return {created:false};
+    }catch(err){
+      cloudBootstrapped=true;setCloudError('클라우드 서버에 연결하지 못했습니다. 로컬 저장으로 계속 플레이합니다.');return {error:true};
+    }
+  }
+
+  async function pullCloudLatest(showNoticeOnChange=false){
+    if(!cloudBootstrapped||!cloudSyncCode||cloudSyncInFlight)return false;
+    try{
+      const remote=await rpcRequest('blacklee_alpha_fetch_account',{p_sync_code:normalizeSyncCode(cloudSyncCode)});
+      if(!remote?.ok)return false;
+      const remoteRev=Math.max(1,Number(remote.revision)||1);
+      if(remoteRev>cloudRevision){
+        applyCloudState(remote.save_data,remote.player_id,remoteRev,{notice:showNoticeOnChange});
+        cloudRevision=remoteRev;cloudDirty=false;persistCloudIdentity();renderCloudCard();
+        return true;
+      }
+      return false;
+    }catch(_){return false;}
+  }
+
+  async function pushCloudSave(force=false){
+    if(!cloudBootstrapped||!cloudSyncCode||cloudSyncInFlight)return false;
+    if(!force&&!cloudDirty)return true;
+    cloudSyncInFlight=true;
+    try{
+      const result=await rpcRequest('blacklee_alpha_push_save',{
+        p_sync_code:normalizeSyncCode(cloudSyncCode),p_expected_revision:cloudRevision,p_save_data:cloudSavePayload()
+      });
+      if(result?.conflict){
+        const raw=localStorage.getItem(SAVE_KEY);if(raw)localStorage.setItem(CLOUD_CONFLICT_KEY,raw);
+        applyCloudState(result.save_data,result.player_id||state.playerId,result.revision,{notice:true});return false;
+      }
+      if(!result?.ok)throw new Error('cloud push failed');
+      cloudRevision=Number(result.revision)||cloudRevision+1;if(result.player_id)state.playerId=result.player_id;
+      cloudDirty=false;cloudLastSyncAt=Date.now();persistCloudIdentity();renderCloudCard();return true;
+    }catch(err){
+      cloudDirty=true;persistCloudIdentity();setCloudError('인터넷 연결이 복구되면 자동으로 다시 동기화합니다.');return false;
+    }finally{cloudSyncInFlight=false;}
+  }
+
+  async function connectExistingCloud(){
+    const code=normalizeSyncCode(el.cloudCodeInput.value);
+    if(code.length<24){el.cloudError.textContent='동기화 코드를 정확히 입력해 주세요.';return;}
+    el.cloudConnectBtn.disabled=true;el.cloudError.textContent='클라우드 데이터를 확인하는 중...';
+    try{
+      const remote=await rpcRequest('blacklee_alpha_fetch_account',{p_sync_code:code});
+      if(!remote?.ok){el.cloudError.textContent='해당 동기화 코드를 찾지 못했습니다.';return;}
+      if(!confirm(`이 클라우드 데이터로 현재 기기의 진행을 교체하시겠습니까?\n\n클라우드 최고 기록: ${remote.best_stage}-${remote.best_floor}F\n\n현재 로컬 진행은 충돌 백업으로 보관됩니다.`))return;
+      const raw=localStorage.getItem(SAVE_KEY);if(raw)localStorage.setItem(CLOUD_CONFLICT_KEY,raw);
+      cloudSyncCode=code;cloudRevision=Number(remote.revision)||1;cloudDirty=false;persistCloudIdentity();
+      applyCloudState(remote.save_data,remote.player_id,cloudRevision);
+      const offline=applyOfflineReward(false);
+      suppressCloudDirty=true;saveGame(false,true,true);suppressCloudDirty=false;
+      cloudDirty=true;persistCloudIdentity();await pushCloudSave(true);
+      closeCloudModal();render();
+      showNotice('클라우드 연결 완료!',offline.reward>0||offline.climbedFloors>0?offlineSummaryText(offline):'이 기기에서 같은 진행을 이어갑니다.',3200);
+    }catch(err){el.cloudError.textContent='클라우드 연결 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.';}
+    finally{el.cloudConnectBtn.disabled=false;}
+  }
+
+  async function restoreCloudBackup(){
+    if(!cloudSyncCode)return;
+    if(!confirm('클라우드의 직전 정상 저장본으로 되돌리시겠습니까?'))return;
+    el.cloudRestoreBtn.disabled=true;el.cloudError.textContent='클라우드 백업을 복구하는 중...';
+    try{
+      const result=await rpcRequest('blacklee_alpha_restore_backup',{p_sync_code:normalizeSyncCode(cloudSyncCode),p_expected_revision:cloudRevision});
+      if(result?.conflict){applyCloudState(result.save_data,state.playerId,result.revision,{notice:true});return;}
+      if(result?.no_backup){el.cloudError.textContent='아직 복구할 클라우드 백업이 없습니다.';return;}
+      if(!result?.ok)throw new Error('restore failed');
+      cloudRevision=Number(result.revision)||cloudRevision+1;cloudDirty=false;persistCloudIdentity();
+      applyCloudState(result.save_data,state.playerId,cloudRevision);closeCloudModal();
+      showNotice('클라우드 백업 복구 완료!','직전 클라우드 저장으로 돌아왔습니다.',2600);
+    }catch(err){el.cloudError.textContent='클라우드 백업을 복구하지 못했습니다.';}
+    finally{el.cloudRestoreBtn.disabled=false;}
   }
 
   function renderRankingCard(){
     if(!el.rankingStatus||!el.rankingProfile)return;
-    if(DEMO_MODE){el.rankingStatus.textContent='DEMO';el.rankingStatus.classList.remove('online','error');el.rankingProfile.textContent='이 데모는 랭킹 서버에 기록을 전송하지 않습니다.';el.rankingOpenBtn.textContent='데모 모드';return;}
     if(state.nickname&&state.playerId){
-      el.rankingStatus.textContent=state.rankingRegistered?'등록됨':'동기화 대기';
-      el.rankingStatus.classList.toggle('online',!!state.rankingRegistered);
-      el.rankingStatus.classList.remove('error');
-      el.rankingProfile.textContent=`${state.nickname} · 최고 ${state.bestStage}-${state.bestFloor}F`;
-      el.rankingOpenBtn.textContent='랭킹 보기';
+      el.rankingStatus.textContent='등록됨';el.rankingStatus.classList.add('online');el.rankingStatus.classList.remove('error');
+      el.rankingProfile.textContent=`${state.nickname} · Alpha 최고 ${state.bestStage}-${state.bestFloor}F`;el.rankingOpenBtn.textContent='Alpha 랭킹 보기';
     }else{
-      el.rankingStatus.textContent='미등록';
-      el.rankingStatus.classList.remove('online','error');
-      el.rankingProfile.textContent='닉네임을 등록하면 최고 스테이지·층 기록이 랭킹에 등록됩니다.';
-      el.rankingOpenBtn.textContent='닉네임 등록 / 랭킹 보기';
+      el.rankingStatus.textContent='미등록';el.rankingStatus.classList.remove('online','error');
+      el.rankingProfile.textContent='Alpha 랭킹은 새로 시작했습니다. 닉네임을 등록하면 최고 기록이 표시됩니다.';
+      el.rankingOpenBtn.textContent='닉네임 등록 / Alpha 랭킹';
     }
   }
-
   function setRankingConnectionError(){
-    if(!el.rankingStatus)return;
-    el.rankingStatus.textContent='연결 실패';
-    el.rankingStatus.classList.remove('online');
-    el.rankingStatus.classList.add('error');
+    if(!el.rankingStatus)return;el.rankingStatus.textContent='연결 실패';el.rankingStatus.classList.remove('online');el.rankingStatus.classList.add('error');
   }
-
   async function syncRankingRecord(force=false){
-    if(DEMO_MODE)return false;
-    if(!state.nickname||!state.playerId||rankingSyncInFlight)return false;
-    const now=Date.now();
-    if(!force&&now-lastRankingSyncAt<3000)return false;
-    rankingSyncInFlight=true;
-    try{
-      const payload={player_id:state.playerId,nickname:state.nickname,best_stage:Math.max(1,Math.floor(Number(state.bestStage)||1)),best_floor:Math.min(5,Math.max(1,Math.floor(Number(state.bestFloor)||1)))};
-      await rankingRequest('?on_conflict=player_id',{method:'POST',headers:{'Prefer':'resolution=merge-duplicates,return=minimal'},body:JSON.stringify(payload)});
-      state.rankingRegistered=true;
-      lastRankingSyncAt=Date.now();
-      localStorage.setItem(SAVE_KEY,JSON.stringify(state));
-      renderRankingCard();
-      return true;
-    }catch(err){
-      state.rankingRegistered=false;
-      renderRankingCard();
-      setRankingConnectionError();
-      return false;
-    }finally{
-      rankingSyncInFlight=false;
-    }
+    if(!state.nickname||!state.playerId)return false;state.rankingRegistered=true;renderRankingCard();return pushCloudSave(force);
   }
-
   function openNicknameModal(){
-    el.nicknameError.textContent='';
-    el.nicknameInput.value=state.nickname||'';
-    el.nicknameOverlay.classList.add('show');
-    el.nicknameOverlay.setAttribute('aria-hidden','false');
-    setTimeout(()=>el.nicknameInput.focus(),40);
+    el.nicknameError.textContent='';el.nicknameInput.value=state.nickname||'';
+    el.nicknameOverlay.classList.add('show');el.nicknameOverlay.setAttribute('aria-hidden','false');setTimeout(()=>el.nicknameInput.focus(),40);
   }
-
   function closeNicknameModal(dismiss=false){
-    el.nicknameOverlay.classList.remove('show');
-    el.nicknameOverlay.setAttribute('aria-hidden','true');
-    if(dismiss&&!state.nickname){
-      state.rankingPromptDismissed=true;
-      saveGame(false);
-    }
+    el.nicknameOverlay.classList.remove('show');el.nicknameOverlay.setAttribute('aria-hidden','true');
+    if(dismiss&&!state.nickname){state.rankingPromptDismissed=true;saveGame(false);}
   }
-
   async function registerRankingNickname(){
     const nickname=el.nicknameInput.value.trim();
-    if(!/^[가-힣A-Za-z0-9]{2,12}$/.test(nickname)){
-      el.nicknameError.textContent='닉네임은 한글·영문·숫자 2~12자로 입력해 주세요.';
-      return;
-    }
-    el.nicknameRegisterBtn.disabled=true;
-    el.nicknameError.textContent='등록 중...';
-    const playerId=state.playerId||generatePlayerId();
+    if(!/^[가-힣A-Za-z0-9]{2,12}$/.test(nickname)){el.nicknameError.textContent='닉네임은 한글·영문·숫자 2~12자로 입력해 주세요.';return;}
+    if(!cloudSyncCode){el.nicknameError.textContent='클라우드 연결이 먼저 필요합니다.';return;}
+    el.nicknameRegisterBtn.disabled=true;el.nicknameError.textContent='등록 중...';
     try{
-      const payload={player_id:playerId,nickname,best_stage:Math.max(1,Math.floor(Number(state.bestStage)||1)),best_floor:Math.min(5,Math.max(1,Math.floor(Number(state.bestFloor)||1)))};
-      await rankingRequest('?on_conflict=player_id',{method:'POST',headers:{'Prefer':'resolution=merge-duplicates,return=minimal'},body:JSON.stringify(payload)});
-      state.playerId=playerId;state.nickname=nickname;state.rankingRegistered=true;state.rankingPromptDismissed=false;lastRankingSyncAt=Date.now();
-      saveGame(false);renderRankingCard();closeNicknameModal(false);
-      showNotice('랭킹 등록 완료!',`${nickname} · 최고 ${state.bestStage}-${state.bestFloor}F`,1700);
-      openRankingModal();
-    }catch(err){
-      const duplicate=err.status===409||/duplicate|unique/i.test(err.message||'');
-      el.nicknameError.textContent=duplicate?'이미 사용 중인 닉네임입니다. 다른 닉네임을 입력해 주세요.':'랭킹 서버에 연결하지 못했습니다. 잠시 후 다시 시도해 주세요.';
-    }finally{
-      el.nicknameRegisterBtn.disabled=false;
-    }
+      const result=await rpcRequest('blacklee_alpha_set_nickname',{p_sync_code:normalizeSyncCode(cloudSyncCode),p_nickname:nickname});
+      if(result?.duplicate){el.nicknameError.textContent='이미 사용 중인 닉네임입니다. 다른 닉네임을 입력해 주세요.';return;}
+      if(!result?.ok)throw new Error('nickname failed');
+      state.playerId=result.player_id||state.playerId;state.nickname=nickname;state.rankingRegistered=true;state.rankingPromptDismissed=false;
+      cloudRevision=Number(result.revision)||cloudRevision+1;cloudDirty=false;persistCloudIdentity();
+      suppressCloudDirty=true;saveGame(false,true,true);suppressCloudDirty=false;
+      renderRankingCard();closeNicknameModal(false);showNotice('Alpha 랭킹 등록 완료!',`${nickname} · 최고 ${state.bestStage}-${state.bestFloor}F`,1700);openRankingModal();
+    }catch(err){el.nicknameError.textContent='랭킹 서버에 연결하지 못했습니다. 잠시 후 다시 시도해 주세요.';}
+    finally{el.nicknameRegisterBtn.disabled=false;}
   }
-
-  function closeRankingModal(){
-    el.rankingOverlay.classList.remove('show');
-    el.rankingOverlay.setAttribute('aria-hidden','true');
-  }
-
+  function closeRankingModal(){el.rankingOverlay.classList.remove('show');el.rankingOverlay.setAttribute('aria-hidden','true');}
   function makeRankingRow(entry,rank){
     const row=document.createElement('div');row.className='ranking-row'+(state.playerId&&entry.player_id===state.playerId?' me':'');
     const rankEl=document.createElement('div');rankEl.className='ranking-rank';rankEl.textContent=`${rank}위`;
@@ -1695,55 +2199,29 @@
     const recordEl=document.createElement('div');recordEl.className='ranking-record';recordEl.textContent=`${entry.best_stage}-${entry.best_floor}F`;
     row.append(rankEl,nameEl,recordEl);return row;
   }
-
   async function fetchRanking(){
-    el.rankingList.innerHTML='<div class="ranking-empty">랭킹을 불러오는 중입니다.</div>';
-    el.rankingRefreshBtn.disabled=true;
+    el.rankingList.innerHTML='<div class="ranking-empty">Alpha 랭킹을 불러오는 중입니다.</div>';el.rankingRefreshBtn.disabled=true;
     try{
-      const data=await rankingRequest('?select=player_id,nickname,best_stage,best_floor&order=best_stage.desc,best_floor.desc,nickname.asc&limit=1000',{method:'GET'});
-      const rows=Array.isArray(data)?data:[];
+      const data=await rpcRequest('blacklee_alpha_get_rankings',{p_limit:100});const rows=Array.isArray(data)?data:[];
       const myIndex=state.playerId?rows.findIndex(r=>r.player_id===state.playerId):-1;
-      el.rankingMySummary.textContent=state.nickname?`${state.nickname} · ${myIndex>=0?`${myIndex+1}위`:'순위 집계 중'} · 최고 ${state.bestStage}-${state.bestFloor}F`:'닉네임을 등록하면 내 순위가 표시됩니다.';
+      el.rankingMySummary.textContent=state.nickname?`${state.nickname} · ${myIndex>=0?`${myIndex+1}위`:'TOP 100 밖'} · 최고 ${state.bestStage}-${state.bestFloor}F`:'닉네임을 등록하면 내 기록이 Alpha 랭킹에 표시됩니다.';
       el.rankingList.textContent='';
-      const top=rows.slice(0,100);
-      if(!top.length){
-        el.rankingList.innerHTML='<div class="ranking-empty">아직 등록된 랭킹이 없습니다.</div>';
-      }else{
-        top.forEach((entry,index)=>el.rankingList.appendChild(makeRankingRow(entry,index+1)));
-        if(myIndex>=100){
-          const gap=document.createElement('div');gap.className='ranking-empty';gap.textContent=`내 순위: ${myIndex+1}위 · ${state.bestStage}-${state.bestFloor}F`;el.rankingList.appendChild(gap);
-        }
-      }
-      if(state.nickname&&state.playerId){state.rankingRegistered=true;renderRankingCard();}
+      if(!rows.length)el.rankingList.innerHTML='<div class="ranking-empty">Alpha 랭킹은 아직 비어 있습니다.</div>';
+      else rows.forEach((entry,index)=>el.rankingList.appendChild(makeRankingRow(entry,index+1)));
     }catch(err){
       el.rankingMySummary.textContent=state.nickname?`${state.nickname} · 최고 ${state.bestStage}-${state.bestFloor}F`:'랭킹 서버 연결 실패';
-      el.rankingList.innerHTML='<div class="ranking-empty">랭킹 서버에 연결하지 못했습니다.<br>잠시 후 새로고침을 눌러 주세요.</div>';
-      setRankingConnectionError();
-    }finally{
-      el.rankingRefreshBtn.disabled=false;
-    }
+      el.rankingList.innerHTML='<div class="ranking-empty">Alpha 랭킹을 불러오지 못했습니다.</div>';setRankingConnectionError();
+    }finally{el.rankingRefreshBtn.disabled=false;}
   }
-
   async function openRankingModal(){
-    if(DEMO_MODE){showNotice('데모 모드','랭킹 서버에는 기록을 전송하지 않습니다.',1400);return;}
     if(!state.nickname||!state.playerId){openNicknameModal();return;}
-    el.rankingOverlay.classList.add('show');el.rankingOverlay.setAttribute('aria-hidden','false');
-    await syncRankingRecord(true);
-    fetchRanking();
+    el.rankingOverlay.classList.add('show');el.rankingOverlay.setAttribute('aria-hidden','false');await syncRankingRecord(true);fetchRanking();
   }
-
-  function initRankingSystem(){
-    renderRankingCard();
-    if(DEMO_MODE){state.rankingPromptDismissed=true;return;}
-    if(state.nickname&&state.playerId)setTimeout(()=>syncRankingRecord(true),700);
-    else if(!state.rankingPromptDismissed)setTimeout(()=>openNicknameModal(),750);
-  }
-
+  function initRankingSystem(){renderRankingCard();}
   function updateBest(){
     if(state.stage>state.bestStage||(state.stage===state.bestStage&&state.floor>state.bestFloor)){
-      const oldBest=state.bestStage;
-      state.bestStage=state.stage;state.bestFloor=state.floor;
-      processSkillProgress(oldBest);renderRankingCard();syncRankingRecord(false);
+      const oldBest=state.bestStage;state.bestStage=state.stage;state.bestFloor=state.floor;
+      processSkillProgress(oldBest);renderRankingCard();saveGame(false);syncRankingRecord(false);
     }
   }
 
@@ -1825,12 +2303,13 @@
   function showHitDialogue(){
     if(dialogueLocked)return;
     dialogueLocked=true;
-    let idx=Math.floor(Math.random()*hitDialogues.length);
-    if(hitDialogues.length>1&&idx===lastDialogueIndex){
-      idx=(idx+1+Math.floor(Math.random()*(hitDialogues.length-1)))%hitDialogues.length;
+    const dialogues=isBlackBoss()?blackHitDialogues:hitDialogues;
+    let idx=Math.floor(Math.random()*dialogues.length);
+    if(dialogues.length>1&&idx===lastDialogueIndex){
+      idx=(idx+1+Math.floor(Math.random()*(dialogues.length-1)))%dialogues.length;
     }
     lastDialogueIndex=idx;
-    el.speechBubble.textContent=hitDialogues[idx];
+    el.speechBubble.textContent=dialogues[idx];
     el.speechBubble.classList.add('show');
     setTimeout(()=>el.speechBubble.classList.remove('show'),2200);
     setTimeout(()=>{dialogueLocked=false;},3000);
@@ -1941,7 +2420,7 @@
     const small=black
       ?`검은수영의 눈물 ${formatNum(bossTears)}개 획득${attribute?' · 속성 보스 ×2':''}`
       :(golden
-        ?`처치 보상 50배!${clearedFloor===5?` · ${clearedStage}스테이지 돌파`:''}`
+        ?`처치 보상 20배!${clearedFloor===5?` · ${clearedStage}스테이지 돌파`:''}`
         :(clearedFloor===5?`${clearedStage}스테이지 돌파`:'다음 층으로 이동합니다.'));
     showNotice(title,small,850);
     setTimeout(()=>{advanceFloor();},900);
@@ -2068,14 +2547,14 @@
     const y=clientY!=null?clientY-rect.top:rect.height/2+(Math.random()*90-45);
 
     createHitEffect(x,y,result.isCrit,frenzy);
-    showFloatingText(`${result.isCrit?'치명타! ':''}-${formatNum(result.damage)} / +${formatNum(result.goldGain)}원`,x,y,result.isCrit?'#ffd34e':'#fff',result.isCrit?26:21);
+    showFloatingText(`${result.isSuperCrit?'슈퍼 치명타! ':result.isCrit?'치명타! ':''}-${formatNum(result.damage)} / +${formatNum(result.goldGain)}원`,x,y,result.isSuperCrit?'#ff9df7':result.isCrit?'#ffd34e':'#fff',result.isSuperCrit?30:result.isCrit?26:21);
 
     if(manual&&state.enemyHp>0&&isSkillUnlocked('luckySeven')&&Math.random()<skillLevel('luckySeven')*.05){
       luckyTriggered=true;
       const luckyEnergy=addEnergy(1);energyGain+=luckyEnergy;
       const lucky=calculateDamageInstance(baseDamage,{manualLike:true,frenzy,comboMult:comboDamageMultiplier()});
       applyDamageResult(lucky);overchargeGain+=maybeOvercharge(lucky.isCrit);
-      showFloatingText(`럭키세븐! ${lucky.isCrit?'치명타! ':''}-${formatNum(lucky.damage)} / +${formatNum(lucky.goldGain)}원`,x+22,y+34,'#9ff6c1',19);
+      showFloatingText(`럭키세븐! ${lucky.isSuperCrit?'슈퍼 치명타! ':lucky.isCrit?'치명타! ':''}-${formatNum(lucky.damage)} / +${formatNum(lucky.goldGain)}원`,x+22,y+34,'#9ff6c1',19);
     }
 
     if(manual&&!frenzy){
@@ -2094,7 +2573,7 @@
 
   function retryCurrent(){
     if(state.bossRetryReady){enterFloor(state.stage,5,'challenge',true);return;}
-    if(state.retryFloor5Ready){enterFloor(state.stage,5,'challenge');showNotice('5층 재도전!','60초 도전을 다시 시작합니다.',900);return;}
+    if(state.retryFloor5Ready){enterFloor(state.stage,5,'challenge');showNotice('5층 재도전!',`${floorLimit(5,state.stage)}초 도전을 다시 시작합니다.`,900);return;}
     enterFloor(state.stage,state.floor,'challenge');showNotice('재도전!','제한시간이 다시 시작됩니다.',900);
   }
 
@@ -2109,8 +2588,9 @@
 
   function doRebirth(){
     const reward=rebirthReward();
+    const returnStage=rebirthReturnStage();
     if(state.stage<10||reward<=0)return;
-    if(!confirm(`현재 ${state.stage}스테이지에서 환생하면 검은수영의 눈물 ${reward}개를 획득합니다.\n\n일반 재화, 일반 능력치, 일반 업그레이드, 스테이지 진행도가 초기화됩니다.\n용사의 축복과 검은수영의 눈물, 최고 기록은 유지됩니다.\n\n환생하시겠습니까?`))return;
+    if(!confirm(`현재 ${state.stage}스테이지에서 환생하면 검은수영의 눈물 ${reward}개를 획득하고 Stage ${returnStage}-1F부터 다시 시작합니다.\n\n일반 재화, 일반 능력치, 일반 업그레이드는 초기화됩니다.\n용사의 축복과 검은수영의 눈물, 스킬, 최고 기록은 유지됩니다.\n\n환생하시겠습니까?`))return;
     combatLocked=true;
     playRebirthEffect(reward,()=>{
       const keep={
@@ -2130,6 +2610,7 @@
       };
       const fresh=defaultState();
       state={...fresh,...keep,blessings:keep.blessings,blessingSpent:keep.blessingSpent,skills:keep.skills,skillCooldowns:keep.skillCooldowns,achievementClaims:keep.achievementClaims,traitKills:keep.traitKills};
+      state.stage=returnStage;state.floor=1;state.mode='challenge';state.timeRemaining=0;state.bossRetryReady=false;state.retryFloor5Ready=false;state.isGolden=null;state.bossTrait=null;
       state.weaknessActiveUntil=0;chainStacks=0;lastChainManualAt=0;frenzyEndAt=0;frenzyCombo=0;lastManualAttackAt=-Infinity;resetManualInputGuard();
       syncEnemyStats(true);combatLocked=false;lastTimerStamp=performance.now();
       render();saveGame(false);
@@ -2142,9 +2623,15 @@
     return {
       ...d,...p,
       saveGeneration:SAVE_GENERATION,
-      balanceVersion:13,
+      balanceVersion:21,
       floor:(p.mode==='farm'&&Number(p.floor)===5&&!p.bossRetryReady)?4:Math.min(5,Math.max(1,Math.floor(Number(p.floor)||1))),
       retryFloor5Ready:!!p.retryFloor5Ready||p.mode==='farm'||!!p.bossRetryReady,
+      timeRemaining:(Math.min(5,Math.max(1,Math.floor(Number(p.floor)||1)))===5&&p.mode==='challenge')
+        ?Math.min(
+          floorLimit(Math.min(5,Math.max(1,Math.floor(Number(p.floor)||1))),Math.max(1,Math.floor(Number(p.stage)||1))),
+          Math.max(0,Number(p.timeRemaining)||floorLimit(Math.min(5,Math.max(1,Math.floor(Number(p.floor)||1))),Math.max(1,Math.floor(Number(p.stage)||1))))
+        )
+        :Math.max(0,Number(p.timeRemaining)||0),
       buyMode:['1','10','max'].includes(String(p.buyMode))?String(p.buyMode):'1',
       isGolden:typeof p.isGolden==='boolean'?p.isGolden:null,
       bossTrait:(p.bossTrait==='normal'||BOSS_TRAIT_KEYS.includes(p.bossTrait))?p.bossTrait:null,
@@ -2208,14 +2695,15 @@
     el.backupStatus.textContent=`자동 백업 ${hh}:${mm}`;
   }
 
-  function saveGame(showMsg=false,skipBackup=false){
+  function saveGame(showMsg=false,skipBackup=false,skipCloud=false){
     state.saveGeneration=SAVE_GENERATION;
-    state.balanceVersion=13;
+    state.balanceVersion=21;
     state.lastActiveAt=Date.now();
     if(!skipBackup)createAutoBackup(showMsg);
     localStorage.setItem(SAVE_KEY,JSON.stringify(state));
-    if(showMsg){el.saveMsg.textContent='저장되었습니다.';setTimeout(()=>el.saveMsg.textContent='',1200);}
-    updateBackupStatus();
+    if(!skipCloud)markCloudDirty();
+    if(showMsg){el.saveMsg.textContent='로컬 저장 완료 · 클라우드 자동 동기화 대기';setTimeout(()=>el.saveMsg.textContent='',1500);}
+    updateBackupStatus();renderCloudCard();
   }
 
   function loadGame(){
@@ -2232,8 +2720,7 @@
     const d=new Date(Number(backup.lastActiveAt)||Date.now());
     if(!confirm(`자동 백업을 복구하시겠습니까?\n\n백업 시각: ${d.toLocaleString()}\n스테이지: ${backup.stage}-${backup.floor}층\n검은수영의 눈물: ${backup.tears||0}개\n\n현재 진행 상황은 백업 시점으로 되돌아갑니다.`))return;
     const currentRankingIdentity={nickname:state.nickname||null,playerId:state.playerId||null,rankingRegistered:!!state.rankingRegistered,rankingPromptDismissed:!!state.rankingPromptDismissed};
-    state=backup;
-    if(!state.nickname||!state.playerId)state={...state,...currentRankingIdentity};
+    state={...backup,...currentRankingIdentity};
     hurtTargetUntil=0;if(hurtTargetTimer){clearTimeout(hurtTargetTimer);hurtTargetTimer=null;}
     chainStacks=0;lastChainManualAt=0;frenzyEndAt=0;frenzyCombo=0;lastManualAttackAt=-Infinity;resetManualInputGuard();
     combatLocked=false;lastTimerStamp=performance.now();
@@ -2247,19 +2734,20 @@
     setTimeout(()=>el.saveMsg.textContent='',1800);
   }
 
-  function resetGame(){
-    if(!confirm('정말 초기화하시겠습니까? 현재 저장 데이터가 삭제됩니다.'))return;
-    const rankingIdentity={nickname:state.nickname||null,playerId:state.playerId||null,rankingRegistered:!!state.rankingRegistered,rankingPromptDismissed:!!state.rankingPromptDismissed};
-    state={...defaultState(),...rankingIdentity};
+  async function resetGame(){
+    if(!confirm('정말 완전히 초기화하시겠습니까?\n\nAlpha 진행 상황, 클라우드 저장, 랭킹 닉네임과 최고 기록이 모두 초기화됩니다.'))return;
+    const fresh=defaultState();fresh.playerId=state.playerId||null;state=fresh;
     hurtTargetUntil=0;if(hurtTargetTimer){clearTimeout(hurtTargetTimer);hurtTargetTimer=null;}
     chainStacks=0;lastChainManualAt=0;frenzyEndAt=0;frenzyCombo=0;lastManualAttackAt=-Infinity;resetManualInputGuard();
-    syncEnemyStats(true);
-    localStorage.removeItem(SAVE_KEY);
-    localStorage.removeItem(BACKUP_KEY);
-    lastBackupWriteAt=0;
-    render();
-    el.saveMsg.textContent='초기화되었습니다.';
-    setTimeout(()=>el.saveMsg.textContent='',1200);
+    syncEnemyStats(true);localStorage.removeItem(SAVE_KEY);localStorage.removeItem(BACKUP_KEY);lastBackupWriteAt=0;
+    if(cloudSyncCode){
+      try{
+        const result=await rpcRequest('blacklee_alpha_reset_account',{p_sync_code:normalizeSyncCode(cloudSyncCode),p_save_data:cloudSavePayload()});
+        if(result?.ok){cloudRevision=Number(result.revision)||cloudRevision+1;state.playerId=result.player_id||state.playerId;cloudDirty=false;persistCloudIdentity();}
+      }catch(_){cloudDirty=true;persistCloudIdentity();}
+    }
+    suppressCloudDirty=true;saveGame(false,true,true);suppressCloudDirty=false;render();
+    el.saveMsg.textContent='Alpha 진행 상황과 랭킹을 초기화했습니다.';setTimeout(()=>el.saveMsg.textContent='',1800);
   }
 
   function saveFileTimestamp(date=new Date()){
@@ -2272,7 +2760,7 @@
     const payload={
       ...state,
       saveGeneration:SAVE_GENERATION,
-      balanceVersion:13,
+      balanceVersion:21,
       lastActiveAt:Date.now(),
       saveFileFormat:'BlackLee',
       exportedAt:Date.now()
@@ -2293,7 +2781,7 @@
   function applyImportedSave(loaded,sourceLabel='저장 데이터'){
     createAutoBackup(true);
     const currentRankingIdentity={nickname:state.nickname||null,playerId:state.playerId||null,rankingRegistered:!!state.rankingRegistered,rankingPromptDismissed:!!state.rankingPromptDismissed};
-    if(!loaded.nickname||!loaded.playerId)loaded={...loaded,...currentRankingIdentity};
+    loaded={...loaded,...currentRankingIdentity};
     state=loaded;
     hurtTargetUntil=0;if(hurtTargetTimer){clearTimeout(hurtTargetTimer);hurtTargetTimer=null;}
     chainStacks=0;lastChainManualAt=0;frenzyEndAt=0;frenzyCombo=0;lastManualAttackAt=-Infinity;resetManualInputGuard();
@@ -2307,10 +2795,10 @@
     el.saveMsg.textContent=`${sourceLabel}를 불러왔습니다.`;
     showNotice(
       '불러오기 완료!',
-      importedOffline.reward>0
-        ?`오프라인 ${formatOfflineDuration(importedOffline.elapsed)} · +${formatNum(importedOffline.reward)}원`
+      (importedOffline.reward>0||importedOffline.climbedFloors>0||importedOffline.blocked)
+        ?offlineSummaryText(importedOffline)
         :'진행 상황을 이어서 플레이합니다.',
-      importedOffline.reward>0?3000:1500
+      (importedOffline.reward>0||importedOffline.climbedFloors>0||importedOffline.blocked)?3600:1500
     );
     setTimeout(()=>el.saveMsg.textContent='',1800);
   }
@@ -2323,7 +2811,7 @@
         const p=JSON.parse(String(reader.result||''));
         if(!p||typeof p!=='object')throw new Error('invalid');
         if(p.saveGeneration!==SAVE_GENERATION){
-          alert('호환되지 않는 세이브 파일입니다.\n\nBeta 0.16 이후 버전의 BlackLee 세이브 파일만 불러올 수 있습니다.');
+          alert('호환되지 않는 세이브 파일입니다.\n\nAlpha 0.1은 모든 Beta 저장 데이터와 호환되지 않습니다. Alpha 0.1에서 만든 세이브만 불러올 수 있습니다.');
           return;
         }
         if(!p.upgrades||!p.blessings)throw new Error('invalid');
@@ -2347,7 +2835,7 @@
 
   function exportSave(){
     state.saveGeneration=SAVE_GENERATION;
-    state.balanceVersion=13;
+    state.balanceVersion=21;
     state.lastActiveAt=Date.now();
     const text=btoa(unescape(encodeURIComponent(JSON.stringify(state))));
     navigator.clipboard.writeText(text).then(()=>{
@@ -2357,7 +2845,7 @@
   }
 
   function importSave(){
-    const input=prompt('beta 0.16 이후 버전에서 복사한 저장 데이터 문자열을 붙여넣으세요.\n현재 진행 상황은 불러온 데이터로 교체됩니다.');
+    const input=prompt('Alpha 0.1에서 복사한 저장 데이터 문자열을 붙여넣으세요.\n현재 진행 상황은 불러온 데이터로 교체됩니다.');
     if(input===null)return;
     const text=input.trim();
     if(!text){alert('저장 데이터가 입력되지 않았습니다.');return;}
@@ -2366,7 +2854,7 @@
       const p=JSON.parse(decoded);
       if(!p||typeof p!=='object')throw new Error('invalid');
       if(p.saveGeneration!==SAVE_GENERATION){
-        alert('이전 버전의 저장 데이터입니다.\n\nBeta 0.16부터 밸런스가 대폭 개편되어 beta 0.15 이하의 저장 데이터는 사용할 수 없습니다.\n새 게임으로 시작해 주세요.');
+        alert('이전 버전의 저장 데이터입니다.\n\nAlpha 0.1은 모든 Beta 저장 데이터와 호환되지 않습니다. Alpha 0.1부터 새 게임으로 시작해 주세요.');
         return;
       }
       if(!p.upgrades||!p.blessings)throw new Error('invalid');
@@ -2388,19 +2876,24 @@
   el.targetBtn.addEventListener('pointerleave',()=>{targetHovered=false;});
   window.addEventListener('blur',()=>{targetHovered=false;lastRawManualInputAt=null;suspiciousIntervalReference=null;suspiciousIntervalRun=0;if(manualInputBlocked)unlockIntervals=[];});
 
+  const MANUAL_ATTACK_KEYS=new Set(['Space','ArrowUp','ArrowDown','ArrowLeft','ArrowRight']);
   document.addEventListener('keydown',e=>{
     const active=document.activeElement;
     const editing=active&&(active.tagName==='INPUT'||active.tagName==='TEXTAREA'||active.tagName==='SELECT'||active.isContentEditable);
+    const modalOpen=el.cloudOverlay.classList.contains('show')||el.rankingOverlay.classList.contains('show')||el.nicknameOverlay.classList.contains('show');
 
     if(e.key==='Control'){
-      if(!e.repeat&&!editing)ctrlFrenzyArmed=true;
+      if(!e.repeat&&!editing&&!modalOpen)ctrlFrenzyArmed=true;
       return;
     }
     if(e.ctrlKey)ctrlFrenzyArmed=false;
 
-    if(e.code!=='Space'||e.repeat||!targetHovered||editing)return;
+    if(!MANUAL_ATTACK_KEYS.has(e.code)||editing||modalOpen)return;
+    // Space/방향키의 기본 스크롤 동작은 막되, 길게 눌러 발생하는 repeat 입력은 공격으로 처리하지 않습니다.
     e.preventDefault();
-    tryManualAttack(lastPointerClientX,lastPointerClientY);
+    if(e.repeat)return;
+    // 키보드 공격은 커서 위치와 무관하게 수영 중앙 부근에 타격 효과가 표시됩니다.
+    tryManualAttack(null,null);
   });
   document.addEventListener('keyup',e=>{
     if(e.key==='Control'){
@@ -2408,7 +2901,10 @@
       ctrlFrenzyArmed=false;
       return;
     }
-    if(e.code==='Space'&&targetHovered)e.preventDefault();
+    const active=document.activeElement;
+    const editing=active&&(active.tagName==='INPUT'||active.tagName==='TEXTAREA'||active.tagName==='SELECT'||active.isContentEditable);
+    const modalOpen=el.cloudOverlay.classList.contains('show')||el.rankingOverlay.classList.contains('show')||el.nicknameOverlay.classList.contains('show');
+    if(MANUAL_ATTACK_KEYS.has(e.code)&&!editing&&!modalOpen)e.preventDefault();
   });
 
   document.querySelectorAll('.buy-mode-btn').forEach(btn=>btn.addEventListener('click',()=>setBuyMode(btn.dataset.buyMode)));
@@ -2426,6 +2922,13 @@
   el.skillStrikeBtn.addEventListener('click',activateStrike);
   el.skillEnergyBtn.addEventListener('click',activateEnergyBurst);
   el.skillWeaknessBtn.addEventListener('click',activateWeakness);
+  el.cloudOpenBtn.addEventListener('click',openCloudModal);
+  el.cloudCloseBtn.addEventListener('click',closeCloudModal);
+  el.cloudCopyBtn.addEventListener('click',copyCloudCode);
+  el.cloudRestoreBtn.addEventListener('click',restoreCloudBackup);
+  el.cloudConnectBtn.addEventListener('click',connectExistingCloud);
+  el.cloudCancelConnectBtn.addEventListener('click',()=>{el.cloudCodeInput.value='';el.cloudError.textContent='';});
+  el.cloudOverlay.addEventListener('click',e=>{if(e.target===el.cloudOverlay)closeCloudModal();});
   el.rankingOpenBtn.addEventListener('click',openRankingModal);
   el.rankingCloseBtn.addEventListener('click',closeRankingModal);
   el.rankingRefreshBtn.addEventListener('click',fetchRanking);
@@ -2435,13 +2938,13 @@
   el.nicknameInput.addEventListener('keydown',e=>{if(e.key==='Enter')registerRankingNickname();});
   el.rankingOverlay.addEventListener('click',e=>{if(e.target===el.rankingOverlay)closeRankingModal();});
   el.nicknameOverlay.addEventListener('click',e=>{if(e.target===el.nicknameOverlay)closeNicknameModal(true);});
-  document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeRankingModal();if(el.nicknameOverlay.classList.contains('show'))closeNicknameModal(true);}});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeCloudModal();closeRankingModal();if(el.nicknameOverlay.classList.contains('show'))closeNicknameModal(true);}});
 
   document.addEventListener('keydown',e=>{
     if(e.repeat||e.ctrlKey||e.altKey||e.metaKey)return;
     const active=document.activeElement;
     const editing=active&&(active.tagName==='INPUT'||active.tagName==='TEXTAREA'||active.tagName==='SELECT'||active.isContentEditable);
-    if(editing||el.rankingOverlay.classList.contains('show')||el.nicknameOverlay.classList.contains('show'))return;
+    if(editing||el.cloudOverlay.classList.contains('show')||el.rankingOverlay.classList.contains('show')||el.nicknameOverlay.classList.contains('show'))return;
     const key=e.key.toLowerCase();
     if(key==='q'||key==='w'||key==='e'){
       e.preventDefault();
@@ -2451,14 +2954,16 @@
 
   setInterval(()=>{if(!document.hidden&&state.autoAttack>0)applyHit(state.autoAttack/2,'auto');},500);
   setInterval(()=>{if(!document.hidden)saveGame(false);},10000);
-  window.addEventListener('beforeunload',()=>saveGame(false));
-  document.addEventListener('visibilitychange',()=>{
+  setInterval(()=>{if(!document.hidden&&cloudDirty)pushCloudSave(false);},CLOUD_PUSH_INTERVAL_MS);
+  window.addEventListener('beforeunload',()=>{saveGame(false);if(cloudDirty)pushCloudSave(false);});
+  document.addEventListener('visibilitychange',async()=>{
     if(document.hidden){
-      saveGame(false);
+      saveGame(false);scheduleCloudPush(0);
     }else{
+      await pullCloudLatest(true);
       applyOfflineReward(true);
       lastTimerStamp=performance.now();
-      render();saveGame(false);
+      render();saveGame(false);scheduleCloudPush(500);
     }
   });
 
@@ -2472,17 +2977,21 @@
     requestAnimationFrame(timerLoop);
   }
 
-  syncEnemyStats(false);
-  if(isBlackBoss()&&state.bossTrait===null){ensureBossTrait();syncEnemyStats(true);resetBossTraitBattleState();}
-  if(state.mode==='challenge'&&state.floor===5&&(!Number.isFinite(state.timeRemaining)||state.timeRemaining<=0)) state.timeRemaining=floorLimit();
-  if(state.mode==='challenge'&&state.floor<5) state.timeRemaining=0;
-  const offlineResult=applyOfflineReward(false);
-  initializeSkillSystem(true);
-  render();
-  initRankingSystem();
-  if(loadedFromBackup)showNotice('자동 백업 복구!','기본 저장본을 읽지 못해 직전 정상 백업으로 복구했습니다.',3600);
-  else if(offlineResult.reward>0)showNotice('오프라인 보상!',`${formatOfflineDuration(offlineResult.elapsed)} · 자동 줘패기 기대수입 100% · +${formatNum(offlineResult.reward)}원`,3600);
-  saveGame(false);maybeAutoActivateFrenzy();requestAnimationFrame(timerLoop);
+  async function bootstrapAlpha(){
+    await bootstrapCloud();
+    syncEnemyStats(false);
+    if(isBlackBoss()&&state.bossTrait===null){ensureBossTrait();syncEnemyStats(true);resetBossTraitBattleState();}
+    if(state.mode==='challenge'&&state.floor===5&&(!Number.isFinite(state.timeRemaining)||state.timeRemaining<=0)) state.timeRemaining=floorLimit();
+    if(state.mode==='challenge'&&state.floor<5) state.timeRemaining=0;
+    const offlineResult=applyOfflineReward(false);
+    initializeSkillSystem(true);render();initRankingSystem();
+    if(loadedFromBackup)showNotice('자동 백업 복구!','기본 저장본을 읽지 못해 직전 정상 백업으로 복구했습니다.',3600);
+    else if(offlineResult.reward>0||offlineResult.climbedFloors>0||offlineResult.blocked)showNotice(offlineResult.climbedFloors>0?'오프라인 등반!':'오프라인 보상!',offlineSummaryText(offlineResult),4200);
+    suppressCloudDirty=true;saveGame(false);suppressCloudDirty=false;
+    if(cloudSyncCode){cloudDirty=true;persistCloudIdentity();scheduleCloudPush(500);}
+    maybeAutoActivateFrenzy();requestAnimationFrame(timerLoop);
+  }
+  bootstrapAlpha();
 </script>
 </body>
 </html>
